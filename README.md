@@ -7,7 +7,7 @@
 
 前端：
 - node v16.13.2
-- npm 16.13.2
+- npm 8.1.2
 - [前端模板](https://github.com/PanJiaChen/vue-admin-template)
 
 ## 功能
