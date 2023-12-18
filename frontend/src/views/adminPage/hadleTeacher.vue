@@ -2,6 +2,30 @@
 <template>
     <div class="app-container">
         <h1>教师管理</h1>
+        <el-row :gutter="20">
+          <el-col :span="2"><span>工号：</span></el-col>
+          <el-col :span="4">
+              <el-input v-model="query.staff_id" autocomplete="off" size="small"></el-input>
+          </el-col>
+          <el-col :span="2"><span>性别：</span></el-col>
+          <el-col :span="4">
+            <el-input v-model="query.sex" autocomplete="off" size="small"></el-input>
+          </el-col>
+          <el-col :span="2"><span>姓名：</span></el-col>
+          <el-col :span="4">
+            <el-input v-model="query.name" autocomplete="off" size="small"></el-input>
+          </el-col>
+          <el-col :span="2"><span>职称：</span></el-col>
+          <el-col :span="4">
+            <el-input v-model="query.professional_ranks" autocomplete="off" size="small"></el-input>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="2"><span>院系号：</span></el-col>
+          <el-col :span="4">
+            <el-input v-model="query.dept_id_id" autocomplete="off" size="small"></el-input>
+          </el-col>
+        </el-row>
         <div align="right">
             <el-button type="primary" size="small" @click="fetchData()">查询教师</el-button>
             <el-button type="primary" size="small" @click="handleAdd()">新增教师</el-button>
@@ -157,7 +181,6 @@
     },
     data() {
       return {
-        formLabelWidth:"40%",
         password:null,
         listLoading: true,
         tableData:[{
@@ -291,7 +314,7 @@
 .boxes{
     width: 18%;
 }
-.buttons{
-  align:right;
+.fetchInputBox{
+  width:20%
 }
 </style>
