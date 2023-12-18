@@ -2,7 +2,7 @@
 #python manage.py makemigrations 
 #python manage.py migrate  生成数据表
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 #院系表
@@ -33,3 +33,32 @@ class teacher(models.Model):
     professional_ranks = models.CharField(max_length=32,blank=True,null=True)           # 等级
     salary = models.FloatField(blank=True,null=True)                                    # 工资
     dept_id = models.ForeignKey('department', to_field='dept_id',on_delete=models.CASCADE) # 院系号(外键)
+
+#课程表
+class course(models.Model):
+    course_id = models.CharField(max_length=32,unique=True, primary_key=True)   # 课程号
+    course_name = models.CharField(max_length=32)        # 课名
+    credit = models.IntegerField()                       # 学分
+    credit_hours = models.IntegerField()                 # 学时
+    dept_id = models.ForeignKey('department', to_field='dept_id',on_delete=models.CASCADE)      # 院系号(外键)
+
+#开课表
+class open_course(models.Model):
+    semester = models.CharField(max_length=32,blank=False, null=False) 
+    course_id = models.ForeignKey('course', to_field='course_id',on_delete=models.CASCADE,blank=False, null=False)      # 课程序号(外键)
+    staff_id = models.ForeignKey('teacher', to_field='staff_id',on_delete=models.CASCADE,blank=False, null=False)         # 工号(外键)
+    class_time = models.CharField(max_length=32)               # 上课时间
+    class Meta:
+        unique_together = ["semester", "course_id", "staff_id"]
+
+#选课表
+class course_selection(models.Model):
+    student_id = models.ForeignKey('student', to_field='student_id',on_delete=models.CASCADE)         # 学号(外键)
+    course_id = models.ForeignKey('course', to_field='course_id',on_delete=models.CASCADE)      # 课程序号(外键)
+    semester = models.CharField(max_length=32)                 # 学期,django限制其不能成为唯一键
+    staff_id = models.ForeignKey('teacher', to_field='staff_id',on_delete=models.CASCADE)         # 工号(外键)
+    normal_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 平时成绩
+    test_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 考试成绩
+    total_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 总评成绩
+    class Meta:
+        unique_together = ["student_id", "course_id", "semester"]
