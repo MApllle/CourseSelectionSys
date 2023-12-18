@@ -4,10 +4,12 @@
 - python:3.8.xx
 - Django 4.2.8
 - mysqlclient 2.2.1
+- django-cors-headers 4.3.1 (解决跨域问题)
+- pyjwt 2.8.0 (生成token)
 
 前端：
-- node v16.13.2
-- npm 16.13.2
+- node 8.11.0
+- npm 16.16.0
 - [前端模板](https://github.com/PanJiaChen/vue-admin-template)
 
 ## 功能
@@ -60,4 +62,7 @@
 
 ## 参考资料
 官方文档 https://docs.djangoproject.com/zh-hans/4.2/
+
 快速上手 https://www.jianshu.com/p/0123d11f9609
+
+跨域问题解决 https://cloud.tencent.com/developer/article/2178334

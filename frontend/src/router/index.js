@@ -91,7 +91,55 @@ export const constantRoutes = [
       }, */
     ]
   },
+  {
+    path: '/adminPage',
+    component: Layout,
+    //redirect: '/studentPage/courseSelect',
+    name: 'adminPage',
+    meta: {
+      title: '后台管理',
+      icon: 'nested'
+    },
+    children: [
+      {
+        path: 'handleDept',
+        component: () => import('@/views/adminPage/handleDept'),
+        name: 'handleDept',
+        meta: { title: '院系管理' }
+      },
+      {
+        path: 'hadleTeacher',
+        component: () => import('@/views/adminPage/hadleTeacher'),
+        name: 'hadleTeacher',
+        meta: { title: '教师管理' }
+      },
+      {
+        path: 'hadleStudent',
+        component: () => import('@/views/adminPage/hadleStudent'),
+        name: 'hadleStudent',
+        meta: { title: '学生管理' }
+      },
+      {
+        path: 'handleCourse',
+        component: () => import('@/views/adminPage/handleCourse'),
+        name: 'handleCourse',
+        meta: { title: '课程管理' }
+      },
+      {
+        path: 'handleCourseSelect',
+        component: () => import('@/views/adminPage/handleCourseSelect'),
+        name: 'handleCourseSelect',
+        meta: { title: '选课管理' }
+      },
+      {
+        path: 'handleUser',
+        component: () => import('@/views/adminPage/handleUser'), 
+        name: 'handleUser',
+        meta: { title: '系统账号管理' },
+      },
 
+    ]
+  },
 
   {
     path: '/example',
