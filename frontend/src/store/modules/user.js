@@ -34,7 +34,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        console.log("login actions返回的消息",response)
+        console.log('login actions返回的消息', response)
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -47,21 +47,21 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      console.log("before getInfo",state.token)
+      console.log('before getInfo', state.token)
       getInfo(state.token).then(response => {
         const { data } = response
-        console.log("getInfo返回了",response)
+        console.log('getInfo返回了', response)
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
 
         const { name, avatar } = data
-        console.log("getInfo返回了",response)
+        console.log('getInfo返回了', response)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
-        console.log("getInfo函数出错",error)
+        console.log('getInfo函数出错', error)
         reject(error)
       })
     })

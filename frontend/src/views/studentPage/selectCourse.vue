@@ -2,15 +2,15 @@
 <template>
   <div class="app-container">
     <div class="inputboxes">
-      课程号：<el-input v-model="input" class="boxes" size="small"></el-input>
-      课程名：<el-input v-model="input" class="boxes" size="small"></el-input>
-      教师名：<el-input v-model="input" class="boxes" size="small"></el-input>
-      教师号：<el-input v-model="input" class="boxes" size="small"></el-input>
+      课程号：<el-input v-model="input" class="boxes" size="small" />
+      课程名：<el-input v-model="input" class="boxes" size="small" />
+      教师名：<el-input v-model="input" class="boxes" size="small" />
+      教师号：<el-input v-model="input" class="boxes" size="small" />
     </div>
     <div class="buttons">
       <el-button type="primary" size="small" @click="testButton()">查询</el-button>
     </div>
-    <el-divider></el-divider>
+    <el-divider />
     <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column label="勾选">
         <template slot-scope="scope">
@@ -71,7 +71,7 @@
     </el-table>
   </div>
 </template>
-  
+
 <script>
 import { getList } from '@/api/table'
 import { Test } from '@/api/studentApi'
@@ -106,15 +106,15 @@ export default {
       })
     },
     testButton() {
-      console.log("testbutton")
+      console.log('testbutton')
       Test().then(response => {
-        console.log("tttttttttttest", response)
+        console.log('tttttttttttest', response)
       })
     }
   }
 }
 </script>
-  
+
 <style>
 .boxes {
   width: 18%;
