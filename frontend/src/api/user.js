@@ -22,3 +22,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function handleUser() {
+  return request({
+    url: 'http://localhost:8000/handleUser/',
+    method: 'put'
+  })
+}

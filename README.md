@@ -101,3 +101,36 @@
 快速上手 https://www.jianshu.com/p/0123d11f9609
 
 跨域问题解决 https://cloud.tencent.com/developer/article/2178334
+
+## 快速上手
+
+1. 准备环境
+    后端：准备python环境：按照环境中的要求安装包
+    前端：安装nvm，可以不配置源；install好`npm 16.16.0` ,node不用手动安装
+    [前端nvm参考](https://blog.csdn.net/HuangsTing/article/details/113857145)
+2. 跑项目
+    - 后端：
+        cmd进入backend目录命令 
+        第一次运行，初始化：`python manage.py makemigrations`
+        插入数据库：`python manage.py migrate`
+        启动后台：`python  manage.py runserver 0.0.0.0:8000`
+    - 前端：
+        powershell启动
+        第一次运行，初始化 `npm install` 
+        启动前端 `npm run dev`
+        自动校正代码风格 `npm run lint -- --fix`
+    - 注意端口，前端9528后端8000
+3. 关于代码风格
+    后端接口风格：
+    每个表都有增、删、改、查四个接口
+    命名规范：xxx首字母大写，哪个表的基础操作就用哪个表的英文名，如下：
+    ``` 
+    增：addCourseSelection 请求方法 post
+    删：handleCourseSelection 请求方法 delete
+    改：handleCourseSelection 请求方法 put
+    查：handleCourseSelection 请求方法 post
+    ```
+    **后端接口命名不要出现下划线！！**
+    注意：后端接口必须返回json响应体，必须要带一个code，**成功一定要设置成code:20000**，而且20000要是数字，失败返回msg,失败的msg尽量细分，这样前端能显示得更加细化
+
+    前端接口风格：名字跟着接口走，各种操作函数名采用驼峰命名（首单词首字母小写，之后单词首字母大写）

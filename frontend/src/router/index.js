@@ -58,7 +58,7 @@ export const constantRoutes = [
   {
     path: '/studentPage',
     component: Layout,
-    //redirect: '/studentPage/courseSelect',
+    // redirect: '/studentPage/courseSelect',
     name: 'studentPage',
     meta: {
       title: '学生选课',
@@ -69,7 +69,7 @@ export const constantRoutes = [
         path: 'selectCourse',
         component: () => import('@/views/studentPage/selectCourse'), // Parent router-view
         name: 'selectCourse',
-        meta: { title: '选课' },
+        meta: { title: '选课' }
       },
       {
         path: 'dropCourse',
@@ -82,8 +82,8 @@ export const constantRoutes = [
         component: () => import('@/views/studentPage/viewSchedule'),
         name: 'viewSchedule',
         meta: { title: '查看课表' }
-      },
-/*       {
+      }
+      /*       {
         path: 'courseDeleted',
         component: () => import('@/views/studentPage/courseDeleted/index'),
         name: 'courseDeleted',
@@ -94,7 +94,7 @@ export const constantRoutes = [
   {
     path: '/adminPage',
     component: Layout,
-    //redirect: '/studentPage/courseSelect',
+    // redirect: '/studentPage/courseSelect',
     name: 'adminPage',
     meta: {
       title: '后台管理',
@@ -133,10 +133,10 @@ export const constantRoutes = [
       },
       {
         path: 'handleUser',
-        component: () => import('@/views/adminPage/handleUser'), 
+        component: () => import('@/views/adminPage/handleUser'),
         name: 'handleUser',
-        meta: { title: '系统账号管理' },
-      },
+        meta: { title: '系统账号管理' }
+      }
 
     ]
   },
