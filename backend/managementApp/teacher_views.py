@@ -26,7 +26,7 @@ def handleTeacher(request):
         data={
             "code":20000,
             "data":out,
-            "msg":"查询成功"
+            "messgae":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
@@ -42,7 +42,7 @@ def handleTeacher(request):
                                                                     dept_id_id=request_data.get('dept_id_id', ''))
         data={
             "code":20000,
-            "msg":"更新成功"
+            "messgae":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
@@ -53,14 +53,14 @@ def handleTeacher(request):
                 User.objects.filter(username__exact=id).delete()  # 删除该教师账户
         data={
             "code":20000,
-            "msg":"删除成功"
+            "messgae":"删除成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
 def addTeacher(request):#新增教师
     data={
         "code":20000,
-        "msg":"新增成功"
+        "messgae":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -73,6 +73,9 @@ def addTeacher(request):#新增教师
                 psw=hashlib.sha256(request_data['staff_id'].encode('utf-8')).hexdigest()
                 user.set_password(psw)   # 设置初始密码为学号
                 user.save()
+                user.groups.add(2)
+            #获取auth_user的id
+            addedUser = User.objects.get(username=request_data['staff_id'])
             if department.objects.filter(dept_id=request_data['dept_id_id']).count() != 0:
                 new_teacher = teacher.objects.create(staff_id=request_data.get('staff_id', ''), 
                                                      name=request_data.get('name', ''), 
@@ -80,13 +83,14 @@ def addTeacher(request):#新增教师
                                                      date_of_birth=request_data.get('date_of_birth', ''),
                                                      professional_ranks=request_data.get('professional_ranks', ''), 
                                                      salary=request_data.get('salary', ''), 
-                                                     dept_id_id=request_data.get('dept_id_id', ''))
+                                                     dept_id_id=request_data.get('dept_id_id', ''),
+                                                     user_id_id=addedUser.id)
                 new_teacher.save()
             else:
                 data['code']=50000,
-                data['msg']="院系号为空！"
+                data['messgae']="院系号为空！"
         else:
             data['code']=50000,
-            data['msg']="工号为空！"
+            data['messgae']="工号为空！"
         return HttpResponse(json.dumps(data),content_type='application/json')
         

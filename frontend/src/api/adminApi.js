@@ -19,7 +19,7 @@ export function updateUser(data) {
 export function fetchUser(data) {
   return request({
     url: 'http://localhost:8000/handleUser/',
-    method: 'get',
+    method: 'post',
     data
   })
 }

@@ -13,6 +13,20 @@
         <h3 class="title">选课管理系统</h3>
       </div>
 
+      <el-form-item>
+        <span class="svg-container">
+          <svg-icon icon-class="semester" />
+        </span>
+        <el-select v-model="loginForm.semester" clearable placeholder="选择学期" style="width: 320px;">
+        <el-option
+          v-for="item in semesterList"
+          :key="item.semester"
+          :label="item.semester"
+          :value="item.semester">
+        </el-option>
+      </el-select>
+      </el-form-item>
+
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -20,7 +34,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="账号"
           name="username"
           type="text"
           tabindex="1"
@@ -37,7 +51,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -54,7 +68,6 @@
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
       >登录</el-button>
-
       <!--       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
@@ -66,6 +79,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { fetchSemester } from  '@/api/openCourseApi'
 import { sha256 } from 'js-sha256'
 export default {
   name: 'Login',
@@ -87,7 +101,8 @@ export default {
     return {
       loginForm: { // 前端接收输入的loginform
         username: null,
-        password: null
+        password: null,
+        semester:null
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur' }],
@@ -98,8 +113,10 @@ export default {
       redirect: undefined,
       postLoginForm: { // 提交请求的loginform
         username: null,
-        password: null
-      }
+        password: null,
+        semester:null
+      },
+      semesterList:[]
     }
   },
   watch: {
@@ -109,6 +126,9 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    this.handleSemester()
   },
   methods: {
     showPwd() {
@@ -124,6 +144,8 @@ export default {
     async handleLogin() {
       this.postLoginForm.username = this.loginForm.username
       this.postLoginForm.password = await sha256(this.loginForm.password)
+      this.postLoginForm.semester = this.loginForm.semester
+      console.log("this.postLoginForm数据...",this.postLoginForm)
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -138,6 +160,13 @@ export default {
           console.log('账号或密码错误！')
           return false
         }
+      })
+    },
+    handleSemester(){
+      fetchSemester().then(response=>{
+        if (response)
+          console.log("获取学期成功")
+          this.semesterList=response.data
       })
     }
   }

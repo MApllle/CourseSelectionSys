@@ -2,6 +2,7 @@
 #python manage.py makemigrations 
 #python manage.py migrate  生成数据表
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
@@ -23,6 +24,7 @@ class student(models.Model):
     dept_id = models.ForeignKey('department', to_field='dept_id', on_delete=models.CASCADE)      # 院系号(外键)
     average_gpa = models.FloatField(null=True,blank=True)   # 所有学期均绩
     total_cerdict = models.FloatField(null=True,blank=True) # 所有学期学分和
+    user_id = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE)  #账号id
 
 #教师表
 class teacher(models.Model):
@@ -33,7 +35,8 @@ class teacher(models.Model):
     professional_ranks = models.CharField(max_length=32,blank=True,null=True)           # 等级
     salary = models.FloatField(blank=True,null=True)                                    # 工资
     dept_id = models.ForeignKey('department', to_field='dept_id',on_delete=models.CASCADE) # 院系号(外键)
-
+    user_id = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE)  #账号id
+    
 #课程表
 class course(models.Model):
     course_id = models.CharField(max_length=32,unique=True, primary_key=True)   # 课程号

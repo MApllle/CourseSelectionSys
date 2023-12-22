@@ -35,7 +35,6 @@
       v-loading="listLoading"
       :data="tableData"
       element-loading-text="Loading"
-      height="250"
       border
       fit
       highlight-current-row
@@ -75,7 +74,7 @@
           <span>{{ scope.row.dept_id_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -98,7 +97,7 @@
         <el-form-item label="姓名" label-width="25%">
           <el-input v-model="addForm.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="姓名" label-width="25%">
+        <el-form-item label="性别" label-width="25%">
           <el-select v-model="addForm.sex" placeholder="选择性别">
             <el-option label="男" value="男" />
             <el-option label="女" value="女" />
