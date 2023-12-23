@@ -31,6 +31,9 @@ urlpatterns = [
     path("handleTeacher/",teacher_views.handleTeacher),#删改查
     #department表增删改查接口
     path("addDepartment/",department_views.addDepartment),  #新增
-    path("handleDepartment/",department_views.handleDepartment)#删改查
+    path("handleDepartment/",department_views.handleDepartment),#删改查
+    #student表增删改查接口
+    path("addStudent/",student_views.addStudent), #新增
+    path("handleStudent/",student_views.handleStudent), #删改查
 
 ]
