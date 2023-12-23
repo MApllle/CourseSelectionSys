@@ -21,7 +21,6 @@
       v-loading="listLoading"
       :data="tableData"
       element-loading-text="Loading"
-      height="250"
       border
       fit
       highlight-current-row
@@ -46,7 +45,7 @@
           <span>{{ scope.row.phone_code }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"

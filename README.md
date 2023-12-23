@@ -13,9 +13,9 @@
 - [前端模板](https://github.com/PanJiaChen/vue-admin-template)
 
 ## 功能
-登录，进入学期选择页面
+登录，进入学期选择页面（前端把学期加到内存/全局变量里）
 首页显示个人信息：姓名、学号/工号、学生：均绩点；总学分；老师：本学期开设课程
-侧边栏：根据身份渲染
+侧边栏：根据身份渲染（前端做）
 💣需要新写逻辑/接口
 🥬调用基础接口
 📢联动其他表
@@ -59,9 +59,12 @@
     - 课程查询：基础表
     - (选课排名查询)
     - 学分完成情况：基础表（或者可以做成正式一点的表单）
+    - 你选了多少学分 （触发器）
 3. 教师
     - 查询课表：可视化课表
     - 成绩管理：基础表（点击修改功能）
+    - 跳出来学生绩点多少（触发器）
+
 ## 项目结构
 后端：
 ```
@@ -102,6 +105,10 @@
 
 跨域问题解决 https://cloud.tencent.com/developer/article/2178334
 
+使用触发器 https://geek-docs.com/django/django-questions/590_django_creating_triggers_with_custom_sql_in_django.html
+
+动态路由 https://blog.csdn.net/qq_41773806/article/details/121407661
+
 ## 快速上手
 
 1. 准备环境
@@ -114,6 +121,7 @@
         第一次运行，初始化：`python manage.py makemigrations`
         插入数据库：`python manage.py migrate`
         启动后台：`python  manage.py runserver 0.0.0.0:8000`
+        创建超级管理员:`python manage.py createsuperuser`
     - 前端：
         powershell启动
         第一次运行，初始化 `npm install` 
