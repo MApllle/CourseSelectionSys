@@ -15,7 +15,8 @@ def get_from_table(sql,param):
         row_dict=dict(zip(title,c))
         if 'date_of_birth' in title:
             date_index = title.index('date_of_birth')
-            row_dict['date_of_birth'] = row_dict['date_of_birth'].strftime("%Y-%m-%d")
+            if row_dict['date_of_birth']:
+                row_dict['date_of_birth'] = row_dict['date_of_birth'].strftime("%Y-%m-%d")
         out.append(row_dict)
         #转换date格式为字符串
         

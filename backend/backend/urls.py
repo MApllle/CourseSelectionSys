@@ -20,7 +20,6 @@ from managementApp import teacher_views,student_views,admin_views,department_vie
 
 urlpatterns = [
     #path("admin/", admin.site.urls),
-    path("index/",student_views.index), #测试函数
     #用户登录相关接口
     path("userLogin/",admin_views.userLogin),#用户登录
     path("getUserInfo/",admin_views.getUserInfo),#获取Token信息

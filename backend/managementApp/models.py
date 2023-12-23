@@ -20,10 +20,10 @@ class student(models.Model):
     sex = models.CharField(max_length=4,blank=True,null=True)        # 性别
     date_of_birth = models.DateField(blank=True,null=True)           # 出生日期
     native_place = models.CharField(max_length=32,blank=True,null=True)   # 籍贯
-    mobile_phone = models.CharField(max_length=32, unique=True,blank=True,null=True)   # 手机号码
+    mobile_phone = models.CharField(max_length=32, blank=True,null=True)   # 手机号码
     dept_id = models.ForeignKey('department', to_field='dept_id', on_delete=models.CASCADE)      # 院系号(外键)
     average_gpa = models.FloatField(null=True,blank=True)   # 所有学期均绩
-    total_cerdict = models.FloatField(null=True,blank=True) # 所有学期学分和
+    total_credit = models.FloatField(null=True,blank=True) # 所有学期学分和
     user_id = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE)  #账号id
 
 #教师表

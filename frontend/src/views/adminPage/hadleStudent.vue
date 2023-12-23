@@ -35,7 +35,6 @@
         v-loading="listLoading"
         :data="tableData"
         element-loading-text="Loading"
-        height="250"
         border
         fit
         highlight-current-row
@@ -85,7 +84,7 @@
             <span>{{ scope.row.dept_id_id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="190" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -126,7 +125,7 @@
             <el-input v-model="addForm.native_place" autocomplete="off" />
           </el-form-item>
           <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="addForm.mobile_phone" autocomplete="off" />
+            <el-input v-model="addForm.phone_number" autocomplete="off" />
           </el-form-item>
           <el-form-item label="平均绩点" label-width="25%">
             <el-input v-model="addForm.average_gpa" autocomplete="off" />
@@ -170,7 +169,7 @@
             <el-input v-model="editForm.native_place" autocomplete="off" />
           </el-form-item>
           <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="editForm.mobile_phone" autocomplete="off" />
+            <el-input v-model="editForm.phone_number" autocomplete="off" />
           </el-form-item>
           <el-form-item label="平均绩点" label-width="25%">
             <el-input v-model="editForm.average_gpa" autocomplete="off" />
@@ -273,7 +272,7 @@
         this.addFormVisible = true
       },
       saveAdd() {
-        console.log(this.addForm)
+        console.log("新增",this.addForm)
         addStudent(this.addForm).then(response => {
           if (response) {
             console.log('in handleAdd', response)

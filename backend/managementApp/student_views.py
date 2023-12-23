@@ -22,7 +22,7 @@ def handleStudent(request):
             sql = 'select * from managementapp_student where '
             for key, value in query.items():
                 sql = sql + key + '= %s '
-                param.append(value)
+                param.append(value)      
         out = get_from_table(sql, param)
         # 需要捕捉一下错误
         data = {
@@ -33,7 +33,6 @@ def handleStudent(request):
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method=='PUT': # 更新
         request_data = json.loads(request.body.decode('utf-8'))
-        query = {key: value for key, value in request_data.items() if value}
         student.objects.filter(student_id=request_data['student_id']).update(student_id=request_data.get('student_id', ''),
                                                                     name=request_data.get('name', ''),
                                                                     sex=request_data.get('sex',''),
@@ -41,7 +40,7 @@ def handleStudent(request):
                                                                     native_place=request_data.get('native_place',''),
                                                                     mobile_phone=request_data.get('mobile_phone',''),
                                                                     average_gpa=request_data.get('average_gpa',0),
-                                                                    total_cerdict=request_data.get('total_cerdict',0),
+                                                                    total_credit=request_data.get('total_credit',0),
                                                                     dept_id_id=request_data.get('dept_id_id',''))
         data = {
             "code":20000,   # 注意，必须要有code，不然返回的消息会被后端拦截
