@@ -122,6 +122,7 @@
         插入数据库：`python manage.py migrate`
         启动后台：`python  manage.py runserver 0.0.0.0:8000`
         创建超级管理员:`python manage.py createsuperuser`
+        【12.23更新，可以不创建了，提供的sql文件里有一个账号密码都是6个1地管理员】
     - 前端：
         powershell启动
         第一次运行，初始化 `npm install` 
