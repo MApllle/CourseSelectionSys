@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-12)sf506@j5w=lh=dj7o1f=lj@_fen2b&frepv8oj90ys3ci5y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0','localhost']
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = {
         'PORT': 3306,  # 数据库端口
         'USER': 'root',  # 数据库用户名
         'PASSWORD': '123456',  # 数据库用户密码
-        'NAME': 'course_selecction_sys'  # 数据库名字
+        'NAME': 'course_selection_sys'  # 数据库名字
     }
 }
 
