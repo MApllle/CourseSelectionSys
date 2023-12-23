@@ -2,6 +2,16 @@
 <template>
   <div class="app-container">
     <h1>院系管理</h1>
+    <el-row :gutter="20">
+      <el-col :span="2"><span>院系号：</span></el-col>
+      <el-col :span="4">
+        <el-input v-model="query.dept_id" autocomplete="off" size="small" />
+      </el-col>
+      <el-col :span="2"><span>学院名：</span></el-col>
+      <el-col :span="4">
+        <el-input v-model="query.dept_name" autocomplete="off" size="small" />
+      </el-col>
+    </el-row>
     <div align="right">
       <el-button type="primary" size="small" @click="fetchData()">查询院系</el-button>
       <el-button type="primary" size="small" @click="handleAdd()">新增院系</el-button>
@@ -54,16 +64,16 @@
     <el-dialog title="新增学院" :visible.sync="addFormVisible">
       <el-form :model="addForm" label-width="200px" algin="left">
         <el-form-item label="院系号" label-width="25%">
-          <el-input v-model="addForm.staff_id" autocomplete="off" />
+          <el-input v-model="addForm.dept_id" autocomplete="off" />
         </el-form-item>
         <el-form-item label="学院名" label-width="25%">
-          <el-input v-model="addForm.name" autocomplete="off" />
+          <el-input v-model="addForm.dept_name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="联系电话" label-width="25%">
-          <el-input v-model="addForm.professional_ranks" autocomplete="off" />
+          <el-input v-model="addForm.phone_code" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="薪资" label-width="25%">
-          <el-input v-model="addForm.salary" autocomplete="off" />
+        <el-form-item label="地址" label-width="25%">
+          <el-input v-model="addForm.address" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -75,28 +85,28 @@
     <el-dialog title="编辑学院" :visible.sync="editFormVisible">
       <el-form :model="editForm" label-width="200px" algin="left">
         <el-form-item label="院系号" label-width="25%">
-          <el-input v-model="editForm.staff_id" autocomplete="off" />
+          <el-input v-model="editForm.dept_id" autocomplete="off" />
         </el-form-item>
         <el-form-item label="学院名" label-width="25%">
-          <el-input v-model="editForm.name" autocomplete="off" />
+          <el-input v-model="editForm.dept_name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="联系电话" label-width="25%">
-          <el-input v-model="editForm.professional_ranks" autocomplete="off" />
+          <el-input v-model="editForm.phone_code" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="薪资" label-width="25%">
-          <el-input v-model="editForm.salary" autocomplete="off" />
+        <el-form-item label="地址" label-width="25%">
+          <el-input v-model="editForm.address" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveAdd()">确 定</el-button>
+        <el-button type="primary" @click="saveEdit()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { addTeacher, updateTeacher, fetchTeacher, deleteTeacher } from '@/api/teacherApi'
+import { addDepartment, updateDepartment, fetchDepartment, deleteDepartment } from '@/api/departmentApi'
 export default {
   filters: {
     statusFilter(status) {
@@ -139,7 +149,7 @@ export default {
         phone_code: ''
       },
       deleteForm: {
-        staff_id: ''
+        dept_id: ''
       }
     }
   },
@@ -149,7 +159,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      fetchTeacher(this.query).then(response => {
+      fetchDepartment(this.query).then(response => {
         console.log('fetch返回的data', response)
         this.tableData = response.data
         console.log('更新tabledata', this.tableData)
@@ -162,18 +172,16 @@ export default {
     },
     saveAdd() {
       console.log(this.addForm)
-      addTeacher(this.addForm).then(response => {
+      addDepartment(this.addForm).then(response => {
         if (response) {
           console.log('in handleAdd', response)
           this.$message({ message: '新增成功', type: 'success' })
           this.addFormVisible = false
           this.fetchData()
-          this.addForm.staff_id = ''
-          this.addForm.name = ''
-          this.addForm.sex = ''
-          this.addForm.date_of_birth = ''
-          this.addForm.salary = ''
-          this.addForm.dept_id_id = ''
+          this.addForm.dept_id = ''
+          this.addForm.dept_name = ''
+          this.addForm.address = ''
+          this.addForm.phone_code = ''
         } else {
           this.$message.error('新增失败')
         }
@@ -182,26 +190,22 @@ export default {
     // 编辑用户
     handleEdit(inex, row) {
       this.editFormVisible = true
-      this.editForm.staff_id = row.staff_id
-      this.editForm.name = row.name
-      this.editForm.sex = row.sex
-      this.editForm.date_of_birth = row.date_of_birth
-      this.editForm.salary = row.salary
-      this.editForm.dept_id_id = row.dept_id_id
+      this.editForm.dept_id = row.dept_id
+      this.editForm.dept_name = row.dept_name
+      this.editForm.address = row.address
+      this.editForm.phone_code = row.phone_code
     },
     saveEdit() {
-      updateTeacher(this.editForm).then(response => {
+      updateDepartment(this.editForm).then(response => {
         if (response) {
           this.editFormVisible = false
           this.$message({ message: '修改成功', type: 'success' })
           console.log('in handleEdit', response)
           this.fetchData()
-          this.editForm.staff_id = ''
-          this.editForm.name = ''
-          this.editForm.sex = ''
-          this.editForm.date_of_birth = ''
-          this.editForm.salary = ''
-          this.editForm.dept_id_id = ''
+          this.editForm.dept_id = ''
+          this.editForm.dept_name = ''
+          this.editForm.address = ''
+          this.editForm.phone_code = ''
         } else {
           this.$message.error('修改失败')
         }
@@ -209,13 +213,13 @@ export default {
     },
     // 删除用户
     handleDelete(inex, row) {
-      this.deleteForm.staff_id = row.staff_id
-      deleteTeacher(this.deleteForm).then(response => {
+      this.deleteForm.dept_id = row.dept_id
+      deleteDepartment(this.deleteForm).then(response => {
         if (response) {
           this.$message({ message: '删除成功', type: 'success' })
           console.log('in handleDelete', response)
           this.fetchData()
-          this.deleteForm.staff_id = ''
+          this.deleteForm.dept_id = ''
         } else {
           this.$message.error('删除失败')
         }
@@ -230,6 +234,6 @@ export default {
     width: 18%;
 }
 .buttons{
-  align:right;
+  box-align:right;
 }
 </style>
