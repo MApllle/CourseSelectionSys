@@ -125,7 +125,7 @@
             <el-input v-model="addForm.native_place" autocomplete="off" />
           </el-form-item>
           <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="addForm.phone_number" autocomplete="off" />
+            <el-input v-model="addForm.mobile_phone" autocomplete="off" />
           </el-form-item>
           <el-form-item label="平均绩点" label-width="25%">
             <el-input v-model="addForm.average_gpa" autocomplete="off" />
@@ -169,7 +169,7 @@
             <el-input v-model="editForm.native_place" autocomplete="off" />
           </el-form-item>
           <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="editForm.phone_number" autocomplete="off" />
+            <el-input v-model="editForm.mobile_phone" autocomplete="off" />
           </el-form-item>
           <el-form-item label="平均绩点" label-width="25%">
             <el-input v-model="editForm.average_gpa" autocomplete="off" />
@@ -212,7 +212,7 @@
           sex: '123',
           date_of_birth: '1212-12-12',
           native_place: '123',
-          phone_number: '123',
+          mobile_phone: '123',
           average_gpa: 100,
           total_credit: 100,
           dept_id_id: '' }
@@ -225,7 +225,7 @@
           sex: '',
           date_of_birth: '',
           native_place: '',
-          phone_number: '',
+          mobile_phone: '',
           average_gpa: 0,
           total_credit: 0,
           dept_id_id: ''
@@ -236,7 +236,7 @@
           sex: '',
           date_of_birth: '',
           native_place: '',
-          phone_number: '',
+          mobile_phone: '',
           average_gpa: 0,
           total_credit: 0,
           dept_id_id: ''
@@ -284,7 +284,7 @@
             this.addForm.sex = ''
             this.addForm.date_of_birth = ''
             this.addForm.native_place = ''
-            this.addForm.phone_number = ''
+            this.addForm.mobile_phone = ''
             this.addForm.average_gpa = 0
             this.addForm.total_credit = 0
             this.addForm.dept_id_id = ''
@@ -301,7 +301,7 @@
         this.editForm.sex = row.sex
         this.editForm.date_of_birth = row.date_of_birth
         this.editForm.native_place = row.native_place
-        this.editForm.phone_number = row.phone_number
+        this.editForm.mobile_phone = row.mobile_phone
         this.editForm.average_gpa = row.average_gpa
         this.editForm.total_credit = row.total_credit
         this.editForm.dept_id_id = row.dept_id_id
@@ -317,7 +317,7 @@
             this.editForm.name = ''
             this.editForm.sex = ''
             this.editForm.date_of_birth = ''
-            this.editForm.phone_number = ''
+            this.editForm.mobile_phone = ''
             this.editForm.average_gpa = 0
             this.editForm.total_credit = 0
             this.editForm.dept_id_id = ''

@@ -41,13 +41,13 @@ router.beforeEach(async(to, from, next) => {
           console.log("ROUTER正常")
           router.addRoutes(accessRoutes)                    // 4. 将用户动态路由表挂载到 router
           next({ ...to, replace: true })  
-        } catch (error) {
+        }  catch (error) {
           // remove token and go to login page to re-login
-           await store.dispatch('user/resetToken')
+          await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
-        } 
+        }  
       }
     }
   } else {

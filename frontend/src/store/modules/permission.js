@@ -49,7 +49,7 @@ const actions = {
       if (group=='管理员') {
         accessedRoutes = asyncRoutes || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        accessedRoutes = filterAsyncRoutes(asyncRoutes, group)
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
