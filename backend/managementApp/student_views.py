@@ -72,30 +72,32 @@ def addStudent(request): # 新增学生
                 psw=hashlib.sha256(request_data['student_id'].encode('utf-8')).hexdigest()
                 user.set_password(psw)
                 user.save()
-            if department.objects.filter(dept_id=request_data['dept_id_id']).count() == 0:
-                new_student = student.objects.create(student_id=request_data.get['student_id',''],
-                                                    name=request_data.get['name',''],
-                                                    sex=request_data.get['sex',''],
-                                                    date_of_birth=request_data.get['date_of_birth',''],
-                                                    native_place=request_data.get['native_place',''],
-                                                    mobile_phone=request_data.get['mobile_phone',''],
-                                                    average_gpa=request_data.get['average_gpa',''],
-                                                    total_cerdict=request_data.get['total_cerdict',''],
-                                                    dept_id_id=request_data.get['dept_id_id',''])
+                user.groups.add(1)
+            addedUser = User.objects.get(username=request_data['student_id'])
+            if department.objects.filter(dept_id=request_data['dept_id_id']).count() != 0:
+                new_student = student.objects.create(student_id=request_data.get('student_id',''),
+                                                    name=request_data.get('name',''),
+                                                    sex=request_data.get('sex',''),
+                                                    date_of_birth=request_data.get('date_of_birth',''),
+                                                    native_place=request_data.get('native_place',''),
+                                                    mobile_phone=request_data.get('mobile_phone',''),
+                                                    average_gpa=request_data.get('average_gpa',''),
+                                                    total_credit=request_data.get('total_credit',''),
+                                                    dept_id_id=request_data.get('dept_id_id',''),
+                                                    user_id_id=addedUser.id)
                 new_student.save()
+                return HttpResponse(json.dumps(data), content_type='application/json')
             else:
                 data = {
                     "code": 50000,
                     "msg": "院系号不存在"
                 }
+                return HttpResponse(json.dumps(data), content_type='application/json')
         else:
             data = {
                 "code": 50000,
                 "msg": "学号不能为空"
             }
-            data = {
-                "code": 50000,
-                "msg": "学号不能为空"
-            }
             return HttpResponse(json.dumps(data), content_type='application/json')
+        
         
