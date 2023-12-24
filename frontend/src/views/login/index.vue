@@ -1,10 +1,31 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">选课管理系统</h3>
       </div>
+
+      <el-form-item>
+        <span class="svg-container">
+          <svg-icon icon-class="semester" />
+        </span>
+        <el-select v-model="loginForm.semester" clearable placeholder="选择学期" style="width: 320px;">
+        <el-option
+          v-for="item in semesterList"
+          :key="item.semester"
+          :label="item.semester"
+          :value="item.semester">
+        </el-option>
+      </el-select>
+      </el-form-item>
 
       <el-form-item prop="username">
         <span class="svg-container">
@@ -13,7 +34,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="Username"
+          placeholder="账号"
           name="username"
           type="text"
           tabindex="1"
@@ -30,7 +51,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -41,12 +62,16 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
-      <div class="tips">
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width:100%;margin-bottom:30px;"
+        @click.native.prevent="handleLogin"
+      >登录</el-button>
+      <!--       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
-      </div>
+      </div> -->
 
     </el-form>
   </div>
@@ -54,36 +79,44 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-
+import { fetchSemester } from  '@/api/openCourseApi'
+import { sha256 } from 'js-sha256'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
+    /*     const validateUsername = (rule, value, callback) => {
+          if (!validUsername(value)) {
+            callback(new Error('请输入正确用户名'))
+          } else {
+            callback()
+          }
+        } */
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码不少于6个字符'))
       } else {
         callback()
       }
     }
     return {
-      loginForm: {
-        username: 'admin',
-        password: '111111'
+      loginForm: { // 前端接收输入的loginform
+        username: null,
+        password: null,
+        semester:null
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: 'blur' }],
+        password: [{ required: true, trigger: 'blur' }]
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      postLoginForm: { // 提交请求的loginform
+        username: null,
+        password: null,
+        semester:null
+      },
+      semesterList:[]
     }
   },
   watch: {
@@ -93,6 +126,9 @@ export default {
       },
       immediate: true
     }
+  },
+  created() {
+    this.handleSemester()
   },
   methods: {
     showPwd() {
@@ -105,20 +141,32 @@ export default {
         this.$refs.password.focus()
       })
     },
-    handleLogin() {
+    async handleLogin() {
+      this.postLoginForm.username = this.loginForm.username
+      this.postLoginForm.password = await sha256(this.loginForm.password)
+      this.postLoginForm.semester = this.loginForm.semester
+      console.log("this.postLoginForm数据...",this.postLoginForm)
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          this.$store.dispatch('user/login', this.postLoginForm).then(() => {
+            console.log('通过校验', this.redirect)
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.log('账号或密码错误！')
           return false
         }
+      })
+    },
+    handleSemester(){
+      fetchSemester().then(response=>{
+        if (response)
+          console.log("获取学期成功")
+          this.semesterList=response.data
       })
     }
   }
@@ -129,8 +177,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -173,9 +221,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;

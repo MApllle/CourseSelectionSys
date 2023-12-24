@@ -54,139 +54,116 @@ export const constantRoutes = [
       meta: { title: '选课系统首页', icon: 'dashboard' }
     }]
   },
+]
 
+export const asyncRoutes = [
   {
     path: '/studentPage',
     component: Layout,
-    //redirect: '/studentPage/courseSelect',
+    // redirect: '/studentPage/courseSelect',
     name: 'studentPage',
     meta: {
       title: '学生选课',
-      icon: 'nested'
+      icon: 'nested',
+      group:'学生'
     },
     children: [
       {
         path: 'selectCourse',
         component: () => import('@/views/studentPage/selectCourse'), // Parent router-view
         name: 'selectCourse',
-        meta: { title: '选课' },
+        meta: { title: '选课',group:'学生' }
       },
       {
         path: 'dropCourse',
         component: () => import('@/views/studentPage/dropCourse'),
         name: 'dropCourse',
-        meta: { title: '退课' }
+        meta: { title: '退课',group:'学生' }
       },
       {
         path: 'viewSchedule',
         component: () => import('@/views/studentPage/viewSchedule'),
         name: 'viewSchedule',
-        meta: { title: '查看课表' }
-      },
-/*       {
-        path: 'courseDeleted',
-        component: () => import('@/views/studentPage/courseDeleted/index'),
-        name: 'courseDeleted',
-        meta: { title: '删除课程查询' }
-      }, */
-    ]
-  },
-
-
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '查看课表',group:'学生' }
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/adminPage',
     component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
+    // redirect: '/studentPage/courseSelect',
+    name: 'adminPage',
     meta: {
-      title: 'Nested',
-      icon: 'nested'
+      title: '后台管理',
+      icon: 'nested',
+      group:'管理员'
     },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        path: 'handleDept',
+        component: () => import('@/views/adminPage/handleDept'),
+        name: 'handleDept',
+        meta: { title: '院系管理',group:'管理员' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
+        path: 'hadleTeacher',
+        component: () => import('@/views/adminPage/hadleTeacher'),
+        name: 'hadleTeacher',
+        meta: { title: '教师管理',group:'管理员' }
+      },
+      {
+        path: 'hadleStudent',
+        component: () => import('@/views/adminPage/hadleStudent'),
+        name: 'hadleStudent',
+        meta: { title: '学生管理',group:'管理员' }
+      },
+      {
+        path: 'handleCourse',
+        component: () => import('@/views/adminPage/handleCourse'),
+        name: 'handleCourse',
+        meta: { title: '课程管理',group:'管理员' }
+      },
+      {
+        path: 'handleCourseSelect',
+        component: () => import('@/views/adminPage/handleCourseSelect'),
+        name: 'handleCourseSelect',
+        meta: { title: '选课管理',group:'管理员' }
+      },
+      {
+        path: 'handleUser',
+        component: () => import('@/views/adminPage/handleUser'),
+        name: 'handleUser',
+        meta: { title: '系统账号管理',group:'管理员' }
       }
+
     ]
   },
-
+  {
+    path: '/teacherPage',
+    component: Layout,
+    // redirect: '/studentPage/courseSelect',
+    name: 'teacherPage',
+    meta: {
+      title: '教师课程管理',
+      icon: 'nested',
+      group:'教师'
+    },
+    children: [
+      {
+        path: 'viewSchedule',
+        component: () => import('@/views/teacherPage/viewSchedule'), // Parent router-view
+        name: 'viewSchedule',
+        meta: { title: '查看课表',group:'教师' }
+      },
+      {
+        path: 'manageScore',
+        component: () => import('@/views/teacherPage/manageScore'),
+        name: 'manageScore',
+        meta: { title: '成绩管理',group:'教师' }
+      },
+    ]
+  },
+  
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

@@ -6,7 +6,9 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    semester:'',
+    group:''
   }
 }
 
@@ -24,17 +26,26 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_SEMESTER:(state,semester) => {
+    state.semester = semester
+  },
+  SET_GROUP:(state,group) => {
+    state.group = group
   }
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, group, semester  } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password, group:group, semester:semester }).then(response => {
         const { data } = response
+        console.log('login actions返回的消息', data)
         commit('SET_TOKEN', data.token)
+        commit('SET_SEMESTER', data.semester)
+        commit('SET_GROUP', data.group)
         setToken(data.token)
         resolve()
       }).catch(error => {
@@ -46,19 +57,21 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
+      console.log('before getInfo', state.token)
       getInfo(state.token).then(response => {
         const { data } = response
-
+        console.log('getInfo返回了', response)
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
-
+        const { name, avatar, group } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_GROUP', group)
         resolve(data)
       }).catch(error => {
+        console.log('getInfo函数出错', error)
         reject(error)
       })
     })

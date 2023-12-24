@@ -16,17 +16,36 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from managementApp import teacher_views,student_views,admin_views,department_views
 
 urlpatterns = [
+<<<<<<< HEAD
     path("admin/", admin.site.urls),
     path("index/",student_views.index), #测试函数
+=======
+    #path("admin/", admin.site.urls),
+>>>>>>> origin/main
     #用户登录相关接口
     path("userLogin/",admin_views.userLogin),#用户登录
     path("getUserInfo/",admin_views.getUserInfo),#获取Token信息
     path("Logout/",admin_views.Logout),  #退出登录
     path("addUser/",admin_views.addUser),   #新增用户
+<<<<<<< HEAD
     #teacher表增删改查接口
     path("addTeacher/",teacher_views.addTeacher),  #新增
     path("handleTeacher/",teacher_views.handleTeacher),#删改查
+=======
+    path("handleUser/",admin_views.handleUser),  #用户改
+    path("fetchSemester/",admin_views.fetchSemester),
+    #teacher表增删改查接口
+    path("addTeacher/",teacher_views.addTeacher),  #新增
+    path("handleTeacher/",teacher_views.handleTeacher),#删改查
+    #department表增删改查接口
+    path("addDepartment/",department_views.addDepartment),  #新增
+    path("handleDepartment/",department_views.handleDepartment),#删改查
+    #student表增删改查接口
+    path("addStudent/",student_views.addStudent), #新增
+    path("handleStudent/",student_views.handleStudent), #删改查
+>>>>>>> origin/main
 
 ]

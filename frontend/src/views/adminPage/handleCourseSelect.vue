@@ -1,13 +1,13 @@
-<!--学生表-->
+<!--选课表-->
 <template>
     <div class="app-container">
-      <h1>学生管理</h1>
+      <h1>选课管理</h1>
       <el-row :gutter="20">
-        <el-col :span="2"><span>学号：</span></el-col>
+        <el-col :span="2"><span>课程号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.student_id" autocomplete="off" size="small" />
+          <el-input v-model="query.staff_id" autocomplete="off" size="small" />
         </el-col>
-        <el-col :span="2"><span>性别：</span></el-col>
+        <el-col :span="2"><span>课程名：</span></el-col>
         <el-col :span="4">
           <el-input v-model="query.sex" autocomplete="off" size="small" />
         </el-col>
@@ -15,9 +15,9 @@
         <el-col :span="4">
           <el-input v-model="query.name" autocomplete="off" size="small" />
         </el-col>
-        <el-col :span="2"><span>出生地：</span></el-col>
+        <el-col :span="2"><span>职称：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.native_place" autocomplete="off" size="small" />
+          <el-input v-model="query.professional_ranks" autocomplete="off" size="small" />
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -27,76 +27,126 @@
         </el-col>
       </el-row>
       <div align="right">
-        <el-button type="primary" size="small" @click="fetchData()">查询学生</el-button>
-        <el-button type="primary" size="small" @click="handleAdd()">新增学生</el-button>
+        <el-button type="primary" size="small" @click="fetchData()">查询课程</el-button>
       </div>
       <el-divider />
       <el-table
         v-loading="listLoading"
         :data="tableData"
         element-loading-text="Loading"
-<<<<<<< HEAD
-        height="250"
-=======
->>>>>>> origin/main
         border
         fit
         highlight-current-row
       >
-        <el-table-column align="center" label="学号">
+        <el-table-column align="center" label="序号">
           <template slot-scope="scope">
-            <span>{{ scope.row.student_id }}</span>
+            <span>{{ scope.$index }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" align="center">
+        <el-table-column label="课程号" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.course_id_id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="性别" align="center">
+        <el-table-column label="课程名" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.sex }}</span>
+            <span>{{ scope.row.course_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="出生日期" align="center">
+        <el-table-column label="上课时间" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.date_of_birth }}</span>
+            <span>{{ scope.row.class_time }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="出生地" align="center">
+        <el-table-column label="教师名" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.native_place }}</span>
+            <span>{{ scope.row.teacher_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="手机号码" align="center">
+        <el-table-column label="教师工号" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.mobile_phone }}</span>
+            <span>{{ scope.row.staff_id_id }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="平均绩点" align="center">
+        <el-table-column label="职称" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.average_gpa }}</span>
+            <span>{{ scope.row.professional_ranks }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总学分" align="center">
+        <el-table-column label="容量" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.total_credit }}</span>
+            <span>{{ scope.row.capacity }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="院系号" align="center">
+        <el-table-column label="已选人数" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.dept_id_id }}</span>
+            <span>{{ scope.row.used_capacity }}</span>
           </template>
         </el-table-column>
-<<<<<<< HEAD
-        <el-table-column label="操作">
-=======
-        <el-table-column label="操作" width="190" align="center">
->>>>>>> origin/main
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="handleAddCourse(scope.$index, scope.row)"
+            >选课</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteCourse(scope.$index, scope.row)"
+            >退课</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+  
+      <!--以下是测试用代码-->
+      <el-table
+        v-loading="listLoading"
+        :data="tableData"
+        element-loading-text="Loading"
+        border
+        fit
+        highlight-current-row
+      >
+        <el-table-column align="center" label="学期">
+          <template slot-scope="scope">
+            <span>{{ scope.row.semester }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="课程号" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.course_id_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="教师工号" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.staff_id_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="学号" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.student_id_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="平时成绩" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.normal_score }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="期末成绩" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.test_score }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="total_score" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.总评成绩 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleAdd(scope.$index, scope.row)"
             >编辑</el-button>
             <el-button
               size="mini"
@@ -106,11 +156,12 @@
           </template>
         </el-table-column>
       </el-table>
-  
-      <el-dialog title="新增学生" :visible.sync="addFormVisible">
+
+
+      <el-dialog title="新增教师" :visible.sync="addFormVisible">
         <el-form :model="addForm" label-width="200px" algin="left">
-          <el-form-item label="学号" label-width="25%">
-            <el-input v-model="addForm.student_id" autocomplete="off" />
+          <el-form-item label="工号" label-width="25%">
+            <el-input v-model="addForm.staff_id" autocomplete="off" />
           </el-form-item>
           <el-form-item label="姓名" label-width="25%">
             <el-input v-model="addForm.name" autocomplete="off" />
@@ -129,17 +180,11 @@
               value-format="yyyy-MM-dd"
             />
           </el-form-item>
-          <el-form-item label="出生地" label-width="25%">
-            <el-input v-model="addForm.native_place" autocomplete="off" />
+          <el-form-item label="职称" label-width="25%">
+            <el-input v-model="addForm.professional_ranks" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="addForm.mobile_phone" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="平均绩点" label-width="25%">
-            <el-input v-model="addForm.average_gpa" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="总学分" label-width="25%">
-                <el-input v-model="addForm.total_credit" autocomplete="off" />
+          <el-form-item label="薪资" label-width="25%">
+            <el-input v-model="addForm.salary" autocomplete="off" />
           </el-form-item>
           <el-form-item label="院系号" label-width="25%">
             <el-input v-model="addForm.dept_id_id" autocomplete="off" />
@@ -151,15 +196,15 @@
         </div>
       </el-dialog>
   
-      <el-dialog title="编辑学生" :visible.sync="editFormVisible">
+      <el-dialog title="编辑教师" :visible.sync="editFormVisible">
         <el-form :model="editForm" label-width="200px" algin="left">
-          <el-form-item label="学号" label-width="25%">
-            <el-input v-model="editForm.student_id" autocomplete="off" />
+          <el-form-item label="工号" label-width="25%">
+            <el-input v-model="editForm.staff_id" autocomplete="off" />
           </el-form-item>
           <el-form-item label="姓名" label-width="25%">
             <el-input v-model="editForm.name" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="性别" label-width="25%">
+          <el-form-item label="姓名" label-width="25%">
             <el-select v-model="editForm.sex" placeholder="选择性别">
               <el-option label="男" value="男" />
               <el-option label="女" value="女" />
@@ -173,17 +218,11 @@
               value-format="yyyy-MM-dd"
             />
           </el-form-item>
-          <el-form-item label="出生地" label-width="25%">
-            <el-input v-model="editForm.native_place" autocomplete="off" />
+          <el-form-item label="职称" label-width="25%">
+            <el-input v-model="editForm.professional_ranks" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="手机号码" label-width="25%">
-            <el-input v-model="editForm.mobile_phone" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="平均绩点" label-width="25%">
-            <el-input v-model="editForm.average_gpa" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="总学分" label-width="25%">
-            <el-input v-model="editForm.total_credit" autocomplete="off" />
+          <el-form-item label="薪资" label-width="25%">
+            <el-input v-model="editForm.salary" autocomplete="off" />
           </el-form-item>
           <el-form-item label="院系号" label-width="25%">
             <el-input v-model="editForm.dept_id_id" autocomplete="off" />
@@ -198,7 +237,7 @@
   </template>
   
   <script>
-  import { addStudent, updateStudent, fetchStudent, deleteStudent } from '@/api/studentApi'
+  import { addTeacher, updateTeacher, fetchTeacher, deleteTeacher } from '@/api/teacherApi'
   export default {
     filters: {
       statusFilter(status) {
@@ -215,62 +254,44 @@
         password: null,
         listLoading: true,
         tableData: [{
-          student_id: '1234',
+          staff_id: '1234',
           name: '4',
           sex: '123',
           date_of_birth: '1212-12-12',
-          native_place: '123',
-<<<<<<< HEAD
-          phone_number: '123',
-=======
-          mobile_phone: '123',
->>>>>>> origin/main
-          average_gpa: 100,
-          total_credit: 100,
+          professional_ranks: '123',
+          salary: 100,
           dept_id_id: '' }
         ],
+        testTableData:[],
         addFormVisible: false,
         editFormVisible: false,
         editForm: {
-          student_id: '',
+          staff_id: '',
           name: '',
           sex: '',
           date_of_birth: '',
-          native_place: '',
-<<<<<<< HEAD
-          phone_number: '',
-=======
-          mobile_phone: '',
->>>>>>> origin/main
-          average_gpa: 0,
-          total_credit: 0,
+          professional_ranks: '',
+          salary: 0,
           dept_id_id: ''
         },
         addForm: {
-          student_id: '',
+          staff_id: '',
           name: '',
           sex: '',
           date_of_birth: '',
-          native_place: '',
-<<<<<<< HEAD
-          phone_number: '',
-=======
-          mobile_phone: '',
->>>>>>> origin/main
-          average_gpa: 0,
-          total_credit: 0,
+          professional_ranks: '',
+          salary: 0,
           dept_id_id: ''
         },
         query: {
-          student_id: '',
+          staff_id: '',
           name: '',
           sex: '',
-          date_of_birth: '',
-          native_place: '',
+          professional_ranks: '',
           dept_id_id: ''
         },
         deleteForm: {
-          student_id: ''
+          staff_id: ''
         }
       }
     },
@@ -280,7 +301,7 @@
     methods: {
       fetchData() {
         this.listLoading = true
-        fetchStudent(this.query).then(response => {
+        fetchTeacher(this.query).then(response => {
           console.log('fetch返回的data', response)
           this.tableData = response.data
           console.log('更新tabledata', this.tableData)
@@ -292,29 +313,18 @@
         this.addFormVisible = true
       },
       saveAdd() {
-<<<<<<< HEAD
         console.log(this.addForm)
-=======
-        console.log("新增",this.addForm)
->>>>>>> origin/main
-        addStudent(this.addForm).then(response => {
+        addTeacher(this.addForm).then(response => {
           if (response) {
             console.log('in handleAdd', response)
             this.$message({ message: '新增成功', type: 'success' })
             this.addFormVisible = false
             this.fetchData()
-            this.addForm.student_id = ''
+            this.addForm.staff_id = ''
             this.addForm.name = ''
             this.addForm.sex = ''
             this.addForm.date_of_birth = ''
-            this.addForm.native_place = ''
-<<<<<<< HEAD
-            this.addForm.phone_number = ''
-=======
-            this.addForm.mobile_phone = ''
->>>>>>> origin/main
-            this.addForm.average_gpa = 0
-            this.addForm.total_credit = 0
+            this.addForm.salary = ''
             this.addForm.dept_id_id = ''
           } else {
             this.$message.error('新增失败')
@@ -324,38 +334,25 @@
       // 编辑用户
       handleEdit(inex, row) {
         this.editFormVisible = true
-        this.editForm.student_id = row.student_id
+        this.editForm.staff_id = row.staff_id
         this.editForm.name = row.name
         this.editForm.sex = row.sex
         this.editForm.date_of_birth = row.date_of_birth
-        this.editForm.native_place = row.native_place
-<<<<<<< HEAD
-        this.editForm.phone_number = row.phone_number
-=======
-        this.editForm.mobile_phone = row.mobile_phone
->>>>>>> origin/main
-        this.editForm.average_gpa = row.average_gpa
-        this.editForm.total_credit = row.total_credit
+        this.editForm.salary = row.salary
         this.editForm.dept_id_id = row.dept_id_id
       },
       saveEdit() {
-        updateStudent(this.editForm).then(response => {
+        updateTeacher(this.editForm).then(response => {
           if (response) {
             this.editFormVisible = false
             this.$message({ message: '修改成功', type: 'success' })
             console.log('in handleEdit', response)
             this.fetchData()
-            this.editForm.student_id = ''
+            this.editForm.staff_id = ''
             this.editForm.name = ''
             this.editForm.sex = ''
             this.editForm.date_of_birth = ''
-<<<<<<< HEAD
-            this.editForm.phone_number = ''
-=======
-            this.editForm.mobile_phone = ''
->>>>>>> origin/main
-            this.editForm.average_gpa = 0
-            this.editForm.total_credit = 0
+            this.editForm.salary = ''
             this.editForm.dept_id_id = ''
           } else {
             this.$message.error('修改失败')
@@ -364,13 +361,13 @@
       },
       // 删除用户
       handleDelete(inex, row) {
-        this.deleteForm.student_id = row.student_id
-        deleteStudent(this.deleteForm).then(response => {
+        this.deleteForm.staff_id = row.staff_id
+        deleteTeacher(this.deleteForm).then(response => {
           if (response) {
             this.$message({ message: '删除成功', type: 'success' })
             console.log('in handleDelete', response)
             this.fetchData()
-            this.deleteForm.student_id = ''
+            this.deleteForm.staff_id = ''
           } else {
             this.$message.error('删除失败')
           }
