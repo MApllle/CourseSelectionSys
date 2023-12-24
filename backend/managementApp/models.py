@@ -44,6 +44,7 @@ class course(models.Model):
     credit = models.IntegerField()                       # 学分
     credit_hours = models.IntegerField()                 # 学时
     dept_id = models.ForeignKey('department', to_field='dept_id',on_delete=models.CASCADE)      # 院系号(外键)
+    normal_score_percent=models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)],default=0.5)   #平时成绩占总成绩百分比
 
 #开课表
 class open_course(models.Model):
@@ -51,6 +52,8 @@ class open_course(models.Model):
     course_id = models.ForeignKey('course', to_field='course_id',on_delete=models.CASCADE,blank=False, null=False)      # 课程序号(外键)
     staff_id = models.ForeignKey('teacher', to_field='staff_id',on_delete=models.CASCADE,blank=False, null=False)         # 工号(外键)
     class_time = models.CharField(max_length=32)               # 上课时间
+    capacity=models.IntegerField()  #课程容量
+    used_capacity=models.IntegerField()  #已用容量
     class Meta:
         unique_together = ["semester", "course_id", "staff_id"]
 
