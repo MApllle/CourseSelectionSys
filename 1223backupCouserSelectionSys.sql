@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `auth_group` (
 -- 正在导出表  course_selection_sys.auth_group 的数据：~3 rows (大约)
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
 INSERT INTO `auth_group` (`id`, `name`) VALUES
-	(1auth_user, '学生'),
+	(1, '学生'),
 	(2, '教师'),
 	(3, '管理员');
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
@@ -47,7 +47,14 @@ CREATE TABLE IF NOT EXISTS `auth_user` (
 
 -- 正在导出表  course_selection_sys.auth_user 的数据：~5 rows (大约)
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-auth_user
+INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+	(4, 'pbkdf2_sha256$600000$rsn02IZepKeEKu7pUvIVX7$z5EfOPJJwPQRogEW3tIKizE9yMYhihizWedG8nhOPns=', '2023-12-21 16:55:52.254591', 0, '3', '', '', '', 0, 1, '2023-12-16 11:16:12.082707'),
+	(14, 'pbkdf2_sha256$600000$NVBWjuHbG9WWYyd5o2fqu9$YZswbRPThN1jD79xoJbWsrZBAuqMTbPBsATMoGwQ1+Y=', '2023-12-23 15:38:18.594643', 0, '111111', '', '', '', 0, 1, '2023-12-21 16:57:09.736216'),
+	(15, 'pbkdf2_sha256$600000$A5yEcfaQ4JbvRDOcbFbmND$aqKg/PAElUEXb0bSG7XC829huTMZOBVAnmOOdNyE3mc=', NULL, 0, '222222', '', '', '', 0, 1, '2023-12-22 00:58:51.098080'),
+	(16, 'pbkdf2_sha256$600000$EKUZQLeOCj6ICltOtrA6DI$ZdMwto9j2nNvQSbfZYrNcFiLA2U8Ks5pr9kExPGdmu4=', NULL, 0, '333333', '', '', '', 0, 1, '2023-12-22 01:52:51.297243'),
+	(17, 'ceshi', NULL, 0, '1', '1', '1', '1', 0, 1, '2023-12-22 09:53:50.000000'),
+	(19, 'pbkdf2_sha256$600000$eT4C55fTUF9hJQ5y4EJBP2$UURCOymYo9w7JtZvDtv9bTYVXBvA27EXe3B3LikpH2g=', '2023-12-23 15:48:38.976636', 0, '20000000', '', '', '', 0, 1, '2023-12-23 15:39:33.972613');
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 
 -- 导出  表 course_selection_sys.auth_user_groups 结构
 CREATE TABLE IF NOT EXISTS `auth_user_groups` (

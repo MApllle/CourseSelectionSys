@@ -35,10 +35,6 @@
         v-loading="listLoading"
         :data="tableData"
         element-loading-text="Loading"
-<<<<<<< HEAD
-        height="250"
-=======
->>>>>>> origin/main
         border
         fit
         highlight-current-row
@@ -88,11 +84,7 @@
             <span>{{ scope.row.dept_id_id }}</span>
           </template>
         </el-table-column>
-<<<<<<< HEAD
-        <el-table-column label="操作">
-=======
         <el-table-column label="操作" width="190" align="center">
->>>>>>> origin/main
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -190,7 +182,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="addFormVisible = false">取 消</el-button>
+          <el-button @click="editFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveEdit()">确 定</el-button>
         </div>
       </el-dialog>
@@ -220,11 +212,7 @@
           sex: '123',
           date_of_birth: '1212-12-12',
           native_place: '123',
-<<<<<<< HEAD
-          phone_number: '123',
-=======
           mobile_phone: '123',
->>>>>>> origin/main
           average_gpa: 100,
           total_credit: 100,
           dept_id_id: '' }
@@ -237,11 +225,7 @@
           sex: '',
           date_of_birth: '',
           native_place: '',
-<<<<<<< HEAD
-          phone_number: '',
-=======
           mobile_phone: '',
->>>>>>> origin/main
           average_gpa: 0,
           total_credit: 0,
           dept_id_id: ''
@@ -252,11 +236,7 @@
           sex: '',
           date_of_birth: '',
           native_place: '',
-<<<<<<< HEAD
-          phone_number: '',
-=======
           mobile_phone: '',
->>>>>>> origin/main
           average_gpa: 0,
           total_credit: 0,
           dept_id_id: ''
@@ -292,11 +272,7 @@
         this.addFormVisible = true
       },
       saveAdd() {
-<<<<<<< HEAD
-        console.log(this.addForm)
-=======
         console.log("新增",this.addForm)
->>>>>>> origin/main
         addStudent(this.addForm).then(response => {
           if (response) {
             console.log('in handleAdd', response)
@@ -308,11 +284,7 @@
             this.addForm.sex = ''
             this.addForm.date_of_birth = ''
             this.addForm.native_place = ''
-<<<<<<< HEAD
-            this.addForm.phone_number = ''
-=======
             this.addForm.mobile_phone = ''
->>>>>>> origin/main
             this.addForm.average_gpa = 0
             this.addForm.total_credit = 0
             this.addForm.dept_id_id = ''
@@ -329,11 +301,7 @@
         this.editForm.sex = row.sex
         this.editForm.date_of_birth = row.date_of_birth
         this.editForm.native_place = row.native_place
-<<<<<<< HEAD
-        this.editForm.phone_number = row.phone_number
-=======
         this.editForm.mobile_phone = row.mobile_phone
->>>>>>> origin/main
         this.editForm.average_gpa = row.average_gpa
         this.editForm.total_credit = row.total_credit
         this.editForm.dept_id_id = row.dept_id_id
@@ -349,11 +317,7 @@
             this.editForm.name = ''
             this.editForm.sex = ''
             this.editForm.date_of_birth = ''
-<<<<<<< HEAD
-            this.editForm.phone_number = ''
-=======
             this.editForm.mobile_phone = ''
->>>>>>> origin/main
             this.editForm.average_gpa = 0
             this.editForm.total_credit = 0
             this.editForm.dept_id_id = ''

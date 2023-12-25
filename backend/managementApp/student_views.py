@@ -22,11 +22,7 @@ def handleStudent(request):
             sql = 'select * from managementapp_student where '
             for key, value in query.items():
                 sql = sql + key + '= %s '
-<<<<<<< HEAD
-                param.append(value)
-=======
                 param.append(value)      
->>>>>>> origin/main
         out = get_from_table(sql, param)
         # 需要捕捉一下错误
         data = {
@@ -37,10 +33,6 @@ def handleStudent(request):
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method=='PUT': # 更新
         request_data = json.loads(request.body.decode('utf-8'))
-<<<<<<< HEAD
-        query = {key: value for key, value in request_data.items() if value}
-=======
->>>>>>> origin/main
         student.objects.filter(student_id=request_data['student_id']).update(student_id=request_data.get('student_id', ''),
                                                                     name=request_data.get('name', ''),
                                                                     sex=request_data.get('sex',''),
@@ -48,11 +40,7 @@ def handleStudent(request):
                                                                     native_place=request_data.get('native_place',''),
                                                                     mobile_phone=request_data.get('mobile_phone',''),
                                                                     average_gpa=request_data.get('average_gpa',0),
-<<<<<<< HEAD
-                                                                    total_cerdict=request_data.get('total_cerdict',0),
-=======
                                                                     total_credit=request_data.get('total_credit',0),
->>>>>>> origin/main
                                                                     dept_id_id=request_data.get('dept_id_id',''))
         data = {
             "code":20000,   # 注意，必须要有code，不然返回的消息会被后端拦截
@@ -84,19 +72,6 @@ def addStudent(request): # 新增学生
                 psw=hashlib.sha256(request_data['student_id'].encode('utf-8')).hexdigest()
                 user.set_password(psw)
                 user.save()
-<<<<<<< HEAD
-            if department.objects.filter(dept_id=request_data['dept_id_id']).count() == 0:
-                new_student = student.objects.create(student_id=request_data.get['student_id',''],
-                                                    name=request_data.get['name',''],
-                                                    sex=request_data.get['sex',''],
-                                                    date_of_birth=request_data.get['date_of_birth',''],
-                                                    native_place=request_data.get['native_place',''],
-                                                    mobile_phone=request_data.get['mobile_phone',''],
-                                                    average_gpa=request_data.get['average_gpa',''],
-                                                    total_cerdict=request_data.get['total_cerdict',''],
-                                                    dept_id_id=request_data.get['dept_id_id',''])
-                new_student.save()
-=======
                 user.groups.add(1)
             addedUser = User.objects.get(username=request_data['student_id'])
             if department.objects.filter(dept_id=request_data['dept_id_id']).count() != 0:
@@ -112,30 +87,17 @@ def addStudent(request): # 新增学生
                                                     user_id_id=addedUser.id)
                 new_student.save()
                 return HttpResponse(json.dumps(data), content_type='application/json')
->>>>>>> origin/main
             else:
                 data = {
                     "code": 50000,
                     "msg": "院系号不存在"
                 }
-<<<<<<< HEAD
-=======
                 return HttpResponse(json.dumps(data), content_type='application/json')
->>>>>>> origin/main
         else:
             data = {
                 "code": 50000,
                 "msg": "学号不能为空"
             }
-<<<<<<< HEAD
-            data = {
-                "code": 50000,
-                "msg": "学号不能为空"
-            }
-            return HttpResponse(json.dumps(data), content_type='application/json')
-        
-=======
             return HttpResponse(json.dumps(data), content_type='application/json')
         
         
->>>>>>> origin/main
