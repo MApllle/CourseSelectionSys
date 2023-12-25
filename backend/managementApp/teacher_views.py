@@ -18,9 +18,11 @@ def handleTeacher(request):
         else:
             #不提供通过生日和薪水查老师
             sql = 'select * from managementapp_teacher where '
-            for key,value in query.items():
-                sql=sql+key+'= %s '
+            conditions = []
+            for key, value in query.items():
+                conditions.append(f'{key} = %s')
                 param.append(value)
+            sql += ' AND '.join(conditions)
         out=get_from_table(sql,param)
         #需要捕捉一下错误
         data={

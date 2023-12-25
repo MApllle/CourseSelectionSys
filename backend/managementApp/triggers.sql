@@ -18,10 +18,25 @@ after insert on managementapp_course_selection
 for each row
 begin 
     update managementapp_open_course
-    set used_capacity=used_capacity-1
+    set used_capacity=used_capacity+1
     where course_id_id=new.course_id_id
         and staff_id_id=new.staff_id_id
         and semester=new.semester;
+end
+||
+DELIMITER ;
+
+--触发器:删除选课后，used_capa-1
+DELIMITER ||
+create trigger manage_course_capacity_ondelete
+after delete on managementapp_course_selection
+for each row
+begin 
+    update managementapp_open_course
+    set used_capacity=used_capacity-1
+        where course_id_id=old.course_id_id
+        and staff_id_id=old.staff_id_id
+        and semester=old.semester;
 end
 ||
 DELIMITER ;

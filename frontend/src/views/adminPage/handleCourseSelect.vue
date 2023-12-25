@@ -2,37 +2,47 @@
 <template>
     <div class="app-container">
       <h1>选课管理</h1>
+      <!--开课表搜索：用于选课-->
       <el-row :gutter="20">
         <el-col :span="2"><span>课程号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.staff_id" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.staff_id_id" autocomplete="off" size="small" />
         </el-col>
         <el-col :span="2"><span>课程名：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.sex" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.course_name" autocomplete="off" size="small" />
         </el-col>
-        <el-col :span="2"><span>姓名：</span></el-col>
+        <el-col :span="2"><span>教师名：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.name" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.staff_name" autocomplete="off" size="small" />
         </el-col>
-        <el-col :span="2"><span>职称：</span></el-col>
+        <el-col :span="2"><span>教师号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.professional_ranks" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.staff_id_id" autocomplete="off" size="small" />
         </el-col>
       </el-row>
       <el-row :gutter="20">
-        <el-col :span="2"><span>院系号：</span></el-col>
+        <el-col :span="2"><span>教师职称</span></el-col>
         <el-col :span="4">
-          <el-input v-model="query.dept_id_id" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.professional_ranks" autocomplete="off" size="small" />
+        </el-col>
+        <el-col :span="2"><span>剩余容量：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="queryOpenCourse.used_capacity" autocomplete="off" size="small" />
+        </el-col>
+        <el-col :span="2"><span>上课时间：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="queryOpenCourse.class_time" autocomplete="off" size="small" />
         </el-col>
       </el-row>
       <div align="right">
-        <el-button type="primary" size="small" @click="fetchData()">查询课程</el-button>
+        <el-button type="primary" size="small" @click="fetchOpenCourseData()">查询课程</el-button>
       </div>
       <el-divider />
+      <!--选课部分-->
       <el-table
         v-loading="listLoading"
-        :data="tableData"
+        :data="tableDataOpenCourse"
         element-loading-text="Loading"
         border
         fit
@@ -53,14 +63,9 @@
             <span>{{ scope.row.course_name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="上课时间" align="center">
-          <template slot-scope="scope">
-            <span>{{ scope.row.class_time }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="教师名" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.teacher_name }}</span>
+            <span>{{ scope.row.staff_name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="教师工号" align="center">
@@ -73,6 +78,11 @@
             <span>{{ scope.row.professional_ranks }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="上课时间" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.class_time }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="容量" align="center">
           <template slot-scope="scope">
             <span>{{ scope.row.capacity }}</span>
@@ -83,7 +93,7 @@
             <span>{{ scope.row.used_capacity }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width="200px">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -97,11 +107,33 @@
           </template>
         </el-table-column>
       </el-table>
-  
-      <!--以下是测试用代码-->
+      <h2>查询选课信息</h2>
+      <el-row :gutter="20">
+        <el-col :span="2"><span>学号：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="querySelectCourse.staff_id_id" autocomplete="off" size="small" />
+        </el-col>
+        <el-col :span="2"><span>学生姓名：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="querySelectCourse.course_name" autocomplete="off" size="small" />
+        </el-col>
+        <el-col :span="2"><span>课程号：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="querySelectCourse.staff_name" autocomplete="off" size="small" />
+        </el-col>
+        <el-col :span="2"><span>课程名：</span></el-col>
+        <el-col :span="4">
+          <el-input v-model="querySelectCourse.staff_id_id" autocomplete="off" size="small" />
+        </el-col>
+      </el-row>
+      <div align="right">
+        <el-button type="primary" size="small" @click="fetchCourseSelectionData()">查询选课</el-button>
+      </div>
+      <el-divider />
+      <!--管理学生选课部分-->
       <el-table
         v-loading="listLoading"
-        :data="tableData"
+        :data="tableDataCourseSelection"
         element-loading-text="Loading"
         border
         fit
@@ -137,9 +169,9 @@
             <span>{{ scope.row.test_score }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="total_score" align="center">
+        <el-table-column label="总评成绩" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.总评成绩 }}</span>
+            <span>{{ scope.row.total_score }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -158,78 +190,95 @@
       </el-table>
 
 
-      <el-dialog title="新增教师" :visible.sync="addFormVisible">
-        <el-form :model="addForm" label-width="200px" algin="left">
-          <el-form-item label="工号" label-width="25%">
-            <el-input v-model="addForm.staff_id" autocomplete="off" />
+      <el-dialog title="管理员：新增选课" :visible.sync="addFormVisible">
+        <el-form :model="addOpenCourseForm" label-width="200px" algin="left">
+          <el-form-item label="课程号" label-width="25%">
+            <el-input v-model="addOpenCourseForm.course_id_id" autocomplete="off" :disabled="true"/>
           </el-form-item>
-          <el-form-item label="姓名" label-width="25%">
-            <el-input v-model="addForm.name" autocomplete="off" />
+          <el-form-item label="课程名" label-width="25%">
+            <el-input v-model="addOpenCourseForm.course_name" autocomplete="off" :disabled="true"/>
           </el-form-item>
-          <el-form-item label="性别" label-width="25%">
-            <el-select v-model="addForm.sex" placeholder="选择性别">
-              <el-option label="男" value="男" />
-              <el-option label="女" value="女" />
-            </el-select>
+          <el-form-item label="教师名" label-width="25%">
+            <el-input v-model="addOpenCourseForm.staff_name" autocomplete="off" :disabled="true"/>
           </el-form-item>
-          <el-form-item label="出生日期" label-width="25%">
-            <el-date-picker
-              v-model="addForm.date_of_birth"
-              type="date"
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"
-            />
+          <el-form-item label="教师工号" label-width="25%">
+            <el-input v-model="addOpenCourseForm.staff_id_id" autocomplete="off" :disabled="true"/>
           </el-form-item>
           <el-form-item label="职称" label-width="25%">
-            <el-input v-model="addForm.professional_ranks" autocomplete="off" />
+            <el-input v-model="addOpenCourseForm.professional_ranks" autocomplete="off" :disabled="true"/>
           </el-form-item>
-          <el-form-item label="薪资" label-width="25%">
-            <el-input v-model="addForm.salary" autocomplete="off" />
+          <el-form-item label="上课时间" label-width="25%">
+            <el-input v-model="addOpenCourseForm.class_time" autocomplete="off" :disabled="true"/>
           </el-form-item>
-          <el-form-item label="院系号" label-width="25%">
-            <el-input v-model="addForm.dept_id_id" autocomplete="off" />
+          <el-form-item label="*学生学号" label-width="25%">
+            <el-input v-model="addOpenCourseForm.student_id_id" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="学生姓名" label-width="25%">
+            <el-input v-model="addOpenCourseForm.student_name" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="addFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="saveAdd()">确 定</el-button>
+          <el-button type="primary" @click="saveOpenCourseAdd()">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <el-dialog title="管理员：删除选课" :visible.sync="deleteFormVisible">
+        <el-form :model="deleteOpenCourseForm" label-width="200px" algin="left">
+          <el-form-item label="课程号" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.course_id_id" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="课程名" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.course_name" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="教师名" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.staff_name" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="教师工号" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.staff_id_id" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="职称" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.professional_ranks" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="上课时间" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.class_time" autocomplete="off" :disabled="true"/>
+          </el-form-item>
+          <el-form-item label="*学生学号" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.student_id_id" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="学生姓名" label-width="25%">
+            <el-input v-model="deleteOpenCourseForm.student_name" autocomplete="off" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="deleteFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="saveOpenCourseDelete()">确 定</el-button>
         </div>
       </el-dialog>
   
-      <el-dialog title="编辑教师" :visible.sync="editFormVisible">
-        <el-form :model="editForm" label-width="200px" algin="left">
+      <el-dialog title="测试：编辑选课" :visible.sync="editFormVisible">
+        <el-form :model="editSelectCourseForm" label-width="200px" algin="left">
+          <el-form-item label="课程号" label-width="25%">
+            <el-input v-model="editSelectCourseForm.course_id_id" autocomplete="off" />
+          </el-form-item>
           <el-form-item label="工号" label-width="25%">
-            <el-input v-model="editForm.staff_id" autocomplete="off" />
+            <el-input v-model="editSelectCourseForm.staff_id_id" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="姓名" label-width="25%">
-            <el-input v-model="editForm.name" autocomplete="off" />
+          <el-form-item label="学生号" label-width="25%">
+            <el-input v-model="editSelectCourseForm.student_id_id" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="姓名" label-width="25%">
-            <el-select v-model="editForm.sex" placeholder="选择性别">
-              <el-option label="男" value="男" />
-              <el-option label="女" value="女" />
-            </el-select>
+          <el-form-item label="平时分" label-width="25%">
+            <el-input v-model="editSelectCourseForm.normal_score" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="出生日期" label-width="25%">
-            <el-date-picker
-              v-model="editForm.date_of_birth"
-              type="date"
-              placeholder="选择日期"
-              value-format="yyyy-MM-dd"
-            />
+          <el-form-item label="期末成绩" label-width="25%">
+            <el-input v-model="editSelectCourseForm.test_score" autocomplete="off" />
           </el-form-item>
-          <el-form-item label="职称" label-width="25%">
-            <el-input v-model="editForm.professional_ranks" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="薪资" label-width="25%">
-            <el-input v-model="editForm.salary" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="院系号" label-width="25%">
-            <el-input v-model="editForm.dept_id_id" autocomplete="off" />
+          <el-form-item label="总成绩" label-width="25%">
+            <el-input v-model="editSelectCourseForm.total_score" autocomplete="off" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="addFormVisible = false">取 消</el-button>
+          <el-button @click="editFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="saveEdit()">确 定</el-button>
         </div>
       </el-dialog>
@@ -237,8 +286,15 @@
   </template>
   
   <script>
-  import { addTeacher, updateTeacher, fetchTeacher, deleteTeacher } from '@/api/teacherApi'
+  import { addCourseSelection, updateCourseSelection, fetchCourseSelection, deleteCourseSelection,fetchCoursesForSelect } from '@/api/courseSelectionApi'
+  import { mapGetters } from 'vuex'
   export default {
+      computed: {
+      ...mapGetters([
+        'group',
+        'semester'
+      ])
+    },
     filters: {
       statusFilter(status) {
         const statusMap = {
@@ -253,46 +309,64 @@
       return {
         password: null,
         listLoading: true,
-        tableData: [{
-          staff_id: '1234',
-          name: '4',
-          sex: '123',
-          date_of_birth: '1212-12-12',
-          professional_ranks: '123',
-          salary: 100,
-          dept_id_id: '' }
-        ],
-        testTableData:[],
+        //从开课表中查找并返回的数据;一定要有开课表的id
+        tableDataOpenCourse: [],
+        //从选课表查找并返回的数据
+        tableDataCourseSelection:[],
         addFormVisible: false,
         editFormVisible: false,
-        editForm: {
-          staff_id: '',
-          name: '',
-          sex: '',
-          date_of_birth: '',
-          professional_ranks: '',
-          salary: 0,
-          dept_id_id: ''
+        deleteFormVisible:false,
+        editSelectCourseForm: {//测试用的，实际不会有这个
+          selectcourse_id: '', //选课表的课程id
+          semester: this.$store.getters.semester,
+          normal_score: '',
+          test_score: '',
+          course_id_id: '',
+          staff_id_id: '',
+          student_id_id: '',
         },
-        addForm: {
-          staff_id: '',
-          name: '',
-          sex: '',
-          date_of_birth: '',
+        addOpenCourseForm: {
+          semester:this.$store.getters.semester,
+          group:this.$store.getters.group,
+          opencourse_id: '', //开课表的课程id
+          course_id_id:'',
+          course_name: '',
+          staff_name: '',
+          staff_id_id: '',
           professional_ranks: '',
-          salary: 0,
-          dept_id_id: ''
+          class_time: '',
+          student_id_id: '',
+          student_name: '',
         },
-        query: {
-          staff_id: '',
-          name: '',
-          sex: '',
-          professional_ranks: '',
-          dept_id_id: ''
+        queryOpenCourse: {
+          semester:this.$store.getters.semester, //semester=this.semester
+          staff_id_id:'',
+          course_name:'',
+          staff_name:'',
+          staff_id_id:'',
+          professional_ranks:'',
+          capacity:'',
+          used_capacity:''
         },
-        deleteForm: {
-          staff_id: ''
-        }
+        querySelectCourse: {
+          semester: this.$store.getters.semester,
+          normal_score: '',
+          course_id_id: '',
+          staff_id_id: '',
+          student_id_id: ''
+        },
+        deleteOpenCourseForm: {
+          selectcourse_id: '',//唯一值，传给后端，剩下的都是看的
+          opencourse_id:'',
+          staff_id:'',
+          course_name:'',
+          staff_name:'',
+          staff_id_id:'',
+          professional_ranks:'',
+          used_capacity:'',
+          class_time:'',
+        },
+        
       }
     },
     created() {
@@ -301,31 +375,103 @@
     methods: {
       fetchData() {
         this.listLoading = true
-        fetchTeacher(this.query).then(response => {
-          console.log('fetch返回的data', response)
-          this.tableData = response.data
-          console.log('更新tabledata', this.tableData)
+        //先找课程表
+        fetchCoursesForSelect(this.queryOpenCourse).then(response => {
+          this.tableDataOpenCourse = response.data
+          console.log('更新tabledata', this.tableDataOpenCourse)
+          //再找选课表
+          fetchCourseSelection(this.querySelectCourse).then(responseCS => {
+            this.tableDataCourseSelection = responseCS.data
+            console.log('更新tabledataCS', this.tableDataCourseSelection)
+            this.listLoading = false
+          })
+        })
+      },
+      //查询选课清单
+      fetchOpenCourseData(){
+        this.listLoading = true
+        fetchCoursesForSelect(this.queryOpenCourse).then(response => {
+          this.tableDataOpenCourse = response.data
+          console.log('更新tabledata', this.tableDataOpenCourse)
           this.listLoading = false
         })
       },
-      // 新增用户
-      handleAdd() {
-        this.addFormVisible = true
+      //查询某个同学的选课情况
+      fetchCourseSelectionData(){
+        this.listLoading = true
+        fetchCourseSelection(this.querySelectCourse).then(responseCS => {
+            this.tableDataCourseSelection = responseCS.data
+            console.log('更新tabledataCS', this.tableDataCourseSelection)
+            this.listLoading = false
+          })
       },
-      saveAdd() {
-        console.log(this.addForm)
-        addTeacher(this.addForm).then(response => {
+      // 新增选课【管理员，跳出弹窗】
+      handleAddCourse(index, row) {
+        this.addFormVisible = true
+        this.addOpenCourseForm.semester=this.$store.getters.semester
+        this.addOpenCourseForm.opencourse_id=row.opencourse_id
+        this.addOpenCourseForm.course_id_id=row.course_id_id
+        this.addOpenCourseForm.staff_id=row.staff_id
+        this.addOpenCourseForm.course_name=row.course_name
+        this.addOpenCourseForm.staff_name=row.staff_name
+        this.addOpenCourseForm.staff_id_id=row.staff_id_id
+        this.addOpenCourseForm.professional_ranks=row.professional_ranks
+        this.addOpenCourseForm.used_capacity=row.used_capacity
+        this.addOpenCourseForm.class_time=row.class_time
+
+      },
+      //删除选课
+      handleDeleteCourse(index, row){
+        this.deleteFormVisible = true
+        this.deleteOpenCourseForm.opencourse_id=row.opencourse_id
+        this.deleteOpenCourseForm.course_id_id=row.course_id_id
+        this.deleteOpenCourseForm.staff_id=row.staff_id
+        this.deleteOpenCourseForm.course_name=row.course_name
+        this.deleteOpenCourseForm.staff_name=row.staff_name
+        this.deleteOpenCourseForm.staff_id_id=row.staff_id_id
+        this.deleteOpenCourseForm.professional_ranks=row.professional_ranks
+        this.deleteOpenCourseForm.used_capacity=row.used_capacity
+        this.deleteOpenCourseForm.class_time=row.class_time
+      },
+      saveOpenCourseAdd() {
+        console.log(this.addOpenCourseForm)
+        addCourseSelection(this.addOpenCourseForm).then(response => {
           if (response) {
             console.log('in handleAdd', response)
             this.$message({ message: '新增成功', type: 'success' })
             this.addFormVisible = false
             this.fetchData()
-            this.addForm.staff_id = ''
-            this.addForm.name = ''
-            this.addForm.sex = ''
-            this.addForm.date_of_birth = ''
-            this.addForm.salary = ''
-            this.addForm.dept_id_id = ''
+            this.addOpenCourseForm.opencourse_id=''
+            this.addOpenCourseForm.staff_id=''
+            this.addOpenCourseForm.course_name=''
+            this.addOpenCourseForm.staff_name=''
+            this.addOpenCourseForm.staff_id_id=''
+            this.addOpenCourseForm.professional_ranks=''
+            this.addOpenCourseForm.used_capacity=''
+            this.addOpenCourseForm.class_time=''
+          } else {
+            this.$message.error('新增失败')
+          }
+        }).catch(error=>{
+          this.$message.error(error.messgae)
+        })
+      },
+      saveOpenCourseDelete() {
+        console.log(this.deleteOpenCourseForm)
+        deleteCourseSelection(this.deleteOpenCourseForm).then(response => {
+          if (response) {
+            console.log('in handleDelete', response)
+            this.$message({ message: '新增成功', type: 'success' })
+            this.deleteFormVisible = false
+            this.fetchData()
+            this.deleteOpenCourseForm.opencourse_id=''
+            this.deleteOpenCourseForm.staff_id=''
+            this.deleteOpenCourseForm.course_name=''
+            this.deleteOpenCourseForm.staff_name=''
+            this.deleteOpenCourseForm.staff_id_id=''
+            this.deleteOpenCourseForm.professional_ranks=''
+            this.deleteOpenCourseForm.used_capacity=''
+            this.deleteOpenCourseForm.class_time=''
           } else {
             this.$message.error('新增失败')
           }
@@ -334,26 +480,26 @@
       // 编辑用户
       handleEdit(inex, row) {
         this.editFormVisible = true
-        this.editForm.staff_id = row.staff_id
-        this.editForm.name = row.name
-        this.editForm.sex = row.sex
-        this.editForm.date_of_birth = row.date_of_birth
-        this.editForm.salary = row.salary
-        this.editForm.dept_id_id = row.dept_id_id
+        this.editForm.course_id_id = row.course_id_id
+        this.editForm.staff_id_id = row.staff_id_id
+        this.editForm.student_id_id = row.student_id_id
+        this.editForm.normal_score = row.normal_score
+        this.editForm.test_score = row.test_score
+        this.editForm.total_score = row.total_score
       },
       saveEdit() {
-        updateTeacher(this.editForm).then(response => {
+        updateCourseSelection(this.editForm).then(response => {
           if (response) {
             this.editFormVisible = false
             this.$message({ message: '修改成功', type: 'success' })
             console.log('in handleEdit', response)
             this.fetchData()
-            this.editForm.staff_id = ''
-            this.editForm.name = ''
-            this.editForm.sex = ''
-            this.editForm.date_of_birth = ''
-            this.editForm.salary = ''
-            this.editForm.dept_id_id = ''
+            this.editForm.course_id_id = ''
+            this.editForm.staff_id_id = ''
+            this.editForm.student_id_id = ''
+            this.editForm.normal_score = ''
+            this.editForm.test_score = ''
+            this.editForm.total_score = ''
           } else {
             this.$message.error('修改失败')
           }

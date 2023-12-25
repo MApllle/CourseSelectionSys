@@ -66,5 +66,6 @@ class course_selection(models.Model):
     normal_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 平时成绩
     test_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 考试成绩
     total_score = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(100)],null=True,blank=True)       # 总评成绩
+    open_course_id=models.ForeignKey('open_course', to_field='id',on_delete=models.CASCADE)
     class Meta:
         unique_together = ["student_id", "course_id", "semester"]
