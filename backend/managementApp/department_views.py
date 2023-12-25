@@ -17,10 +17,14 @@ def handleDepartment(request):
             sql = 'select * from managementapp_department'
         else:
             #不提供通过地址和电话查学院
+            #动态地根据查询参数的数量构建SQL语句，并在其中使用逻辑运算符AND来连接不同的查询条件。
             sql = 'select * from managementapp_department where '
+            conditions = []
             for key,value in query.items():
-                sql=sql+key+'= %s '
+                #sql=sql+key+'= %s '
+                conditions.append(f'{key} = %s')
                 param.append(value)
+            sql += ' AND '.join(conditions)
         out=get_from_table(sql,param)
         #需要捕捉一下错误
         data={

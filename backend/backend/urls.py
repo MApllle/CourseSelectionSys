@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from managementApp import teacher_views,student_views,admin_views,department_views
+from managementApp import teacher_views,student_views,admin_views,department_views,course_views
 
 urlpatterns = [
     #path("admin/", admin.site.urls),
@@ -36,5 +36,8 @@ urlpatterns = [
     #student表增删改查接口
     path("addStudent/",student_views.addStudent), #新增
     path("handleStudent/",student_views.handleStudent), #删改查
+    #course表增删改查接口
+    path("addCourse/",course_views.addCourse), #新增
+    path("handleCourse/",course_views.handleCourse), #删改查
 
 ]
