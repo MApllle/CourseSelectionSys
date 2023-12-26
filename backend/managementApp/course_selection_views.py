@@ -70,6 +70,35 @@ def fetchCoursesForSelect(request):
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
 
+def fetchCoursesForStudentSchedule(request):
+    if request.method == 'POST': # 查询
+        # 获取query
+        post_data = json.loads(request.body.decode('utf-8'))
+        print('=================pppppppppppppppppppppppppppp',post_data)
+        # 提取所有值为空的，新建一个字典
+        query = {key: value for key, value in post_data.items() if value}
+        param = []
+        if not query:
+            sql = 'select cs.course_id_id,c.course_name,cs.staff_id_id,t.name as teacher_name,c.credit,c.credit_hours,oc.class_time from managementapp_course_selection cs,managementapp_course c,managementapp_teacher t,managementapp_open_course oc where t.staff_id=cs.staff_id_id and c.course_id=cs.course_id_id and oc.id=cs.open_course_id_id'
+        else:
+            # 不提供通过已选人数查开课
+            sql = 'select cs.course_id_id,c.course_name,cs.staff_id_id,t.name as teacher_name,c.credit,c.credit_hours,oc.class_time from managementapp_course_selection cs,managementapp_course c,managementapp_teacher t,managementapp_open_course oc where t.staff_id=cs.staff_id_id and c.course_id=cs.course_id_id and oc.id=cs.open_course_id_id and '
+            conditions=[]
+            for key, value in query.items():
+                if key in ['semester','student_id_id']:
+                    conditions.append(f'cs.{key} = %s')
+                param.append(value)
+            sql += ' AND '.join(conditions)
+            print("sql senetence",sql,param)
+        out = get_from_table(sql, param)
+        print('=================',out)
+        # 需要捕捉一下错误
+        data = {
+            "code": 20000,
+            "data": out,
+            "msg": "查询成功"
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
 
 def handleCourseSelection(request):
     if request.method=='POST':#查询

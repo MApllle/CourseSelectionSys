@@ -18,6 +18,34 @@ def is_time_conflict(new_time, existing_times):
             return True
     return False
 
+def fetchCoursesForTeacherSchedule(request):
+    if request.method == 'POST': # 查询
+        # 获取query
+        post_data = json.loads(request.body.decode('utf-8'))
+        # 提取所有值为空的，新建一个字典
+        query = {key: value for key, value in post_data.items() if value}
+        param = []
+        if not query:
+            sql = 'select oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id'
+        else:
+            # 不提供通过已选人数查开课
+            sql = 'select oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id and '
+            conditions=[]
+            for key, value in query.items():
+                if key in ['semester','staff_id_id']:
+                    conditions.append(f'oc.{key} = %s')
+                param.append(value)
+            sql += ' AND '.join(conditions)
+            print("=================",sql,param)
+        out = get_from_table(sql, param)
+        # 需要捕捉一下错误
+        data = {
+            "code": 20000,
+            "data": out,
+            "msg": "查询成功"
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
+
 def handleOpenCourse(request):
     if request.method == 'POST': # 查询
         # 获取query
@@ -32,10 +60,10 @@ def handleOpenCourse(request):
             sql = 'select * from managementapp_open_course where '
             conditions=[]
             for key, value in query.items():
-                sql = sql + key + '= %s'
                 conditions.append(f'{key} = %s')
                 param.append(value)
             sql += ' AND '.join(conditions)
+            print("=================",sql,param)
         out = get_from_table(sql, param)
         # 需要捕捉一下错误
         data = {
