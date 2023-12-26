@@ -55,7 +55,7 @@ class open_course(models.Model):
     capacity=models.IntegerField()  #课程容量
     used_capacity=models.IntegerField()  #已用容量
     class Meta:
-        unique_together = ["semester", "course_id", "staff_id"]
+        unique_together = ["semester", "course_id", "staff_id","class_time"]
 
 #选课表
 class course_selection(models.Model):

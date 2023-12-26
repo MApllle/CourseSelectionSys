@@ -47,9 +47,9 @@ def fetchCoursesForSelect(request):
         query = {key: value for key, value in post_data.items() if value}
         param=[]
         if not query:
-            sql = 'select oc.id as opencourse_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id'
+            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id'
         else:
-            sql = 'select oc.id as opencourse_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and '
+            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and '
             conditions = []
             for key, value in query.items():
                 if key in ['course_name']:
@@ -126,7 +126,7 @@ def addCourseSelection(request):#新增
         if request_data['student_id_id'] and request_data['course_id_id'] and request_data['semester'] and request_data['staff_id_id']:
             #获取auth_user的id
             #只要都传过来，无条件认为组合是合法的，因为懒得写校验了
-            course_to=open_course.objects.get(id=request_data['opencourse_id'])
+            course_to=open_course.objects.get(id=request_data['opencourse_id_id'])
             if course_selection.objects.filter(student_id_id=request_data['student_id_id'],course_id_id=request_data['course_id_id'],semester=request_data['semester'],staff_id_id=request_data['staff_id_id']).count()!=0:
                 data={
                     "code":50000,
@@ -150,7 +150,8 @@ def addCourseSelection(request):#新增
                                                     total_score=request_data.get('total_score', 0),
                                                     course_id_id=request_data.get('course_id_id', ''), 
                                                     staff_id_id=request_data.get('staff_id_id', ''), 
-                                                    student_id_id=request_data.get('student_id_id', ''))
+                                                    student_id_id=request_data.get('student_id_id', ''),
+                                                    open_course_id_id=request_data.get('opencourse_id_id',''))
             new_cs.save()
             data={
                 "code":20000,

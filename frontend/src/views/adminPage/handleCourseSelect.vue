@@ -328,7 +328,7 @@
         addOpenCourseForm: {
           semester:this.$store.getters.semester,
           group:this.$store.getters.group,
-          opencourse_id: '', //开课表的课程id
+          opencourse_id_id: '', //开课表的课程id
           course_id_id:'',
           course_name: '',
           staff_name: '',
@@ -357,7 +357,8 @@
         },
         deleteOpenCourseForm: {
           selectcourse_id: '',//唯一值，传给后端，剩下的都是看的
-          opencourse_id:'',
+          opencourse_id_id:'',
+          course_id_id:'',
           staff_id:'',
           course_name:'',
           staff_name:'',
@@ -409,7 +410,7 @@
       handleAddCourse(index, row) {
         this.addFormVisible = true
         this.addOpenCourseForm.semester=this.$store.getters.semester
-        this.addOpenCourseForm.opencourse_id=row.opencourse_id
+        this.addOpenCourseForm.opencourse_id_id=row.opencourse_id_id
         this.addOpenCourseForm.course_id_id=row.course_id_id
         this.addOpenCourseForm.staff_id=row.staff_id
         this.addOpenCourseForm.course_name=row.course_name
@@ -423,7 +424,7 @@
       //删除选课
       handleDeleteCourse(index, row){
         this.deleteFormVisible = true
-        this.deleteOpenCourseForm.opencourse_id=row.opencourse_id
+        this.deleteOpenCourseForm.opencourse_id_id=row.opencourse_id_id
         this.deleteOpenCourseForm.course_id_id=row.course_id_id
         this.deleteOpenCourseForm.staff_id=row.staff_id
         this.deleteOpenCourseForm.course_name=row.course_name
@@ -434,14 +435,14 @@
         this.deleteOpenCourseForm.class_time=row.class_time
       },
       saveOpenCourseAdd() {
-        console.log(this.addOpenCourseForm)
+        console.log("开课传入值",this.addOpenCourseForm)
         addCourseSelection(this.addOpenCourseForm).then(response => {
           if (response) {
             console.log('in handleAdd', response)
             this.$message({ message: '新增成功', type: 'success' })
             this.addFormVisible = false
             this.fetchData()
-            this.addOpenCourseForm.opencourse_id=''
+            this.addOpenCourseForm.opencourse_id_id=''
             this.addOpenCourseForm.staff_id=''
             this.addOpenCourseForm.course_name=''
             this.addOpenCourseForm.staff_name=''
@@ -464,7 +465,7 @@
             this.$message({ message: '新增成功', type: 'success' })
             this.deleteFormVisible = false
             this.fetchData()
-            this.deleteOpenCourseForm.opencourse_id=''
+            this.deleteOpenCourseForm.opencourse_id_id=''
             this.deleteOpenCourseForm.staff_id=''
             this.deleteOpenCourseForm.course_name=''
             this.deleteOpenCourseForm.staff_name=''
