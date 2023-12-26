@@ -111,19 +111,11 @@
       <el-row :gutter="20">
         <el-col :span="2"><span>学号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="querySelectCourse.staff_id_id" autocomplete="off" size="small" />
-        </el-col>
-        <el-col :span="2"><span>学生姓名：</span></el-col>
-        <el-col :span="4">
-          <el-input v-model="querySelectCourse.course_name" autocomplete="off" size="small" />
+          <el-input v-model="querySelectCourse.student_id_id" autocomplete="off" size="small" />
         </el-col>
         <el-col :span="2"><span>课程号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="querySelectCourse.staff_name" autocomplete="off" size="small" />
-        </el-col>
-        <el-col :span="2"><span>课程名：</span></el-col>
-        <el-col :span="4">
-          <el-input v-model="querySelectCourse.staff_id_id" autocomplete="off" size="small" />
+          <el-input v-model="querySelectCourse.course_id_id" autocomplete="off" size="small" />
         </el-col>
       </el-row>
       <div align="right">
@@ -178,7 +170,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleAdd(scope.$index, scope.row)"
+              @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button>
             <el-button
               size="mini"
@@ -367,6 +359,9 @@
           used_capacity:'',
           class_time:'',
         },
+        deleteForm: {
+          selectcourse_id: ''
+      }
         
       }
     },
@@ -481,26 +476,28 @@
       // 编辑用户
       handleEdit(inex, row) {
         this.editFormVisible = true
-        this.editForm.course_id_id = row.course_id_id
-        this.editForm.staff_id_id = row.staff_id_id
-        this.editForm.student_id_id = row.student_id_id
-        this.editForm.normal_score = row.normal_score
-        this.editForm.test_score = row.test_score
-        this.editForm.total_score = row.total_score
+        console.log("row=",row)
+        this.editSelectCourseForm.selectcourse_id=row.id
+        this.editSelectCourseForm.course_id_id = row.course_id_id
+        this.editSelectCourseForm.staff_id_id = row.staff_id_id
+        this.editSelectCourseForm.student_id_id = row.student_id_id
+        this.editSelectCourseForm.normal_score = row.normal_score
+        this.editSelectCourseForm.test_score = row.test_score
+        this.editSelectCourseForm.total_score = row.total_score
       },
       saveEdit() {
-        updateCourseSelection(this.editForm).then(response => {
+        updateCourseSelection(this.editSelectCourseForm).then(response => {
           if (response) {
+            console.log('in handleEdit', response)
             this.editFormVisible = false
             this.$message({ message: '修改成功', type: 'success' })
-            console.log('in handleEdit', response)
             this.fetchData()
-            this.editForm.course_id_id = ''
-            this.editForm.staff_id_id = ''
-            this.editForm.student_id_id = ''
-            this.editForm.normal_score = ''
-            this.editForm.test_score = ''
-            this.editForm.total_score = ''
+            this.editSelectCourseForm.course_id_id = ''
+            this.editSelectCourseForm.staff_id_id = ''
+            this.editSelectCourseForm.student_id_id = ''
+            this.editSelectCourseForm.normal_score = ''
+            this.editSelectCourseForm.test_score = ''
+            this.editSelectCourseForm.total_score = ''
           } else {
             this.$message.error('修改失败')
           }
@@ -508,13 +505,13 @@
       },
       // 删除用户
       handleDelete(inex, row) {
-        this.deleteForm.staff_id = row.staff_id
-        deleteTeacher(this.deleteForm).then(response => {
+        this.deleteForm.selectcourse_id = row.id
+        deleteCourseSelection(this.deleteForm).then(response => {
           if (response) {
             this.$message({ message: '删除成功', type: 'success' })
             console.log('in handleDelete', response)
             this.fetchData()
-            this.deleteForm.staff_id = ''
+            this.deleteForm.selectcourse_id = ''
           } else {
             this.$message.error('删除失败')
           }

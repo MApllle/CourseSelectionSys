@@ -4,6 +4,8 @@ import json,hashlib
 from .sql_basic import get_from_table
 from .models import student,teacher,course,course_selection,open_course
 from django.contrib.auth.models import User
+from django.db.models import Sum
+from .open_course_views import is_time_conflict
 # Create your views here.
 
 '''
@@ -98,7 +100,7 @@ def handleCourseSelection(request):
         request_data = json.loads(request.body.decode('utf-8'))
         #需要捕捉一下错误
         #确保院系号存在？
-        course_selection.objects.filter(id=request_data['id']).update(normal_score=request_data.get('normal_score', 0),
+        course_selection.objects.filter(id=request_data['selectcourse_id']).update(normal_score=request_data.get('normal_score', 0),
                                                                     test_score=request_data.get('test_score', 0),)
         data={
             "code":20000,
@@ -143,7 +145,31 @@ def addCourseSelection(request):#新增
                 newnum=course_to.capacity+1
                 open_course.objects.filter(semester=request_data['semester'],course_id_id=request_data['course_id_id'],staff_id_id=request_data['staff_id_id']).update(capacity=newnum)
             #触发器会自动-1
-            #在这里写两个判断条件
+            #在这里写两个判断条件1.加上这门课的学分，总学分小于等于32分 2.时间不能冲突
+                
+            # course_id_id是一个引用course表中course_id的外键
+            course_instance = course.objects.get(course_id=request_data['course_id_id'])
+            course_credits = course_instance.credit  
+            # 检查加上这门课总学分是否超过32分
+            total_credits = course_selection.objects.filter(student_id_id=request_data['student_id_id']).aggregate(
+                total_credits=Sum('course_id__credit')
+            )['total_credits'] or 0
+
+            if total_credits + course_credits > 32:
+                data = {
+                    "code": 50000,
+                    "message": "总学分超过限制！"
+                }
+                return HttpResponse(json.dumps(data), content_type='application/json')
+            
+            # 查看是否有时间冲突的开课
+            course_times = course_selection.objects.filter(student_id_id=request_data['student_id_id']).values_list('open_course_id__class_time', flat=True)#某个学生选的所有课的上课时间
+            if is_time_conflict(request_data['class_time'], course_times):
+                data = {
+                "code": 50000,
+                "message": "新增失败，该同学在该时间已经选课"
+            }
+                return HttpResponse(json.dumps(data), content_type='application/json')
             new_cs = course_selection.objects.create(semester=request_data.get('semester', ''), 
                                                     normal_score=request_data.get('normal_score', 0), 
                                                     test_score=request_data.get('test_score', 0), 
