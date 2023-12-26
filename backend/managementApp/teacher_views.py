@@ -28,7 +28,7 @@ def handleTeacher(request):
         data={
             "code":20000,
             "data":out,
-            "messgae":"查询成功"
+            "message":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
@@ -44,7 +44,7 @@ def handleTeacher(request):
                                                                     dept_id_id=request_data.get('dept_id_id', ''))
         data={
             "code":20000,
-            "messgae":"更新成功"
+            "message":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
@@ -55,14 +55,14 @@ def handleTeacher(request):
                 User.objects.filter(username__exact=id).delete()  # 删除该教师账户
         data={
             "code":20000,
-            "messgae":"删除成功"
+            "message":"删除成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
 def addTeacher(request):#新增教师
     data={
         "code":20000,
-        "messgae":"新增成功"
+        "message":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -89,10 +89,16 @@ def addTeacher(request):#新增教师
                                                      user_id_id=addedUser.id)
                 new_teacher.save()
             else:
-                data['code']=50000,
-                data['messgae']="院系号为空！"
+                data={
+                "code":50000,
+                "message":"院系号为空！"
+                }
+                return HttpResponse(json.dumps(data),content_type='application/json')
         else:
-            data['code']=50000,
-            data['messgae']="工号为空！"
+            data={
+            "code":50000,
+            "message":"工号为空！"
+            }
+            return HttpResponse(json.dumps(data),content_type='application/json')
         return HttpResponse(json.dumps(data),content_type='application/json')
         

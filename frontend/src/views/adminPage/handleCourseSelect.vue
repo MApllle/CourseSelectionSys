@@ -454,7 +454,7 @@
             this.$message.error('新增失败')
           }
         }).catch(error=>{
-          this.$message.error(error.messgae)
+          this.$message.error(error.message)
         })
       },
       saveOpenCourseDelete() {

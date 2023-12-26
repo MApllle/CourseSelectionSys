@@ -66,7 +66,7 @@ def fetchCoursesForSelect(request):
         data={
             "code":20000,
             "data":out,
-            "messgae":"查询成功"
+            "message":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
 
@@ -120,7 +120,7 @@ def handleCourseSelection(request):
         data={
             "code":20000,
             "data":out,
-            "messgae":"查询成功"
+            "message":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
@@ -131,7 +131,7 @@ def handleCourseSelection(request):
                                                                     test_score=request_data.get('test_score', 0),)
         data={
             "code":20000,
-            "messgae":"更新成功"
+            "message":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
@@ -140,14 +140,14 @@ def handleCourseSelection(request):
         course_selection.objects.filter(id=todelete_id).delete()
         data={
             "code":20000,
-            "messgae":"删除成功"
+            "message":"删除成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
 def addCourseSelection(request):#新增
     data={
         "code":20000,
-        "messgae":"新增成功"
+        "message":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -159,13 +159,13 @@ def addCourseSelection(request):#新增
             if course_selection.objects.filter(student_id_id=request_data['student_id_id'],course_id_id=request_data['course_id_id'],semester=request_data['semester'],staff_id_id=request_data['staff_id_id']).count()!=0:
                 data={
                     "code":50000,
-                    "messgae":"不能重复选择相同的课！"
+                    "message":"不能重复选择相同的课！"
                 }
                 return HttpResponse(json.dumps(data),content_type='application/json')
             elif request_data['group']=='学生' and course_to.used_capacity==course_to.capacity:
                 data={
                     "code":50000,
-                    "messgae":"课程容量已满！"
+                    "message":"课程容量已满！"
                 }
                 return HttpResponse(json.dumps(data),content_type='application/json')
             elif request_data['group']=='管理员' and course_to.used_capacity==course_to.capacity:
@@ -184,11 +184,11 @@ def addCourseSelection(request):#新增
             new_cs.save()
             data={
                 "code":20000,
-                "messgae":"选课成功！"
+                "message":"选课成功！"
             }
             return HttpResponse(json.dumps(data),content_type='application/json')
         else:
             data['code']=50000,
-            data['messgae']="缺少申请字段！"
+            data['message']="缺少申请字段！"
         return HttpResponse(json.dumps(data),content_type='application/json')
         

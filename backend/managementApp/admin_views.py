@@ -102,7 +102,7 @@ def userLogin(request): #登录
     else:
         data= {
             "code":50000,
-            "messgae":"用户不存在"
+            "message":"用户不存在"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
