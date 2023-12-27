@@ -39,8 +39,6 @@ urlpatterns = [
     #course表增删改查接口
     path("addCourse/",course_views.addCourse), #新增
     path("handleCourse/",course_views.handleCourse), #删改查
-
-    
     #open_course表增删改查接口
     path("addOpenCourse/",open_course_views.addOpenCourse), #新增
     path("handleOpenCourse/",open_course_views.handleOpenCourse), #删改查
@@ -49,4 +47,9 @@ urlpatterns = [
     path("handleCourseSelection/",course_selection_views.handleCourseSelection), #删改查
     #选课课程清单获取联查接口
     path("fetchCoursesForSelect/",course_selection_views.fetchCoursesForSelect), 
+    #教师课程表获取联查接口、
+    path("fetchCoursesForTeacherSchedule/",open_course_views.fetchCoursesForTeacherSchedule), 
+    #学生课程表获取联查接口、
+    path("fetchCoursesForStudentSchedule/",course_selection_views.fetchCoursesForStudentSchedule), 
+    
 ]

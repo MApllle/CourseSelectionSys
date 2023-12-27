@@ -33,12 +33,17 @@
       <el-divider />
       <el-table
         v-loading="listLoading"
-        :data="tableData"
+        :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         element-loading-text="Loading"
         border
         fit
         highlight-current-row
       >
+        <el-table-column align="center" label="序号">
+          <template slot-scope="scope">
+            {{ scope.$index+1+pageSize*(currentPage-1) }}
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="学号">
           <template slot-scope="scope">
             <span>{{ scope.row.student_id }}</span>
@@ -64,7 +69,7 @@
             <span>{{ scope.row.native_place }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="手机号码" align="center">
+        <el-table-column label="手机号码" align="center" width="140px">
           <template slot-scope="scope">
             <span>{{ scope.row.mobile_phone }}</span>
           </template>
@@ -98,6 +103,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination align='center' 
+        @size-change="handleSizeChange" 
+        @current-change="handleCurrentChange"
+        :current-page="currentPage" 
+        :page-sizes="[1,5,10,20]" 
+        :page-size="pageSize" 
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="tableData.length">
+      </el-pagination>
   
       <el-dialog title="新增学生" :visible.sync="addFormVisible">
         <el-form :model="addForm" label-width="200px" algin="left">
@@ -251,7 +265,10 @@
         },
         deleteForm: {
           student_id: ''
-        }
+        },
+        currentPage: 1,// 当前页码
+        total: 20, // 总条数
+        pageSize: 5 // 每页的数据条数
       }
     },
     created() {
@@ -339,6 +356,17 @@
             this.$message.error('删除失败')
           }
         })
+      },
+      //每页条数改变时触发 选择一页显示多少行
+      handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+          this.currentPage = 1;
+          this.pageSize = val;
+      },
+      //当前页改变时触发 跳转其他页
+      handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.currentPage = val;
       }
     }
   }

@@ -30,7 +30,7 @@ def handleDepartment(request):
         data={
             "code":20000,
             "data":out,
-            "msg":"查询成功"
+            "message":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
@@ -43,7 +43,7 @@ def handleDepartment(request):
                                                                     phone_code=request_data.get('phone_code',''))
         data={
             "code":20000,
-            "msg":"更新成功"
+            "message":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
@@ -52,14 +52,14 @@ def handleDepartment(request):
         department.objects.filter(dept_id=id).delete()
         data={
             "code":20000,
-            "msg":"删除成功"
+            "message":"删除成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
 def addDepartment(request):#新增学院
     data={
         "code":20000,
-        "msg":"新增成功"
+        "message":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -73,9 +73,11 @@ def addDepartment(request):#新增学院
                 new_department.save()
             else:
                 data['code']=50000,
-                data['msg']="院系号已存在！"
+                data['message']="院系号已存在！"
+                return HttpResponse(json.dumps(data),content_type='application/json')
         else:
             data['code']=50000,
-            data['msg']="院系号为空！"
+            data['message']="院系号为空！"
+            return HttpResponse(json.dumps(data),content_type='application/json')
         return HttpResponse(json.dumps(data),content_type='application/json')
         

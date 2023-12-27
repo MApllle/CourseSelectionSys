@@ -30,7 +30,7 @@ def handleCourse(request):
         data={
             "code":20000,
             "data":out,
-            "messgae":"查询成功"
+            "message":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
@@ -45,7 +45,7 @@ def handleCourse(request):
                                                                     dept_id_id=request_data.get('dept_id_id', ''))
         data={
             "code":20000,
-            "messgae":"更新成功"
+            "message":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
@@ -54,14 +54,14 @@ def handleCourse(request):
         course.objects.filter(course_id=id).delete()#虽然course_id是选课和开课表的外键，由于已经设置级联删除，这里直接删除即可
         data={
             "code":20000,
-            "messgae":"删除成功"
+            "message":"删除成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     
 def addCourse(request):#新增课程 
     data={
         "code":20000,
-        "messgae":"新增成功"
+        "message":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -77,12 +77,12 @@ def addCourse(request):#新增课程
                     new_course.save()
                 else:
                     data['code']=50000,
-                    data['messgae']="课程号已存在！"
+                    data['message']="课程号已存在！"
             else:
                 data['code']=50000,
-                data['messgae']="院系号为空！"
+                data['message']="院系号为空！"
         else:
             data['code']=50000,
-            data['messgae']="课程号为空！"
+            data['message']="课程号为空！"
         return HttpResponse(json.dumps(data),content_type='application/json')
         

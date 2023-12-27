@@ -24,7 +24,7 @@ export function filterAsyncRoutes(routes, group) {
       res.push(tmp)
     }
   })
-  console.log("递归过滤结果",res)
+  //console.log("递归过滤结果",res)
   return res
 }
 
