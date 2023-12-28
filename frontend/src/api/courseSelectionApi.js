@@ -39,6 +39,14 @@ export function fetchCourseSelection(data) {
   })
 }
 
+export function fetchCoursesForCheck(data) {
+  return request({
+    url: 'http://localhost:8000/fetchCoursesForCheck/',
+    method: 'post',
+    data
+  })
+}
+
 export function deleteCourseSelection(data) {
   return request({
     url: 'http://localhost:8000/handleCourseSelection/',

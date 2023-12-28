@@ -58,3 +58,19 @@ CREATE DEFINER = `root`@`localhost` TRIGGER `update_total_score` AFTER UPDATE ON
 END;
 ||
 DELIMITER ;
+
+--更改平时分占比 存储过程版
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_total_score`(IN course_id_param VARCHAR(32))
+BEGIN
+    DECLARE normal_score_percent_val DOUBLE;-- 定义变量平时分占比
+    
+    -- 获取最新的平时分占比
+    SELECT normal_score_percent INTO normal_score_percent_val
+    FROM managementapp_course
+    WHERE course_id = course_id_param;
+    
+    -- 更新选课表中的total_score
+    UPDATE managementapp_course_selection
+    SET total_score = normal_score * normal_score_percent_val + test_score * (1 - normal_score_percent_val)
+    WHERE managementapp_course_selection.course_id_id = course_id_param;
+END

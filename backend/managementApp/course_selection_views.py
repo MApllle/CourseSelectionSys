@@ -49,12 +49,12 @@ def fetchCoursesForSelect(request):
         query = {key: value for key, value in post_data.items() if value}
         param=[]
         if not query:
-            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id'
+            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id'
         else:
-            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and '
+            sql = 'select oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and '
             conditions = []
             for key, value in query.items():
-                if key in ['course_name']:
+                if key in ['course_name','credit']:
                     conditions.append(f'c.{key} = %s')
                 elif key in ['course_id_id','staff_id_id','semester','capacity','used_capacity']:
                     conditions.append(f'oc.{key} = %s')
@@ -72,6 +72,41 @@ def fetchCoursesForSelect(request):
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
 
+#为获取课程名、教师名、学分、开课时间，选课表联查课程表、开课表、教师表
+def fetchCoursesForCheck(request):
+    if request.method=='POST':
+        #获取query
+        post_data = json.loads(request.body.decode('utf-8'))
+        query = {key: value for key, value in post_data.items() if value}
+        param=[]
+        if not query:
+            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id '
+        else:
+            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id and  '
+            
+            conditions = []
+            for key, value in query.items():
+                if key in ['course_name','credit']:
+                    conditions.append(f'c.{key} = %s')
+                elif key in ['course_id_id','staff_id_id','semester','capacity','used_capacity']:
+                    conditions.append(f'oc.{key} = %s')
+                elif key in ['name','professional_ranks']:
+                    conditions.append(f't.{key} = %s')
+                elif key in ['semester','student_id_id']:
+                    conditions.append(f'cs.{key} = %s')        
+                else :conditions.append(f'{key} = %s')
+                param.append(value)
+            sql += ' AND '.join(conditions)
+            print("sql",sql)
+        out=get_from_table(sql,param)
+        #需要捕捉一下错误
+        data={
+            "code":20000,
+            "data":out,
+            "message":"查询成功"
+        }
+        return HttpResponse(json.dumps(data),content_type='application/json')
+    
 def fetchCoursesForStudentSchedule(request):
     if request.method == 'POST': # 查询
         # 获取query
@@ -137,6 +172,7 @@ def handleCourseSelection(request):
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
+        print('===========================',request.body)
         request_data = json.loads(request.body.decode('utf-8'))
         todelete_id=request_data['selectcourse_id']
         course_selection.objects.filter(id=todelete_id).delete()

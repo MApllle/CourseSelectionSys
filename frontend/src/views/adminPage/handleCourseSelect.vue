@@ -6,7 +6,7 @@
       <el-row :gutter="20">
         <el-col :span="2"><span>课程号：</span></el-col>
         <el-col :span="4">
-          <el-input v-model="queryOpenCourse.staff_id_id" autocomplete="off" size="small" />
+          <el-input v-model="queryOpenCourse.course_id_id" autocomplete="off" size="small" />
         </el-col>
         <el-col :span="2"><span>课程名：</span></el-col>
         <el-col :span="4">
@@ -331,7 +331,8 @@
           student_name: '',
         },
         queryOpenCourse: {
-          semester:this.$store.getters.semester, //semester=this.semester
+          semester:this.$store.getters.semester, //semester=this.semester、
+          course_id_id:'',
           staff_id_id:'',
           course_name:'',
           staff_name:'',
@@ -457,7 +458,7 @@
         deleteCourseSelection(this.deleteOpenCourseForm).then(response => {
           if (response) {
             console.log('in handleDelete', response)
-            this.$message({ message: '新增成功', type: 'success' })
+            this.$message({ message: '删除成功', type: 'success' })
             this.deleteFormVisible = false
             this.fetchData()
             this.deleteOpenCourseForm.opencourse_id_id=''
@@ -469,7 +470,7 @@
             this.deleteOpenCourseForm.used_capacity=''
             this.deleteOpenCourseForm.class_time=''
           } else {
-            this.$message.error('新增失败')
+            this.$message.error('删除失败')
           }
         })
       },
