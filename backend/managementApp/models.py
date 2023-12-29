@@ -69,3 +69,16 @@ class course_selection(models.Model):
     open_course_id=models.ForeignKey('open_course', to_field='id',on_delete=models.CASCADE)
     class Meta:
         unique_together = ["student_id", "course_id", "semester"]
+
+
+# 教师申请开课
+class course_request(models.Model):
+    course_id = models.CharField(max_length=32, unique=True, primary_key=True, blank=False, null=False)  # 课程号
+    course_name = models.CharField(max_length=32, default='111')  # 课名
+    credit = models.IntegerField()  # 学分
+    credit_hours = models.IntegerField()  # 学时
+    dept_id = models.ForeignKey('department', to_field='dept_id', on_delete=models.CASCADE)  # 院系号(外键)
+    normal_score_percent = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)],
+                                             default=0.5)  # 平时成绩占总成绩百分比
+    staff_id = models.ForeignKey('teacher', to_field='staff_id', on_delete=models.CASCADE)  # 请求教师工号(外键)
+    status = models.IntegerField(default=0)  # 状态 0:待处理 1:已通过 2:已拒绝

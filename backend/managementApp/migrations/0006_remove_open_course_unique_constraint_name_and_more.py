@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name="open_course",
-            unique_together={("semester", "course_id", "staff_id")},
+            unique_together={("semester", "course_id", "staff_id","class_time")},
         ),
     ]

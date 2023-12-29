@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="open_course",
             constraint=models.UniqueConstraint(
-                fields=("semester", "course_id", "staff_id"),
+                fields=("semester", "course_id", "staff_id","classtime"),
                 name="unique_constraint_name",
             ),
         ),

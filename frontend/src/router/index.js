@@ -167,6 +167,12 @@ export const asyncRoutes = [
         name: 'manageScore',
         meta: { title: '成绩管理',group:'教师' }
       },
+      {
+        path: 'openCourseRequest',
+        component: () => import('@/views/teacherPage/openCourseRequest'),
+        name: 'manageScore',
+        meta: { title: '申请开课',group:'教师' }
+      },
     ]
   },
   

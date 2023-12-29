@@ -4,7 +4,7 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.hashers import check_password
 from .sql_basic import get_from_table
-from .models import student,teacher,course_selection
+from .models import course, course_request, student,teacher,course_selection
 from jwt import exceptions
 import json,time,jwt
 from datetime import datetime,timedelta
@@ -237,3 +237,47 @@ def fetchSemester(request):
         "msg":"查询成功"
     }
     return HttpResponse(json.dumps(data),content_type='application/json')
+
+
+def handleCourseRequest(request):
+    """教师请求开课申请处理"""
+    if request.method == 'PUT':
+        request_data = json.loads(request.body.decode('utf-8'))
+        print("request_data", request_data)
+        if request_data['course_id'] and request_data['status']:
+            # 修改密码与原来的相同，不会报错
+            course_request_obj = course_request.objects.get(course_id=request_data['course_id'])
+            course_request_obj.status = request_data['status']
+            course_request_obj.save()
+            if request_data['status'] == 1 or request_data['status'] == '1':  # 通过
+                try:
+                    course.objects.create(course_id=course_request_obj.course_id,
+                                            course_name=course_request_obj.course_name,
+                                            credit=course_request_obj.credit,
+                                            credit_hours=course_request_obj.credit_hours,
+                                            dept_id=course_request_obj.dept_id,
+                                            normal_score_percent=course_request_obj.normal_score_percent)
+                except Exception as e:
+                    course_request_obj.status = 0
+                    course_request_obj.save()
+                    print(e)
+                    data = {
+                        "code": 50000,
+                        "message": "审核失败, 课程号重复" 
+                    }
+                    return HttpResponse(json.dumps(data), content_type='application/json')
+            data = {
+                "code": 20000,
+                "message": "审核成功"
+            }
+        else:
+            data = {
+                "code": 50000,
+                "message": "不存在id 查询失败"
+            }
+    else:
+        data = {
+            "code": 50000,
+            "message": "请求方式错误"
+        }
+    return HttpResponse(json.dumps(data), content_type='application/json')
