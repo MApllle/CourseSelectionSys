@@ -19,7 +19,7 @@ from django.urls import path
 from managementApp import teacher_views,student_views,admin_views,department_views,course_selection_views,open_course_views,course_views
 
 urlpatterns = [
-    #path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
     #用户登录相关接口
     path("userLogin/",admin_views.userLogin),#用户登录
     path("getUserInfo/",admin_views.getUserInfo),#获取Token信息
@@ -42,6 +42,12 @@ urlpatterns = [
     #open_course表增删改查接口
     path("addOpenCourse/",open_course_views.addOpenCourse), #新增
     path("handleOpenCourse/",open_course_views.handleOpenCourse), #删改查
+
+    #course_request表相关接口
+    path("courseRequest/", teacher_views.courseRequest),  # 开课申请新增及获取
+
+    path("handleCourseRequest/", admin_views.handleCourseRequest),  # 开课申请处理
+
     #course_selectionb表增删改查接口
     path("addCourseSelection/",course_selection_views.addCourseSelection), #新增
     path("handleCourseSelection/",course_selection_views.handleCourseSelection), #删改查

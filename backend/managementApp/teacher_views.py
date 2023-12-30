@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 import json,hashlib
 from .sql_basic import get_from_table
-from .models import student,teacher,department
+from .models import student,teacher,department, course_request
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -102,3 +102,65 @@ def addTeacher(request):#新增教师
             return HttpResponse(json.dumps(data),content_type='application/json')
         return HttpResponse(json.dumps(data),content_type='application/json')
         
+
+def courseRequest(request):
+    """教师请求开课"""
+    if request.method == 'POST':  # 新增申请
+        # 获取前端发送的数据
+        post_data = json.loads(request.body.decode('utf-8'))
+
+        dept_id = post_data.get('dept_id', '')
+        staff_id = post_data.get('staff_id', '')
+        if not dept_id or not staff_id:
+            return HttpResponse(json.dumps({
+                "code": 50000,
+                "message": "院系号或申请人不能为空"
+            }), content_type='application/json')
+        dept = department.objects.filter(dept_id=dept_id).first()
+        staff = teacher.objects.filter(staff_id=staff_id).first()
+        if not dept or not staff:
+            return HttpResponse(json.dumps({
+                "code": 50000,
+                "message": "院系号或申请人不存在"
+            }), content_type='application/json')
+        print(post_data)
+        # 新增申请
+        try:
+            new_request = course_request.objects.create(
+                course_id=post_data.get('course_id', ''),
+                course_name=post_data.get('course_name', ''),
+                credit=post_data.get('credit', ''),
+                credit_hours=post_data.get('credit_hours', ''),
+                dept_id=dept,
+                normal_score_percent=post_data.get('normal_score_percent', ''),
+                staff_id=staff,
+            )
+        except Exception as e:
+            print(e)
+            return HttpResponse(json.dumps({
+                "code": 50000,
+                "message": "申请失败"
+            }), content_type='application/json')
+        data = {
+            "code": 20000,
+            "message": "申请成功"
+        }
+    elif request.method == 'GET':  # 获取申请列表
+        # 获取前端发送的数据
+        staff_id = request.GET.get('staff_id', '')
+        if staff_id:
+            course_obj = course_request.objects.filter(staff_id=staff_id)
+        else:
+            course_obj = course_request.objects.all()
+        print(course_obj)
+        data = {
+            "code": 20000,
+            "data": list(course_obj.values()),
+            "message": "获取成功"
+        }
+    else:
+        data = {
+            "code": 50000,
+            "message": "请求错误"
+        }
+    return HttpResponse(json.dumps(data), content_type='application/json')

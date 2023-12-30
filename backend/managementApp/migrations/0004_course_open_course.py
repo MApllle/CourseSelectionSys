@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ),
             ],
             options={
-                "unique_together": {("semester", "course_id", "staff_id")},
+                "unique_together": {("semester", "course_id", "staff_id","class_time")},
             },
         ),
     ]
