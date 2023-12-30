@@ -167,8 +167,8 @@ def handleCourseSelection(request):
         request_data = json.loads(request.body.decode('utf-8'))
         #需要捕捉一下错误
         #确保院系号存在？
-        course_selection.objects.filter(id=request_data['selectcourse_id']).update(normal_score=request_data.get('normal_score', 0),
-                                                                    test_score=request_data.get('test_score', 0),)
+        course_selection.objects.filter(id=request_data['selectcourse_id']).update(normal_score=request_data['normal_score'] if request_data.get('normal_score', '') != '' else None,
+                                                                    test_score=request_data['test_score'] if request_data.get('test_score', '') != '' else None,)
         data={
             "code":20000,
             "message":"更新成功"
@@ -253,9 +253,9 @@ def addCourseSelection(request):#新增
             }
                 return HttpResponse(json.dumps(data), content_type='application/json')
             new_cs = course_selection.objects.create(semester=request_data.get('semester', ''), 
-                                                    normal_score=request_data.get('normal_score', 0), 
-                                                    test_score=request_data.get('test_score', 0), 
-                                                    total_score=request_data.get('total_score', 0),
+                                                    normal_score=request_data['normal_score'] if request_data.get('normal_score', '') != '' else None, 
+                                                    test_score=request_data['test_score'] if request_data.get('test_score', '') != '' else None, 
+                                                    total_score=request_data['total_score'] if request_data.get('total_score', '') != '' else None,
                                                     course_id_id=request_data.get('course_id_id', ''), 
                                                     staff_id_id=request_data.get('staff_id_id', ''), 
                                                     student_id_id=request_data.get('student_id_id', ''),

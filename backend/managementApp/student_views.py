@@ -56,9 +56,9 @@ def handleStudent(request):
                                                                     date_of_birth=request_data.get('date_of_birth',''),
                                                                     native_place=request_data.get('native_place',''),
                                                                     mobile_phone=request_data.get('mobile_phone',''),
-                                                                    average_gpa=request_data['average_gpa'] if request_data.get('average_gpa', None) != '' else None,
-                                                                    average_score=request_data['average_score'] if request_data.get('average_score', None) != '' else None,
-                                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', None) != '' else None,
+                                                                    average_gpa=request_data['average_gpa'] if request_data.get('average_gpa', '') != '' else None,
+                                                                    average_score=request_data['average_score'] if request_data.get('average_score', '') != '' else None,
+                                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', '') != '' else None,
                                                                     dept_id_id=request_data.get('dept_id_id',''))
         data = {
             "code":20000,   # 注意，必须要有code，不然返回的消息会被后端拦截
@@ -100,9 +100,9 @@ def addStudent(request): # 新增学生
                                                     date_of_birth=request_data.get('date_of_birth',''),
                                                     native_place=request_data.get('native_place',''),
                                                     mobile_phone=request_data.get('mobile_phone',''),
-                                                    average_gpa= request_data['average_gpa'] if request_data.get('average_gpa', None) != '' else None,
-                                                    average_score=request_data['average_score'] if request_data.get('average_score', None) != '' else None,
-                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', None) != '' else None,
+                                                    average_gpa= request_data['average_gpa'] if request_data.get('average_gpa', '') != '' else None,
+                                                    average_score=request_data['average_score'] if request_data.get('average_score', '') != '' else None,
+                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', '') != '' else None,
                                                     dept_id_id=request_data.get('dept_id_id',''),
                                                     user_id_id=addedUser.id)
                 new_student.save()

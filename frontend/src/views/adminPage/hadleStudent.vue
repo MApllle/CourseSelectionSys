@@ -219,7 +219,8 @@
       title="提示"
       :visible.sync="confirmDeleteDialogVisible"
       width="30%"
-      center>
+      center
+    >
       <span>确认删除？</span>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="confirmDeleteDialogVisible = false">取 消</el-button>
@@ -259,7 +260,7 @@ export default {
         mobile_phone: '',
         average_gpa: null,
         total_credit: null,
-        average_score:null,
+        average_score: null,
         dept_id_id: ''
       },
       addForm: {
@@ -271,7 +272,7 @@ export default {
         mobile_phone: '',
         average_gpa: null,
         total_credit: null,
-        average_score:null,
+        average_score: null,
         dept_id_id: ''
       },
       query: {
@@ -371,17 +372,17 @@ export default {
     // 删除用户
     handleDelete(inex, row) {
       this.deleteForm.student_id = row.student_id
-      this.confirmDeleteDialogVisible = true 
+      this.confirmDeleteDialogVisible = true
     },
-    //确认删除
-    confirmDelete(){
+    // 确认删除
+    confirmDelete() {
       deleteStudent(this.deleteForm).then(response => {
         if (response) {
           this.$message({ message: '删除成功', type: 'success' })
           console.log('in handleDelete', response)
           this.fetchData()
           this.deleteForm.student_id = ''
-          this.confirmDeleteDialogVisible = false 
+          this.confirmDeleteDialogVisible = false
         } else {
           this.$message.error('删除失败')
         }

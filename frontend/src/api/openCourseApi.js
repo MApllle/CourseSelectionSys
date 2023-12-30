@@ -39,8 +39,6 @@ export function deleteOpenCourse(data) {
   })
 }
 
-
-
 /**
  * 开课申请
  * @param data 开课申请信息
@@ -53,7 +51,6 @@ export function postCourseRequest(data) {
     data
   })
 }
-
 
 /**
  * 开课申请审核

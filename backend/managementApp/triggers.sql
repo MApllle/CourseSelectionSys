@@ -1,4 +1,4 @@
--- 触发器：计算总成绩+更新均分
+-- 触发器：计算总成绩
 DELIMITER ||
 create trigger caculate_score
 before update on managementapp_course_selection
@@ -11,7 +11,7 @@ end
 ||
 DELIMITER ;
 
--- 触发器：选课前，课程容量减一+该学生总学分加
+-- 触发器：选课前，课程容量减一
 DELIMITER ||
 create trigger manage_course_capacity
 after insert on managementapp_course_selection
@@ -19,14 +19,12 @@ for each row
 begin 
     update managementapp_open_course
     set used_capacity=used_capacity+1
-    where course_id_id=new.course_id_id
-        and staff_id_id=new.staff_id_id
-        and semester=new.semester;
+    where id=new.open_course_id_id;
 end
 ||
 DELIMITER ;
 
---触发器:删除选课后，used_capa-1+该学生总学分减少
+--触发器:删除选课后，used_capa-1
 DELIMITER ||
 create trigger manage_course_capacity_ondelete
 after delete on managementapp_course_selection
@@ -34,9 +32,7 @@ for each row
 begin 
     update managementapp_open_course
     set used_capacity=used_capacity-1
-        where course_id_id=old.course_id_id
-        and staff_id_id=old.staff_id_id
-        and semester=old.semester;
+        where id=old.open_course_id_id;
 end
 ||
 DELIMITER ;
