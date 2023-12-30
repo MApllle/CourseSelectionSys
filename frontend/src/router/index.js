@@ -124,6 +124,12 @@ export const asyncRoutes = [
         meta: { title: '课程管理', group: '管理员' }
       },
       {
+        path: 'openCourseRequest',
+        component: () => import('@/views/teacherPage/openCourseRequest'),
+        name: 'manageScore',
+        meta: { title: '开课申请审批', group: '管理员' }
+      },
+      {
         path: 'handleOpenCourse',
         component: () => import('@/views/adminPage/handleOpenCourse'),
         name: 'handleOpenCourse',

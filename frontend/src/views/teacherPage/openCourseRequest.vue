@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { postCourseRequest, getCourseRequest, putCourseRequest } from '@/api/openCourseApi'
+import { postCourseRequest, getCourseRequest, putCourseRequest } from '@/api/courseRequestApi'
 export default {
   data() {
     return {

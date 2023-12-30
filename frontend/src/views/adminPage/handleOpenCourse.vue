@@ -113,10 +113,12 @@
         </el-form-item>
         <el-form-item label="学期" label-width="25%">
           <el-select v-model="addForm.semester" placeholder="选择学期">
-            <el-option label="2021-2022春季学期" value="2021-2022春季学期" />
-            <el-option label="2021-2022夏季学期" value="2021-2022夏季学期" />
-            <el-option label="2021-2022秋季学期" value="2021-2022秋季学期" />
-            <el-option label="2021-2022冬季学期" value="2021-2022冬季学期" />
+            <el-option
+            v-for="item in semesterList"
+            :key="item.semester"
+            :label="item.semester"
+            :value="item.semester"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="教师号" label-width="25%">
@@ -164,8 +166,15 @@
 </template>
 
 <script>
-import { addOpenCourse, updateOpenCourse, fetchOpenCourse, deleteOpenCourse } from '@/api/openCourseApi'
+import { addOpenCourse, updateOpenCourse, fetchOpenCourse, deleteOpenCourse, fetchSemester } from '@/api/openCourseApi'
+import { mapGetters } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters([
+      'group',
+      'semester'
+    ])
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -180,15 +189,8 @@ export default {
     return {
       password: null,
       listLoading: true,
-      tableData: [{
-        id: '123',
-        semester: '1234',
-        class_time: '124',
-        course_id_id: '123',
-        staff_id_id: '123',
-        capacity: 100,
-        used_capacity: 10 }
-      ],
+      tableData: [],
+      semesterList:[],
       addFormVisible: false,
       editFormVisible: false,
       editForm: {
@@ -201,7 +203,7 @@ export default {
         used_capacity: 0
       },
       addForm: {
-        semester: '',
+        semester: this.$store.getters.semester,
         class_time: '',
         course_id_id: '',
         staff_id_id: '',
@@ -224,6 +226,7 @@ export default {
   },
   created() {
     this.fetchData()
+    this.handleSemester()
   },
   methods: {
     fetchData() {
@@ -247,7 +250,7 @@ export default {
           this.$message({ message: '新增成功', type: 'success' })
           this.addFormVisible = false
           this.fetchData()
-          this.addForm.semester = ''
+          this.addForm.semester = this.$store.getters.semester
           this.addForm.class_time = ''
           this.addForm.course_id_id = ''
           this.addForm.staff_id_id = ''
@@ -300,6 +303,12 @@ export default {
         } else {
           this.$message.error('删除失败')
         }
+      })
+    },
+    handleSemester() {
+      fetchSemester().then(response => {
+        if (response) { console.log('获取学期成功') }
+        this.semesterList = response.data
       })
     },
     // 每页条数改变时触发 选择一页显示多少行
