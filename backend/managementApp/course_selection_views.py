@@ -76,7 +76,7 @@ def fetchCoursesForStudentSchedule(request):
     if request.method == 'POST': # 查询
         # 获取query
         post_data = json.loads(request.body.decode('utf-8'))
-        print('=================pppppppppppppppppppppppppppp',post_data)
+        print('=================',post_data)
         # 提取所有值为空的，新建一个字典
         query = {key: value for key, value in post_data.items() if value}
         param = []
@@ -114,9 +114,12 @@ def handleCourseSelection(request):
         else:
             #不提供通过生日和薪水查老师
             sql = 'select * from managementapp_course_selection where '
-            for key,value in query.items():
-                sql=sql+key+'= %s '
+            conditions = []
+            for key, value in query.items():
+                conditions.append(f'{key} = %s')
                 param.append(value)
+            sql += ' AND '.join(conditions)
+        print("==========================",sql)
         out=get_from_table(sql,param)
         #需要捕捉一下错误
         data={
@@ -138,14 +141,28 @@ def handleCourseSelection(request):
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)
         request_data = json.loads(request.body.decode('utf-8'))
-        todelete_id=request_data['selectcourse_id']
-        course_selection.objects.filter(id=todelete_id).delete()
-        data={
-            "code":20000,
-            "message":"删除成功"
-        }
-        return HttpResponse(json.dumps(data),content_type='application/json')
-    
+        print("=====================",request_data)
+        if request_data.get('selectcourse_id','')!='':
+            course_selection.objects.filter(id=request_data['selectcourse_id']).delete()
+            data={
+                "code":20000,
+                "message":"删除成功"
+            }
+            return HttpResponse(json.dumps(data),content_type='application/json')
+        elif request_data['student_id_id'] and request_data['open_course_id_id']:
+            course_selection.objects.filter(semester=request_data['semester'],course_id_id=request_data['course_id_id'],staff_id_id=request_data['staff_id_id'],student_id_id=request_data['student_id_id'],open_course_id_id=request_data['open_course_id_id']).delete()
+            data={
+                "code":20000,
+                "message":"删除成功"
+            }
+            return HttpResponse(json.dumps(data),content_type='application/json')
+        else:
+            data={
+                "code":50000,
+                "message":"缺少字段！"
+            }
+            return HttpResponse(json.dumps(data),content_type='application/json')
+
 def addCourseSelection(request):#新增
     data={
         "code":20000,

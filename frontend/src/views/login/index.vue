@@ -18,13 +18,13 @@
           <svg-icon icon-class="semester" />
         </span>
         <el-select v-model="loginForm.semester" clearable placeholder="选择学期" style="width: 320px;">
-        <el-option
-          v-for="item in semesterList"
-          :key="item.semester"
-          :label="item.semester"
-          :value="item.semester">
-        </el-option>
-      </el-select>
+          <el-option
+            v-for="item in semesterList"
+            :key="item.semester"
+            :label="item.semester"
+            :value="item.semester"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item prop="username">
@@ -78,8 +78,7 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import { fetchSemester } from  '@/api/openCourseApi'
+import { fetchSemester } from '@/api/openCourseApi'
 import { sha256 } from 'js-sha256'
 export default {
   name: 'Login',
@@ -102,7 +101,7 @@ export default {
       loginForm: { // 前端接收输入的loginform
         username: null,
         password: null,
-        semester:null
+        semester: null
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur' }],
@@ -114,9 +113,9 @@ export default {
       postLoginForm: { // 提交请求的loginform
         username: null,
         password: null,
-        semester:null
+        semester: null
       },
-      semesterList:[]
+      semesterList: []
     }
   },
   watch: {
@@ -145,7 +144,7 @@ export default {
       this.postLoginForm.username = this.loginForm.username
       this.postLoginForm.password = await sha256(this.loginForm.password)
       this.postLoginForm.semester = this.loginForm.semester
-      console.log("this.postLoginForm数据...",this.postLoginForm)
+      console.log('this.postLoginForm数据...', this.postLoginForm)
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -162,11 +161,10 @@ export default {
         }
       })
     },
-    handleSemester(){
-      fetchSemester().then(response=>{
-        if (response)
-          console.log("获取学期成功")
-          this.semesterList=response.data
+    handleSemester() {
+      fetchSemester().then(response => {
+        if (response) { console.log('获取学期成功') }
+        this.semesterList = response.data
       })
     }
   }

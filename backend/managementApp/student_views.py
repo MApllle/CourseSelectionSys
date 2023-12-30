@@ -2,12 +2,29 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.http import JsonResponse
 import json,hashlib
-from .sql_basic import get_from_table
+from .sql_basic import get_from_table,call_scoreprocedure
 from .models import student, teacher, department
 from django.contrib.auth.models import User
 
 
 # Create your views here.
+def calculateAllScore(request):
+    if request.method=='POST':
+        post_data = json.loads(request.body.decode('utf-8'))
+        if post_data['semester']:
+            call_scoreprocedure(post_data.get('semester'))
+            data = {
+                "code": 20000,
+                "message": "查询成功"
+            }
+            return HttpResponse(json.dumps(data), content_type='application/json')
+        else:
+            data = {
+                "code": 50000,
+                "message": "学期不存在，更新失败！"
+            }
+            return HttpResponse(json.dumps(data), content_type='application/json')
+        
 def handleStudent(request):
     if request.method=='POST': # 查询
           # 获取query
@@ -28,7 +45,7 @@ def handleStudent(request):
         data = {
             "code": 20000,
             "data": out,
-            "msg": "查询成功"
+            "message": "查询成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method=='PUT': # 更新
@@ -39,31 +56,33 @@ def handleStudent(request):
                                                                     date_of_birth=request_data.get('date_of_birth',''),
                                                                     native_place=request_data.get('native_place',''),
                                                                     mobile_phone=request_data.get('mobile_phone',''),
-                                                                    average_gpa=request_data.get('average_gpa',0),
-                                                                    total_credit=request_data.get('total_credit',0),
+                                                                    average_gpa=request_data['average_gpa'] if request_data.get('average_gpa', None) != '' else None,
+                                                                    average_score=request_data['average_score'] if request_data.get('average_score', None) != '' else None,
+                                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', None) != '' else None,
                                                                     dept_id_id=request_data.get('dept_id_id',''))
         data = {
             "code":20000,   # 注意，必须要有code，不然返回的消息会被后端拦截
-            "msg":"更新成功"
+            "message":"更新成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method=='DELETE': # 删除(逐个删)
         request_data = json.loads(request.body.decode('utf-8'))
         id = request_data['student_id']
-        student.objects.filter(stu_id=id).delete()
+        student.objects.filter(student_id=id).delete()
         data = {
             "code": 20000,
-            "msg": "删除成功"
+            "message": "删除成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     
 def addStudent(request): # 新增学生
     data={
         "code":20000,
-        "msg":"新增成功"
+        "message":"新增成功"
     }
     if request.method=='POST':
         request_data = json.loads(request.body.decode('utf-8'))
+        print("=====================",request_data)
         if request_data['student_id'] is not None:
             if User.objects.filter(username=request_data['student_id']).count() == 0:
                 user=User.objects.create_user(username=request_data['student_id'])
@@ -81,8 +100,9 @@ def addStudent(request): # 新增学生
                                                     date_of_birth=request_data.get('date_of_birth',''),
                                                     native_place=request_data.get('native_place',''),
                                                     mobile_phone=request_data.get('mobile_phone',''),
-                                                    average_gpa=request_data.get('average_gpa',''),
-                                                    total_credit=request_data.get('total_credit',''),
+                                                    average_gpa= request_data['average_gpa'] if request_data.get('average_gpa', None) != '' else None,
+                                                    average_score=request_data['average_score'] if request_data.get('average_score', None) != '' else None,
+                                                    total_credit=request_data['total_credit'] if request_data.get('total_credit', None) != '' else None,
                                                     dept_id_id=request_data.get('dept_id_id',''),
                                                     user_id_id=addedUser.id)
                 new_student.save()
@@ -90,14 +110,14 @@ def addStudent(request): # 新增学生
             else:
                 data = {
                     "code": 50000,
-                    "msg": "院系号不存在"
+                    "message": "院系号不存在"
                 }
                 return HttpResponse(json.dumps(data), content_type='application/json')
         else:
             data = {
                 "code": 50000,
-                "msg": "学号不能为空"
+                "message": "学号不能为空"
             }
             return HttpResponse(json.dumps(data), content_type='application/json')
         
-        
+    

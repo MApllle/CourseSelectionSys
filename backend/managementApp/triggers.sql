@@ -1,4 +1,4 @@
--- 触发器：计算总成绩
+-- 触发器：计算总成绩+更新均分
 DELIMITER ||
 create trigger caculate_score
 before update on managementapp_course_selection
@@ -11,7 +11,7 @@ end
 ||
 DELIMITER ;
 
--- 触发器：选课前，课程容量减一
+-- 触发器：选课前，课程容量减一+该学生总学分加
 DELIMITER ||
 create trigger manage_course_capacity
 after insert on managementapp_course_selection
@@ -26,7 +26,7 @@ end
 ||
 DELIMITER ;
 
---触发器:删除选课后，used_capa-1
+--触发器:删除选课后，used_capa-1+该学生总学分减少
 DELIMITER ||
 create trigger manage_course_capacity_ondelete
 after delete on managementapp_course_selection
@@ -57,4 +57,83 @@ CREATE DEFINER = `root`@`localhost` TRIGGER `update_total_score` AFTER UPDATE ON
     WHERE managementapp_course_selection.course_id_id = NEW.course_id;
 END;
 ||
+DELIMITER ;
+
+ --存储过程：计算平均成绩（只有在本学期选了课的需要更新平时成绩）
+DELIMITER //
+
+CREATE PROCEDURE CalculateAverageScore(in thisSemester varchar(32))
+BEGIN
+    DECLARE studentId INT;
+    DECLARE totalScore DECIMAL(10, 2);
+    DECLARE subjectCount INT;
+    DECLARE totalGPA DECIMAL(10, 2);
+    DECLARE totalCredits INT;  
+    --包含失学分
+    DECLARE totalRealCredits INT;
+    DECLARE totalCreditGPA DECIMAL(10, 2);
+
+    -- 获取学生ID列表
+    DECLARE studentCursor CURSOR FOR
+        SELECT DISTINCT student_id_id
+        FROM managementapp_course_selection
+        WHERE semester=thisSemester;
+
+    -- 声明终止条件
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+        SET studentId = NULL;
+
+    OPEN studentCursor;
+
+    -- 遍历学生列表
+    studentLoop: LOOP
+        FETCH studentCursor INTO studentId;
+
+        IF studentId IS NULL THEN
+            LEAVE studentLoop;
+        END IF;
+
+        SET totalScore = 0;
+        SET subjectCount = 0;
+        SET totalCredits = 0;
+        SET totalGPA = 0;
+        SET totalCreditGPA = 0;
+        SET totalRealCredits = 0;
+
+        -- 计算总分和科目数
+        SELECT SUM(cs.total_score), 
+            COUNT(cs.id),
+            SUM(CASE WHEN cs.total_score > 60 THEN c.credit ELSE 0 END),
+            SUM(c.credit),
+            SUM(CASE
+                    WHEN total_score >= 90 THEN 4.0*c.credit
+                    WHEN total_score >= 85 THEN 3.7*c.credit
+                    WHEN total_score >= 82 THEN 3.3*c.credit
+                    WHEN total_score >= 78 THEN 3.0*c.credit
+                    WHEN total_score >= 75 THEN 2.7*c.credit
+                    WHEN total_score >= 72 THEN 2.3*c.credit
+                    WHEN total_score >= 68 THEN 2.0*c.credit
+                    WHEN total_score >= 66 THEN 1.7*c.credit
+                    WHEN total_score >= 64 THEN 1.5*c.credit
+                    WHEN total_score >= 60 THEN 1.0*c.credit
+                    ELSE 0.0
+                END)
+            
+        INTO totalScore, subjectCount, totalCredits, totalRealCredits, totalCreditGPA
+        FROM managementapp_course_selection cs,managementapp_course c
+        WHERE cs.course_id_id=c.course_id
+            AND cs.student_id_id = studentId;
+
+        -- 计算平均成绩,平均绩点，总学分（不包含失学分）
+        IF subjectCount > 0 THEN
+            UPDATE managementapp_student
+            SET average_score = COALESCE(totalScore / NULLIF(subjectCount, 0), 0),average_gpa = COALESCE(totalCreditGPA / NULLIF(totalRealCredits, 0), 0),total_credit = totalCredits
+            WHERE student_id = studentId;
+        END IF;
+
+    END LOOP;
+
+    CLOSE studentCursor;
+END // 
+
 DELIMITER ;

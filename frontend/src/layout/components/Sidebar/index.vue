@@ -31,7 +31,7 @@ export default {
       'sidebar',
       'group',
       'permission_routes'
-      
+
     ]),
     routes() {
       return this.$router.options.routes

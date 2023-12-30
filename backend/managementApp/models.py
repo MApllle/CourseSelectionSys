@@ -24,6 +24,7 @@ class student(models.Model):
     dept_id = models.ForeignKey('department', to_field='dept_id', on_delete=models.CASCADE)      # 院系号(外键)
     average_gpa = models.FloatField(null=True,blank=True)   # 所有学期均绩
     total_credit = models.FloatField(null=True,blank=True) # 所有学期学分和
+    average_score = models.FloatField(null=True,blank=True)   # 所有学期均分
     user_id = models.ForeignKey(User, to_field='id', on_delete=models.CASCADE)  #账号id
 
 #教师表
