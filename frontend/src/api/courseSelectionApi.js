@@ -7,13 +7,13 @@ import request from '@/utils/request'
     })
   } */
 
-export function fetchCoursesForSelect(data) {   //查找开课表，构造选课清单
-    return request({
-      url: 'http://localhost:8000/fetchCoursesForSelect/',
-      method: 'post',
-      data
-    })
-  }
+export function fetchCoursesForSelect(data) { // 查找开课表，构造选课清单
+  return request({
+    url: 'http://localhost:8000/fetchCoursesForSelect/',
+    method: 'post',
+    data
+  })
+}
 
 export function addCourseSelection(data) {
   return request({

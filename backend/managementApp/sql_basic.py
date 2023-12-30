@@ -33,3 +33,9 @@ def delete_from_table(sql,param):
     cursor = connection.cursor()
     cursor.execute(sql, param)
     return
+
+def call_scoreprocedure(semester):
+    cursor = connection.cursor()
+    cursor.callproc('CalculateAllScore', (semester,)) #注意参数应该是一个元组
+    connection.connection.commit()         #调用存储过程后，确定要进行commit执行
+    return

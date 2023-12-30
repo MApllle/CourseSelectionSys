@@ -42,7 +42,7 @@
       <!--选课部分-->
       <el-table
         v-loading="listLoading"
-        :data="tableDataOpenCourse"
+        :data="tableDataOpenCourse.slice((currentPageOpenCourse-1)*pageSizeOpenCourse,currentPageOpenCourse*pageSizeOpenCourse)"
         element-loading-text="Loading"
         border
         fit
@@ -50,7 +50,7 @@
       >
         <el-table-column align="center" label="序号">
           <template slot-scope="scope">
-            <span>{{ scope.$index }}</span>
+            <span>{{ scope.$index+1+pageSizeOpenCourse*(currentPageOpenCourse-1) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="课程号" align="center">
@@ -107,6 +107,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+      align="center"
+      :current-page="currentPageOpenCourse"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSizeOpenCourse"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableDataOpenCourse.length"
+      @size-change="handleSizeChangeOpenCourse"
+      @current-change="handleCurrentChangeOpenCourse"
+    />
       <h2>查询选课信息</h2>
       <el-row :gutter="20">
         <el-col :span="2"><span>学号：</span></el-col>
@@ -125,12 +135,17 @@
       <!--管理学生选课部分-->
       <el-table
         v-loading="listLoading"
-        :data="tableDataCourseSelection"
+        :data="tableDataCourseSelection.slice((currentPageCourseSelection-1)*pageSizeCourseSelection,currentPageCourseSelection*pageSizeCourseSelection)"
         element-loading-text="Loading"
         border
         fit
         highlight-current-row
       >
+        <el-table-column align="center" label="序号">
+          <template slot-scope="scope">
+            <span>{{ scope.$index+1+pageSizeCourseSelection*(currentPageCourseSelection-1) }}</span>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="学期">
           <template slot-scope="scope">
             <span>{{ scope.row.semester }}</span>
@@ -180,40 +195,49 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+      align="center"
+      :current-page="currentPageCourseSelection"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSizeCourseSelection"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableDataCourseSelection.length"
+      @size-change="handleSizeChangeCourseSelection"
+      @current-change="handleCurrentChangeCourseSelection"
+    />
 
-
-      <el-dialog title="管理员：新增选课" :visible.sync="addFormVisible">
-        <el-form :model="addOpenCourseForm" label-width="200px" algin="left">
-          <el-form-item label="课程号" label-width="25%">
-            <el-input v-model="addOpenCourseForm.course_id_id" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="课程名" label-width="25%">
-            <el-input v-model="addOpenCourseForm.course_name" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="教师名" label-width="25%">
-            <el-input v-model="addOpenCourseForm.staff_name" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="教师工号" label-width="25%">
-            <el-input v-model="addOpenCourseForm.staff_id_id" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="职称" label-width="25%">
-            <el-input v-model="addOpenCourseForm.professional_ranks" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="上课时间" label-width="25%">
-            <el-input v-model="addOpenCourseForm.class_time" autocomplete="off" :disabled="true"/>
-          </el-form-item>
-          <el-form-item label="*学生学号" label-width="25%">
-            <el-input v-model="addOpenCourseForm.student_id_id" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="学生姓名" label-width="25%">
-            <el-input v-model="addOpenCourseForm.student_name" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="addFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="saveOpenCourseAdd()">确 定</el-button>
-        </div>
-      </el-dialog>
+    <el-dialog title="管理员：新增选课" :visible.sync="addFormVisible">
+      <el-form :model="addOpenCourseForm" label-width="200px" algin="left">
+        <el-form-item label="课程号" label-width="25%">
+          <el-input v-model="addOpenCourseForm.course_id_id" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="课程名" label-width="25%">
+          <el-input v-model="addOpenCourseForm.course_name" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="教师名" label-width="25%">
+          <el-input v-model="addOpenCourseForm.staff_name" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="教师工号" label-width="25%">
+          <el-input v-model="addOpenCourseForm.staff_id_id" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="职称" label-width="25%">
+          <el-input v-model="addOpenCourseForm.professional_ranks" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="上课时间" label-width="25%">
+          <el-input v-model="addOpenCourseForm.class_time" autocomplete="off" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="*学生学号" label-width="25%">
+          <el-input v-model="addOpenCourseForm.student_id_id" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="学生姓名" label-width="25%">
+          <el-input v-model="addOpenCourseForm.student_name" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveOpenCourseAdd()">确 定</el-button>
+      </div>
+    </el-dialog>
 
       <el-dialog title="管理员：删除选课" :visible.sync="deleteFormVisible">
         <el-form :model="deleteOpenCourseForm" label-width="200px" algin="left">
@@ -331,7 +355,7 @@
           student_name: '',
         },
         queryOpenCourse: {
-          semester:this.$store.getters.semester, //semester=this.semester、
+          semester:this.$store.getters.semester, //semester=this.semester
           course_id_id:'',
           staff_id_id:'',
           course_name:'',
@@ -349,8 +373,8 @@
           student_id_id: ''
         },
         deleteOpenCourseForm: {
-          selectcourse_id: '',//唯一值，传给后端，剩下的都是看的
-          opencourse_id_id:'',
+        // 需要opencourse_id_id，student_id_id
+          opencourse_id_id: '',
           course_id_id:'',
           staff_id:'',
           course_name:'',
@@ -362,8 +386,13 @@
         },
         deleteForm: {
           selectcourse_id: ''
-      }
-        
+        },
+      currentPageOpenCourse: 1, // 当前页码
+      totalOpenCourse: 20, // 总条数
+      pageSizeOpenCourse: 5, // 每页的数据条数
+      currentPageCourseSelection: 1, // 当前页码
+      totalCourseSelection: 20, // 总条数
+      pageSizeCourseSelection: 5 // 每页的数据条数
       }
     },
     created() {
@@ -420,6 +449,7 @@
       //删除选课
       handleDeleteCourse(index, row){
         this.deleteFormVisible = true
+        this.deleteOpenCourseForm.semester = this.$store.getters.semester
         this.deleteOpenCourseForm.opencourse_id_id=row.opencourse_id_id
         this.deleteOpenCourseForm.course_id_id=row.course_id_id
         this.deleteOpenCourseForm.staff_id=row.staff_id
@@ -458,7 +488,7 @@
         deleteCourseSelection(this.deleteOpenCourseForm).then(response => {
           if (response) {
             console.log('in handleDelete', response)
-            this.$message({ message: '删除成功', type: 'success' })
+            this.$message({ message: '新增成功', type: 'success' })
             this.deleteFormVisible = false
             this.fetchData()
             this.deleteOpenCourseForm.opencourse_id_id=''
@@ -470,7 +500,7 @@
             this.deleteOpenCourseForm.used_capacity=''
             this.deleteOpenCourseForm.class_time=''
           } else {
-            this.$message.error('删除失败')
+            this.$message.error('新增失败')
           }
         })
       },
@@ -517,7 +547,29 @@
             this.$message.error('删除失败')
           }
         })
-      }
+      },
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChangeOpenCourse(val) {
+      console.log(`每页 ${val} 条`)
+      this.currentPageOpenCourse = 1
+      this.pageSizeOpenCourse = val
+    },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChangeOpenCourse(val) {
+      console.log(`当前页: ${val}`)
+      this.currentPageOpenCourse = val
+    },
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChangeCourseSelection(val) {
+      console.log(`每页 ${val} 条`)
+      this.currentPageCourseSelection = 1
+      this.pageSizeCourseSelection = val
+    },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChangeCourseSelection(val) {
+      console.log(`当前页: ${val}`)
+      this.currentPageCourseSelection = val
+    }
     }
   }
   </script>
@@ -530,4 +582,3 @@
     width:20%
   }
   </style>
-  

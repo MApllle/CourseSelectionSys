@@ -7,8 +7,8 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    semester:'',
-    group:''
+    semester: '',
+    group: ''
   }
 }
 
@@ -27,10 +27,10 @@ const mutations = {
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   },
-  SET_SEMESTER:(state,semester) => {
+  SET_SEMESTER: (state, semester) => {
     state.semester = semester
   },
-  SET_GROUP:(state,group) => {
+  SET_GROUP: (state, group) => {
     state.group = group
   }
 }
@@ -38,9 +38,9 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password, group, semester  } = userInfo
+    const { username, password, group, semester } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password, group:group, semester:semester }).then(response => {
+      login({ username: username.trim(), password: password, group: group, semester: semester }).then(response => {
         const { data } = response
         console.log('login actions返回的消息', data)
         commit('SET_TOKEN', data.token)

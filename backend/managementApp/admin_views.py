@@ -224,6 +224,15 @@ def handleUser(request): #更改用户信息（主要是改密码）
             "msg":"查询成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
+    elif request.method=='DELETE':  #删
+        request_data = json.loads(request.body.decode('utf-8'))
+        id=request_data['id']
+        User.objects.filter(id=id).delete()
+        data={
+            "code":20000,
+            "message":"删除成功"
+        }
+        return HttpResponse(json.dumps(data),content_type='application/json')
     return HttpResponse(json.dumps(data),content_type='application/json')
 
 #学期选择;get方法

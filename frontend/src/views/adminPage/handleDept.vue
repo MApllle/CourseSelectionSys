@@ -64,15 +64,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination align='center' 
-      @size-change="handleSizeChange" 
+    <el-pagination
+      align="center"
+      :current-page="currentPage"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length"
+      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage" 
-      :page-sizes="[1,5,10,20]" 
-      :page-size="pageSize" 
-      layout="total, sizes, prev, pager, next, jumper" 
-      :total="tableData.length">
-    </el-pagination>
+    />
     <el-dialog title="新增学院" :visible.sync="addFormVisible">
       <el-form :model="addForm" label-width="200px" algin="left">
         <el-form-item label="院系号" label-width="25%">
@@ -163,7 +164,7 @@ export default {
       deleteForm: {
         dept_id: ''
       },
-      currentPage: 1,// 当前页码
+      currentPage: 1, // 当前页码
       total: 20, // 总条数
       pageSize: 5 // 每页的数据条数
     }
@@ -240,16 +241,16 @@ export default {
         }
       })
     },
-    //每页条数改变时触发 选择一页显示多少行
+    // 每页条数改变时触发 选择一页显示多少行
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-      this.currentPage = 1;
-      this.pageSize = val;
+      console.log(`每页 ${val} 条`)
+      this.currentPage = 1
+      this.pageSize = val
     },
-    //当前页改变时触发 跳转其他页
+    // 当前页改变时触发 跳转其他页
     handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
+      console.log(`当前页: ${val}`)
+      this.currentPage = val
     }
   }
 }

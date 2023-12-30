@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
-export function fetchSemester( ) {   //login页面用来请求学期
-    return request({
-      url: 'http://localhost:8000/fetchSemester/',
-      method: 'get',
-    })
-  }
+export function fetchSemester() { // login页面用来请求学期
+  return request({
+    url: 'http://localhost:8000/fetchSemester/',
+    method: 'get'
+  })
+}
 
 export function addOpenCourse(data) {
   return request({

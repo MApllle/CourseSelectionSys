@@ -79,7 +79,7 @@
           <span>{{ scope.row.dept_id_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center"  width="200px">
+      <el-table-column label="操作" align="center" width="200px">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -93,15 +93,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination align='center' 
-      @size-change="handleSizeChange" 
+    <el-pagination
+      align="center"
+      :current-page="currentPage"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableData.length"
+      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage" 
-      :page-sizes="[1,5,10,20]" 
-      :page-size="pageSize" 
-      layout="total, sizes, prev, pager, next, jumper" 
-      :total="tableData.length">
-    </el-pagination>
+    />
 
     <el-dialog title="新增教师" :visible.sync="addFormVisible">
       <el-form :model="addForm" label-width="200px" algin="left">
@@ -178,6 +179,19 @@
         <el-button type="primary" @click="saveEdit()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--确认对话框-->
+    <el-dialog
+      title="提示"
+      :visible.sync="confirmDeleteDialogVisible"
+      width="30%"
+      center>
+      <span>确认删除？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="confirmDeleteDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmDelete()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -209,6 +223,7 @@ export default {
       ],
       addFormVisible: false,
       editFormVisible: false,
+      confirmDeleteDialogVisible: false,
       editForm: {
         staff_id: '',
         name: '',
@@ -237,7 +252,7 @@ export default {
       deleteForm: {
         staff_id: ''
       },
-      currentPage: 1,// 当前页码
+      currentPage: 1, // 当前页码
       total: 20, // 总条数
       pageSize: 5 // 每页的数据条数
     }
@@ -270,6 +285,7 @@ export default {
           this.addForm.staff_id = ''
           this.addForm.name = ''
           this.addForm.sex = ''
+          this.addForm.professional_ranks = ''
           this.addForm.date_of_birth = ''
           this.addForm.salary = ''
           this.addForm.dept_id_id = ''
@@ -309,28 +325,33 @@ export default {
     // 删除用户
     handleDelete(inex, row) {
       this.deleteForm.staff_id = row.staff_id
+      this.confirmDeleteDialogVisible = true 
+    },
+    //确认删除
+    confirmDelete(){
       deleteTeacher(this.deleteForm).then(response => {
         if (response) {
           this.$message({ message: '删除成功', type: 'success' })
           console.log('in handleDelete', response)
           this.fetchData()
           this.deleteForm.staff_id = ''
+          this.confirmDeleteDialogVisible = false 
         } else {
           this.$message.error('删除失败')
         }
       })
     },
-    //每页条数改变时触发 选择一页显示多少行
+    // 每页条数改变时触发 选择一页显示多少行
     handleSizeChange(val) {
-         console.log(`每页 ${val} 条`);
-         this.currentPage = 1;
-         this.pageSize = val;
-     },
-     //当前页改变时触发 跳转其他页
-     handleCurrentChange(val) {
-         console.log(`当前页: ${val}`);
-         this.currentPage = val;
-     }
+      console.log(`每页 ${val} 条`)
+      this.currentPage = 1
+      this.pageSize = val
+    },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
+      this.currentPage = val
+    }
   }
 }
 </script>

@@ -59,5 +59,7 @@ urlpatterns = [
     path("fetchCoursesForTeacherSchedule/",open_course_views.fetchCoursesForTeacherSchedule), 
     #学生课程表获取联查接口、
     path("fetchCoursesForStudentSchedule/",course_selection_views.fetchCoursesForStudentSchedule), 
+    #调用存储过程计算均分
+    path("calculateAllScore/",student_views.calculateAllScore), 
     
 ]

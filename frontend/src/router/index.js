@@ -53,7 +53,7 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '选课系统首页', icon: 'dashboard' }
     }]
-  },
+  }
 ]
 
 export const asyncRoutes = [
@@ -65,26 +65,26 @@ export const asyncRoutes = [
     meta: {
       title: '学生选课',
       icon: 'nested',
-      group:'学生'
+      group: '学生'
     },
     children: [
       {
         path: 'selectCourse',
         component: () => import('@/views/studentPage/selectCourse'), // Parent router-view
         name: 'selectCourse',
-        meta: { title: '选课',group:'学生' }
+        meta: { title: '选课', group: '学生' }
       },
       {
         path: 'viewHistoryCourseSelection',
         component: () => import('@/views/studentPage/viewHistoryCourseSelection'),
         name: 'viewHistoryCourseSelection',
-        meta: { title: '查看过往选课',group:'学生' }
+        meta: { title: '查看过往选课', group: '学生' }
       },
       {
         path: 'viewSchedule',
         component: () => import('@/views/studentPage/viewSchedule'),
         name: 'viewSchedule',
-        meta: { title: '查看课表',group:'学生' }
+        meta: { title: '查看课表', group: '学生' }
       }
     ]
   },
@@ -96,50 +96,50 @@ export const asyncRoutes = [
     meta: {
       title: '后台管理',
       icon: 'nested',
-      group:'管理员'
+      group: '管理员'
     },
     children: [
       {
         path: 'handleDept',
         component: () => import('@/views/adminPage/handleDept'),
         name: 'handleDept',
-        meta: { title: '院系管理',group:'管理员' }
+        meta: { title: '院系管理', group: '管理员' }
       },
       {
         path: 'hadleTeacher',
         component: () => import('@/views/adminPage/hadleTeacher'),
         name: 'hadleTeacher',
-        meta: { title: '教师管理',group:'管理员' }
+        meta: { title: '教师管理', group: '管理员' }
       },
       {
         path: 'hadleStudent',
         component: () => import('@/views/adminPage/hadleStudent'),
         name: 'hadleStudent',
-        meta: { title: '学生管理',group:'管理员' }
+        meta: { title: '学生管理', group: '管理员' }
       },
       {
         path: 'handleCourse',
         component: () => import('@/views/adminPage/handleCourse'),
         name: 'handleCourse',
-        meta: { title: '课程管理',group:'管理员' }
+        meta: { title: '课程管理', group: '管理员' }
       },
       {
         path: 'handleOpenCourse',
         component: () => import('@/views/adminPage/handleOpenCourse'),
         name: 'handleOpenCourse',
-        meta: { title: '开课管理',group:'管理员' }
+        meta: { title: '开课管理', group: '管理员' }
       },
       {
         path: 'handleCourseSelect',
         component: () => import('@/views/adminPage/handleCourseSelect'),
         name: 'handleCourseSelect',
-        meta: { title: '选课管理',group:'管理员' }
+        meta: { title: '选课管理', group: '管理员' }
       },
       {
         path: 'handleUser',
         component: () => import('@/views/adminPage/handleUser'),
         name: 'handleUser',
-        meta: { title: '系统账号管理',group:'管理员' }
+        meta: { title: '系统账号管理', group: '管理员' }
       }
 
     ]
@@ -152,14 +152,14 @@ export const asyncRoutes = [
     meta: {
       title: '教师课程管理',
       icon: 'nested',
-      group:'教师'
+      group: '教师'
     },
     children: [
       {
         path: 'viewSchedule',
         component: () => import('@/views/teacherPage/viewSchedule'), // Parent router-view
         name: 'viewSchedule',
-        meta: { title: '查看课表',group:'教师' }
+        meta: { title: '查看课表', group: '教师' }
       },
       {
         path: 'manageScore',
@@ -175,7 +175,7 @@ export const asyncRoutes = [
       },
     ]
   },
-  
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

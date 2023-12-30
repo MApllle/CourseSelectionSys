@@ -32,3 +32,11 @@ export function deleteStudent(data) {
   })
 }
 
+export function calculateAllScore(data) {
+  return request({
+    url: 'http://localhost:8000/calculateAllScore/',
+    method: 'post',
+    data
+  })
+}
+
