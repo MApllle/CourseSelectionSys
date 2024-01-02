@@ -14,6 +14,11 @@
           <div v-for="item in outList" :key="outList" class="text item">
             {{ item.value }}
           </div>
+          <el-button
+            size="mini"
+            @click="semesterDialogVisible = true"
+            v-if="usergroup==='管理员'"
+          >修改系统学期</el-button>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -31,7 +36,18 @@
         </el-card>
       </el-col>
     </el-row>
-
+    <!--管理员修改学期-->
+    <el-dialog title="修改学期" :visible.sync="semesterDialogVisible">
+      <el-form label-width="200px" algin="left">
+        <el-form-item label="请输入学期：" label-width="25%">
+          <el-input v-model="inputSemester" autocomplete="off" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="semesterDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveSemester()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,6 +57,7 @@ import { fetchCourseSelection } from '@/api/courseSelectionApi'
 import { fetchOpenCourse } from '@/api/openCourseApi'
 import { fetchStudent } from '@/api/studentApi'
 import { fetchTeacher } from '@/api/teacherApi'
+import { getCourseRequestNum } from '@/api/courseRequestApi'
 
 export default {
   name: 'Dashboard',
@@ -83,7 +100,9 @@ export default {
         teacher_name: null,
         professional_ranks: null
       },
-      addSemesterVisible: false
+      usergroup:this.$store.getters.group,
+      inputSemester:null,
+      semesterDialogVisible:false,
     }
   },
   mounted() {
@@ -143,7 +162,23 @@ export default {
             }
           }
         })
+      } else if(this.group === '管理员'){
+        getCourseRequestNum().then(response=>{
+          if(response.data.number== 0){
+            this.todoList.push({ label: '开课审核', value: '有'+response.data.number+'个申请待审核', tag: 'success' })
+          }
+          else if(response.data.number > 0){
+            this.todoList.push({ label: '开课审核', value: '有'+response.data.number+'个申请待审核', tag: 'danger' })
+          }
+        })
       }
+    },
+    saveSemester(){
+      this.$store.dispatch('user/changeSemester', this.inputSemester).then(() => {
+            console.log('修改成功', this.$store.getters.semester)
+            this.semesterDialogVisible=false
+            this.outList[1].value='学期：' + this.$store.getters.semester
+          })
     }
 
   }

@@ -36,3 +36,15 @@ export function postCourseRequest(data) {
       params: data
     })
   }
+
+  /**
+   * 开课申请审核
+   * @param data 开课申请状态修改信息
+   * @returns 是否申请成功
+   */
+  export function getCourseRequestNum() {
+    return request({
+      url: 'http://localhost:8000/handleCourseRequest/',
+      method: 'GET'
+    })
+  }

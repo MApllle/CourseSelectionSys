@@ -103,6 +103,14 @@ def handleCourseRequest(request):
                 "code": 50000,
                 "message": "不存在id 查询失败"
             }
+    elif request.method == 'GET':#统计还有多少待审核
+        num=course_request.objects.filter(status=0).count()
+        data = {
+            "code": 20000,
+            "data":{'number':num},
+            "message": "请求成功"
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         data = {
             "code": 50000,

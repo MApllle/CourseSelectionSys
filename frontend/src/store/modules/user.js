@@ -92,12 +92,19 @@ const actions = {
   },
 
   // remove token
-  resetToken({ commit }) {
+  resetToken({ commit, newsemester }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
     })
+  },
+
+  //管理员修改学期
+  changeSemester({ commit }, semester){
+    console.log('进入修改学期')
+    const newsemester = semester
+    commit('SET_SEMESTER',newsemester)
   }
 }
 

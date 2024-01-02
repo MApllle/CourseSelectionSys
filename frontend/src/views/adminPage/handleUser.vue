@@ -146,7 +146,7 @@
 <script>
 import { addUser, updateUser, fetchUser, deleteUser } from '@/api/adminApi'
 import { sha256 } from 'js-sha256'
-
+import { mapGetters } from 'vuex'
 export default {
   filters: {
     statusFilter(status) {
@@ -157,6 +157,12 @@ export default {
       }
       return statusMap[status]
     }
+  },
+  computed: {
+    ...mapGetters([
+      'group',
+      'semester'
+    ])
   },
   data() {
     return {
@@ -275,7 +281,9 @@ export default {
     // 删除用户
     handleDelete(inex, row) {
       this.deleteForm.id = row.id
-      this.confirmDeleteDialogVisible = true
+      if(row.username===this.$store.getters.name)
+        this.$message.error('管理员无法删除自己！')
+      else this.confirmDeleteDialogVisible = true
     },
     // 确认删除
     confirmDelete() {
