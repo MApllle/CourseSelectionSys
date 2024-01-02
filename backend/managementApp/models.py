@@ -83,3 +83,11 @@ class course_request(models.Model):
                                              default=0.5)  # 平时成绩占总成绩百分比
     staff_id = models.ForeignKey('teacher', to_field='staff_id', on_delete=models.CASCADE)  # 请求教师工号(外键)
     status = models.IntegerField(default=0)  # 状态 0:待处理 1:已通过 2:已拒绝
+
+
+class student_comments(models.Model):
+    student_id = models.ForeignKey('student', to_field='student_id', on_delete=models.CASCADE)  # 学号(外键)
+    course_id = models.ForeignKey('course', to_field='course_id', on_delete=models.CASCADE)  # 课程号(外键)
+    staff_id = models.ForeignKey('teacher', to_field='staff_id', on_delete=models.CASCADE)  # 工号(外键)
+    comments = models.TextField()  # 评价
+
