@@ -85,6 +85,12 @@ export const asyncRoutes = [
         component: () => import('@/views/studentPage/viewSchedule'),
         name: 'viewSchedule',
         meta: { title: '查看课表', group: '学生' }
+      },
+      {
+        path: 'studentComment',
+        component: () => import('@/views/studentPage/studentComment'),
+        name: 'studentComment',
+        meta: { title: '评论', group: '学生' }
       }
     ]
   },
@@ -178,6 +184,12 @@ export const asyncRoutes = [
         component: () => import('@/views/teacherPage/openCourseRequest'),
         name: 'manageScore',
         meta: { title: '申请开课', group: '教师' }
+      },
+      {
+        path: 'studentComments',
+        component: () => import('@/views/teacherPage/studentComments'),
+        name: 'manageScore',
+        meta: { title: '学生评论', group: '教师' }
       }
     ]
   },

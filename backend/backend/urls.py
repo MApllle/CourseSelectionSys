@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from managementApp import teacher_views,student_views,admin_views,department_views,\
-    course_selection_views,open_course_views,course_views,course_request_views
+    course_selection_views,open_course_views,course_views,course_request_views, student_comments_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -61,5 +61,8 @@ urlpatterns = [
     path("fetchCoursesForStudentSchedule/",course_selection_views.fetchCoursesForStudentSchedule), 
     #调用存储过程计算均分
     path("calculateAllScore/",student_views.calculateAllScore), 
+
+    # student_comments表相关接口
+    path("studentComments/", student_comments_views.studentComments),  # 学生评论 添加POST/获取GET
     
 ]

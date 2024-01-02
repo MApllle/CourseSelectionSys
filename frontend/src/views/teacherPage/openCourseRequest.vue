@@ -37,7 +37,7 @@
           <span>{{ scope.row.credit_hours }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学院号">
+      <el-table-column label="院系号">
         <template slot-scope="scope">
           <span>{{ scope.row.dept_id_id }}</span>
         </template>
