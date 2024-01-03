@@ -98,7 +98,7 @@
     <el-dialog title="编辑学院" :visible.sync="editFormVisible">
       <el-form :model="editForm" label-width="200px" algin="left">
         <el-form-item label="院系号" label-width="25%">
-          <el-input v-model="editForm.dept_id" autocomplete="off" />
+          <el-input v-model="editForm.dept_id" autocomplete="off" disabled="true"/>
         </el-form-item>
         <el-form-item label="学院名" label-width="25%">
           <el-input v-model="editForm.dept_name" autocomplete="off" />

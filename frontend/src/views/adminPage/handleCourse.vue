@@ -123,7 +123,7 @@
     <el-dialog title="编辑课程" :visible.sync="editFormVisible">
       <el-form :model="editForm" label-width="200px" algin="left">
         <el-form-item label="课程号" label-width="25%">
-          <el-input v-model="editForm.course_id" autocomplete="off" />
+          <el-input v-model="editForm.course_id" autocomplete="off" disabled="true"/>
         </el-form-item>
         <el-form-item label="课程名" label-width="25%">
           <el-input v-model="editForm.course_name" autocomplete="off" />

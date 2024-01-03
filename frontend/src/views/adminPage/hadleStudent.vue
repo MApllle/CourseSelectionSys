@@ -170,7 +170,7 @@
     <el-dialog title="编辑学生" :visible.sync="editFormVisible">
       <el-form :model="editForm" label-width="200px" algin="left">
         <el-form-item label="学号" label-width="25%">
-          <el-input v-model="editForm.student_id" autocomplete="off" />
+          <el-input v-model="editForm.student_id" autocomplete="off" disabled="true" />
         </el-form-item>
         <el-form-item label="姓名" label-width="25%">
           <el-input v-model="editForm.name" autocomplete="off" />
