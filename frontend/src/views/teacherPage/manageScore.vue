@@ -199,8 +199,11 @@
       const responseOC = await fetchCoursesForTeacherSchedule(this.queryOpenCourse)
       this.openCourseListData = responseOC.data
       //返回：oc.id,oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time
-      this.query.open_course_id_id=this.openCourseListData[0].id
-      this.tableTitle=this.openCourseListData[this.selectedopenCourseListData].course_name+'（'+this.openCourseListData[this.selectedopenCourseListData].course_id_id+' 上课时间：'+this.openCourseListData[this.selectedopenCourseListData].class_time+'）登分表'
+      if(this.openCourseListData.length!=0){
+        this.query.open_course_id_id=this.openCourseListData[0].id
+        this.tableTitle=this.openCourseListData[this.selectedopenCourseListData].course_name+'（'+this.openCourseListData[this.selectedopenCourseListData].course_id_id+' 上课时间：'+this.openCourseListData[this.selectedopenCourseListData].class_time+'）登分表'
+      }
+        
       
       const response = await fetchCoursesForScore(this.query)
       this.tableData = response.data

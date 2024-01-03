@@ -96,7 +96,7 @@ export const asyncRoutes = [
         path: 'studentComment',
         component: () => import('@/views/studentPage/studentComment'),
         name: 'studentComment',
-        meta: { title: '评论', group: '学生' }
+        meta: { title: '课程反馈建议', group: '学生' }
       }
     ]
   },
@@ -195,7 +195,7 @@ export const asyncRoutes = [
         path: 'studentComments',
         component: () => import('@/views/teacherPage/studentComments'),
         name: 'manageScore',
-        meta: { title: '学生评论', group: '教师' }
+        meta: { title: '学生反馈及建议', group: '教师' }
       },
       {
         path: 'manageStudentCourseSelection',
