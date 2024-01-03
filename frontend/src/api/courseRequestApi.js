@@ -48,3 +48,11 @@ export function postCourseRequest(data) {
       method: 'GET'
     })
   }
+//老师审核情况统计
+  export function getCourseRequestTeacher(data) {
+    return request({
+      url: 'http://localhost:8000/handleCourseRequest/',
+      method: 'POST',
+      data
+    })
+  }

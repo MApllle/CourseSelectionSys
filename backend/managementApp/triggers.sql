@@ -56,16 +56,20 @@ END;
 DELIMITER ;
 
  --存储过程：计算平均成绩（只有在本学期选了课的需要更新平时成绩）
-DELIMITER //
-
-CREATE PROCEDURE CalculateAverageScore(in thisSemester varchar(32))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CalculateAllScore`(
+	IN `thisSemester` varchar(32)
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
 BEGIN
     DECLARE studentId INT;
     DECLARE totalScore DECIMAL(10, 2);
     DECLARE subjectCount INT;
     DECLARE totalGPA DECIMAL(10, 2);
     DECLARE totalCredits INT;  
-    -- 包含失学分
     DECLARE totalRealCredits INT;
     DECLARE totalCreditGPA DECIMAL(10, 2);
 
@@ -120,7 +124,7 @@ BEGIN
         WHERE cs.course_id_id=c.course_id
             AND cs.student_id_id = studentId;
 
-        -- 计算平均成绩,平均绩点，总学分（不包含失学分）
+        -- 计算平均成绩
         IF subjectCount > 0 THEN
             UPDATE managementapp_student
             SET average_score = COALESCE(totalScore / NULLIF(subjectCount, 0), 0),average_gpa = COALESCE(totalCreditGPA / NULLIF(totalRealCredits, 0), 0),total_credit = totalCredits
@@ -130,6 +134,4 @@ BEGIN
     END LOOP;
 
     CLOSE studentCursor;
-END // 
-
-DELIMITER ;
+END

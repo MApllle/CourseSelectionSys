@@ -96,13 +96,13 @@ def handleOpenCourse(request):
             semester=request_data['semester'], 
             staff_id_id=request_data['staff_id_id']
         )
-        existing_times = [course.class_time for course in existing_courses]
+        existing_times = [course.class_time for course in existing_courses if course.id!=request_data['id']]
 
         print("================================is_time_conflict",is_time_conflict(request_data['class_time'], existing_times))    
         if is_time_conflict(request_data['class_time'], existing_times):
             data = {
                 "code": 50000,
-                "message": "新增失败，该老师在该时间已经开课"
+                "message": "修改失败，该老师在该时间已经开课"
             }
             return HttpResponse(json.dumps(data), content_type='application/json')
         open_course.objects.filter(id=request_data['id']).update(capacity=request_data.get('capacity',0),

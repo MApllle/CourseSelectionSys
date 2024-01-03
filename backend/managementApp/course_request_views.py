@@ -111,6 +111,15 @@ def handleCourseRequest(request):
             "message": "请求成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
+    elif request.method == 'POST':#统计某老师的审核情况
+        post_data = json.loads(request.body.decode('utf-8'))
+        num=course_request.objects.filter(status=0).count()
+        data = {
+            "code": 20000,
+            "data":{'number':num},
+            "message": "请求成功"
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         data = {
             "code": 50000,

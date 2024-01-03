@@ -57,7 +57,7 @@ import { fetchCourseSelection } from '@/api/courseSelectionApi'
 import { fetchOpenCourse } from '@/api/openCourseApi'
 import { fetchStudent } from '@/api/studentApi'
 import { fetchTeacher } from '@/api/teacherApi'
-import { getCourseRequestNum } from '@/api/courseRequestApi'
+import { getCourseRequestNum, getCourseRequestTeacher } from '@/api/courseRequestApi'
 
 export default {
   name: 'Dashboard',
@@ -99,6 +99,9 @@ export default {
       teacherReturn: {
         teacher_name: null,
         professional_ranks: null
+      },
+      queryCourseRequest:{
+        staff_id_id: this.$store.getters.name
       },
       usergroup:this.$store.getters.group,
       inputSemester:null,
@@ -143,7 +146,7 @@ export default {
             // 计算课程数
               this.todoList.push({ label: '选课事项', value: '本学期已选' + this.courseSelectionReturn.length + '门课', tag: 'success' })
               // 是否提醒考评
-              this.todoList.push({ label: '考评事项', value: '待填写考评', tag: 'danger' })
+              this.todoList.push({ label: '考评事项', value: '可填写考评', tag: 'danger' })
             }
           }
         })
@@ -151,15 +154,16 @@ export default {
         fetchOpenCourse(this.queryOpenCourse).then(response => {
           if (response) {
             this.OpenCourseReturn = response.data
-            // 判断是否需要选课
+            // 判断是否要上课
             if (this.OpenCourseReturn.length === 0) {
               this.todoList.push({ label: '课程事项', value: '本学期没有待授课程！', tag: 'success' })
             } else {
             // 计算课程数
               this.todoList.push({ label: '课程事项', value: '本学期有' + this.OpenCourseReturn.length + '门课待授', tag: 'success' })
-              // 是否提醒考评
-              this.todoList.push({ label: '考评事项', value: '学期结束，可查看考评', tag: 'success' })
             }
+             // 是否提醒考评
+            this.todoList.push({ label: '考评事项', value: '可查看考评', tag: 'success' })
+            this.todoList.push({ label: '申请课程', value: '可申请开课', tag: 'success' })
           }
         })
       } else if(this.group === '管理员'){

@@ -352,7 +352,7 @@ def addCourseSelection(request):#新增
             course_instance = course.objects.get(course_id=request_data['course_id_id'])
             course_credits = course_instance.credit  
             # 检查加上这门课总学分是否超过32分
-            total_credits = course_selection.objects.filter(student_id_id=request_data['student_id_id']).aggregate(
+            total_credits = course_selection.objects.filter(student_id_id=request_data['student_id_id'],semester=request_data['semester']).aggregate(
                 total_credits=Sum('course_id__credit')
             )['total_credits'] or 0
 
@@ -364,7 +364,7 @@ def addCourseSelection(request):#新增
                 return HttpResponse(json.dumps(data), content_type='application/json')
             
             # 查看是否有时间冲突的开课
-            course_times = course_selection.objects.filter(student_id_id=request_data['student_id_id']).values_list('open_course_id__class_time', flat=True)#某个学生选的所有课的上课时间
+            course_times = course_selection.objects.filter(student_id_id=request_data['student_id_id'],semester=request_data['semester']).values_list('open_course_id__class_time', flat=True)#某个学生选的所有课的上课时间
             if is_time_conflict(request_data['class_time'], course_times):
                 data = {
                 "code": 50000,
