@@ -61,8 +61,12 @@ urlpatterns = [
     path("fetchCoursesForStudentSchedule/",course_selection_views.fetchCoursesForStudentSchedule), 
     #调用存储过程计算均分
     path("calculateAllScore/",student_views.calculateAllScore), 
-
     # student_comments表相关接口
     path("studentComments/", student_comments_views.studentComments),  # 学生评论 添加POST/获取GET
+    #教师登分表查登分表
+    path("fetchCoursesForScore/",course_selection_views.fetchCoursesForScore),
+    #学生查选课记录
+    path("fetchCourseSelectionForStudentScore/",course_selection_views.fetchCourseSelectionForStudentScore),
     
+     
 ]

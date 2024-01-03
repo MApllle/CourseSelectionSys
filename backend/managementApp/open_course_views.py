@@ -26,10 +26,10 @@ def fetchCoursesForTeacherSchedule(request):
         query = {key: value for key, value in post_data.items() if value}
         param = []
         if not query:
-            sql = 'select oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id'
+            sql = 'select oc.id,oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id'
         else:
             # 不提供通过已选人数查开课
-            sql = 'select oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id and '
+            sql = 'select oc.id,oc.course_id_id,c.course_name,c.credit,c.credit_hours,oc.class_time from managementapp_open_course oc,managementapp_course c where oc.course_id_id=c.course_id and '
             conditions=[]
             for key, value in query.items():
                 if key in ['semester','staff_id_id']:

@@ -146,7 +146,7 @@
           <span>{{ scope.$index+1+pageSizeCourseSelection*(currentPageCourseSelection-1) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="学期">
+      <el-table-column align="center" label="学期" width="180px">
         <template slot-scope="scope">
           <span>{{ scope.row.semester }}</span>
         </template>
@@ -181,7 +181,7 @@
           <span>{{ scope.row.total_score }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column label="操作" align="center" width="200px">
         <template slot-scope="scope">
           <el-button
             size="mini"
