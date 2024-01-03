@@ -184,7 +184,7 @@ def fetchCoursesForSelect(request):
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
 
-#为获取课程名、教师名、学分、开课时间，选课表联查课程表、开课表、教师表
+#为获取课程名、教师名、学分、开课时间，选课表联查课程表、开课表、教师表、选课表managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs
 def fetchCoursesForCheck(request):
     if request.method=='POST':
         #获取query
@@ -192,9 +192,9 @@ def fetchCoursesForCheck(request):
         query = {key: value for key, value in post_data.items() if value}
         param=[]
         if not query:
-            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id '
+            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id and cs.open_course_id_id=oc.id '
         else:
-            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id and  '
+            sql = 'select cs.student_id_id,cs.id,oc.id as opencourse_id_id,oc.course_id_id,c.course_name,c.credit,t.name as staff_name,oc.staff_id_id,t.professional_ranks,oc.class_time,oc.capacity,oc.used_capacity from managementapp_open_course oc,managementapp_course c,managementapp_teacher t,managementapp_course_selection cs where oc.staff_id_id=t.staff_id and oc.course_id_id=c.course_id and c.course_id=cs.course_id_id and cs.open_course_id_id=oc.id and '
             
             conditions = []
             for key, value in query.items():

@@ -37,7 +37,7 @@
     <el-divider />
     <el-table
       v-loading="listLoading"
-      :data="tableDataOpenCourse"
+      :data="tableDataOpenCourse.slice((currentPageOpenCourse-1)*pageSizeOpenCourse,currentPageOpenCourse*pageSizeOpenCourse)"
       element-loading-text="Loading"
       border
       fit
@@ -45,7 +45,7 @@
     >
       <el-table-column align="center" label="序号" width="95">
         <template slot-scope="scope">
-          <span>{{ scope.$index }}</span>
+          <span>{{ scope.$index+1+pageSizeOpenCourse*(currentPageOpenCourse-1) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="课程号" width="110" align="center">
@@ -97,16 +97,31 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      align="center"
+      :current-page="currentPageOpenCourse"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSizeOpenCourse"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableDataOpenCourse.length"
+      @size-change="handleSizeChangeOpenCourse"
+      @current-change="handleCurrentChangeOpenCourse"
+    />
     <h2>已选的课程</h2>
     <!--用于学生退课-->
     <el-table
       v-loading="listLoading"
-      :data="tableDataCourseSelection"
+      :data="tableDataCourseSelection.slice((currentPageCourseSelection-1)*pageSizeCourseSelection,currentPageCourseSelection*pageSizeCourseSelection)"
       element-loading-text="Loading"
       border
       fit
       highlight-current-row
     >
+      <el-table-column align="center" label="序号">
+        <template slot-scope="scope">
+          <span>{{ scope.$index+1+pageSizeCourseSelection*(currentPageCourseSelection-1) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="课程号" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.course_id_id }}</span>
@@ -147,11 +162,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      align="center"
+      :current-page="currentPageCourseSelection"
+      :page-sizes="[1,5,10,20]"
+      :page-size="pageSizeCourseSelection"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="tableDataCourseSelection.length"
+      @size-change="handleSizeChangeCourseSelection"
+      @current-change="handleCurrentChangeCourseSelection"
+    />
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
 import { addCourseSelection, updateCourseSelection, fetchCoursesForCheck, fetchCourseSelection, deleteCourseSelection, fetchCoursesForSelect } from '@/api/courseSelectionApi'
 import { mapGetters } from 'vuex'
 // import { addStudent, updateStudent, fetchStudent, deleteStudent,fetchStudent } from '@/api/studentApi'
@@ -228,7 +252,13 @@ export default {
       },
       deleteForm: {
         selectcourse_id: ''
-      }
+      },
+      currentPageOpenCourse: 1, // 当前页码
+      totalOpenCourse: 20, // 总条数
+      pageSizeOpenCourse: 5, // 每页的数据条数
+      currentPageCourseSelection: 1, // 当前页码
+      totalCourseSelection: 20, // 总条数
+      pageSizeCourseSelection: 5 // 每页的数据条数
     }
   },
   created() {
@@ -247,10 +277,6 @@ export default {
           console.log('更新tabledataCS', this.tableDataCourseSelection)
           this.listLoading = false
         })
-      })
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
       })
     },
     // 查询选课清单
@@ -321,12 +347,27 @@ export default {
         }
       })
     },
-
-    testButton() {
-      console.log('testbutton')
-      Test().then(response => {
-        console.log('tttttttttttest', response)
-      })
+        // 每页条数改变时触发 选择一页显示多少行
+        handleSizeChangeOpenCourse(val) {
+      console.log(`每页 ${val} 条`)
+      this.currentPageOpenCourse = 1
+      this.pageSizeOpenCourse = val
+    },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChangeOpenCourse(val) {
+      console.log(`当前页: ${val}`)
+      this.currentPageOpenCourse = val
+    },
+    // 每页条数改变时触发 选择一页显示多少行
+    handleSizeChangeCourseSelection(val) {
+      console.log(`每页 ${val} 条`)
+      this.currentPageCourseSelection = 1
+      this.pageSizeCourseSelection = val
+    },
+    // 当前页改变时触发 跳转其他页
+    handleCurrentChangeCourseSelection(val) {
+      console.log(`当前页: ${val}`)
+      this.currentPageCourseSelection = val
     }
   }
 }
