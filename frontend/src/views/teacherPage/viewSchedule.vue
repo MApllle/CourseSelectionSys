@@ -200,35 +200,37 @@ export default {
         for (let j = 0; j < timelist.length; j++) {
           // 添加到课程表
           console.log('timelist', timelist[j], 'list1', timelist[j][0])
+          let match = timelist[j].match(/(\d+)-(\d+)/);
           switch (timelist[j][0]) {
             case '一': {
-              this.scheduleData[Number(timelist[j][1]) - 1].Monday = this.tableData[i].number
-              this.scheduleData[Number(timelist[j][3]) - 1].Monday = this.tableData[i].number
+              for(let k=Number(match[1]);k<=match[2];k++)
+                this.scheduleData[Number(k) - 1].Monday = this.tableData[i].number
               break
             }
             case '二': {
-              this.scheduleData[Number(timelist[j][1]) - 1].Tuesday = this.tableData[i].number
-              this.scheduleData[Number(timelist[j][3]) - 1].Tuesday = this.tableData[i].number
+              for(let k=match[1];k<=match[2];k++)
+                this.scheduleData[Number(k) - 1].Tuesday = this.tableData[i].number
               break
             }
             case '三': {
-              this.scheduleData[Number(timelist[j][1]) - 1].Wednesday = this.tableData[i].number
-              this.scheduleData[Number(timelist[j][3]) - 1].Wednesday = this.tableData[i].number
+              for(let k=match[1];k<=match[2];k++)
+                this.scheduleData[Number(k) - 1].Wednesday = this.tableData[i].number
               break
             }
             case '四': {
-              this.scheduleData[Number(timelist[j][1]) - 1].Thursday = this.tableData[i].number
-              this.scheduleData[Number(timelist[j][3]) - 1].Thursday = this.tableData[i].number
+              for(let k=match[1];k<=match[2];k++)
+                this.scheduleData[Number(k) - 1].Thursday = this.tableData[i].number
               break
             }
             case '五': {
-              this.scheduleData[Number(timelist[j][1]) - 1].Friday = this.tableData[i].number
-              this.scheduleData[Number(timelist[j][3]) - 1].Friday = this.tableData[i].number
+              for(let k=match[1];k<=match[2];k++)
+                this.scheduleData[Number(k) - 1].Friday = this.tableData[i].number
               break
             }
             default:
               break
           }
+          console.log("结果",this.scheduleData)
         }
       }
     }
