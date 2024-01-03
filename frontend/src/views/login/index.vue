@@ -13,12 +13,14 @@
         <h3 class="title">选课管理系统</h3>
       </div>
 
-      <el-form-item>
+      <el-form-item prop="semester">
         <span class="svg-container">
           <svg-icon icon-class="semester" />
         </span>
         <el-select v-model="loginForm.semester" clearable placeholder="选择学期" style="width: 320px;">
           <el-option
+            ref="semester"
+            name="semester"
             v-for="item in semesterList"
             :key="item.semester"
             :label="item.semester"
@@ -105,7 +107,8 @@ export default {
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur' }]
+        password: [{ required: true, trigger: 'blur' }],
+        semester: [{ required: true, trigger: 'blur' }],
       },
       loading: false,
       passwordType: 'password',
