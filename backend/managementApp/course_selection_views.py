@@ -390,3 +390,21 @@ def addCourseSelection(request):#新增
             data['message']="缺少申请字段！"
         return HttpResponse(json.dumps(data),content_type='application/json')
         
+
+def historyCourseSelectionView(request):
+    """
+    查询某个学生的所有课程
+    """
+    if request.method == "GET":
+        student_id = request.GET.get('student_id')
+        cs_lst = course_selection.objects.filter(student_id=student_id).values(
+            "id", "semester", "course_id",
+            "course_id__course_name", "staff_id", "course_id__credit", 
+            "normal_score", "test_score", "total_score"
+        )
+        data = {
+            "code": 20000,
+            "data": list(cs_lst),
+            "msg": "查询成功"
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')

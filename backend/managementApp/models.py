@@ -91,3 +91,22 @@ class student_comments(models.Model):
     staff_id = models.ForeignKey('teacher', to_field='staff_id', on_delete=models.CASCADE)  # 工号(外键)
     comments = models.TextField()  # 评价
 
+
+class meeting_room(models.Model):
+
+
+    TIME_RANGE = (
+        ('8-12', '8-12'),
+        ('13-17', '13-17'),
+        ('18-22', '18-22'),
+    )
+
+    room_id = models.CharField(max_length=32, unique=True, primary_key=True)  # 会议室号
+    room_name = models.CharField(max_length=32, default='A')  # 会议室名称
+    room_size = models.CharField(max_length=32, default='small')  # 会议室大小
+    min_number = models.IntegerField(default=2)  # 会议室最少人数
+    status = models.BooleanField(default=0)  # 会议室状态态 0:空闲 1:占用
+    time_range = models.CharField(max_length=32, default='8-12', choices=TIME_RANGE, blank=True, null=True)  # 会议室可用时间段
+
+    class Meta:
+        db_table = "managementapp_meeting_room"

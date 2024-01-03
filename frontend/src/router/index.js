@@ -78,7 +78,13 @@ export const asyncRoutes = [
         path: 'viewHistoryCourseSelection',
         component: () => import('@/views/studentPage/viewHistoryCourseSelection'),
         name: 'viewHistoryCourseSelection',
-        meta: { title: '成绩查询', group: '学生' }
+        meta: { title: '成绩大表', group: '学生' }
+      },
+      {
+        path: 'viewHistoryCourseSelection_BAK',
+        component: () => import('@/views/studentPage/viewHistoryCourseSelection_BAK'),
+        name: 'viewHistoryCourseSelection',
+        meta: { title: '往期课表', group: '学生' }
       },
       {
         path: 'viewSchedule',
@@ -190,6 +196,18 @@ export const asyncRoutes = [
         component: () => import('@/views/teacherPage/studentComments'),
         name: 'manageScore',
         meta: { title: '学生评论', group: '教师' }
+      },
+      {
+        path: 'manageStudentCourseSelection',
+        component: () => import('@/views/teacherPage/manageStudentCourseSelection'),
+        name: 'manageStudentCourseSelection',
+        meta: { title: '课程学生管理', group: '教师' }
+      },
+      {
+        path: 'meetingRoom',
+        component: () => import('@/views/teacherPage/meetingRoom'),
+        name: 'meetingRoom',
+        meta: { title: '会议室', group: '教师' }
       }
     ]
   },

@@ -65,7 +65,7 @@ BEGIN
     DECLARE subjectCount INT;
     DECLARE totalGPA DECIMAL(10, 2);
     DECLARE totalCredits INT;  
-    --包含失学分
+    -- 包含失学分
     DECLARE totalRealCredits INT;
     DECLARE totalCreditGPA DECIMAL(10, 2);
 

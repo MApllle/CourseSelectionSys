@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-      <h1>学生评论</h1>
+      <h1>课程建议</h1>
       <el-form :inline="true" class="demo-form-inline">
         <!-- 表格内容 -->
       </el-form>
@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-            <el-input v-model="commentInput"></el-input>
+  
           <el-button
             size="mini"
             type="danger"
@@ -58,27 +58,23 @@
     </el-table>
 
     <el-dialog
-      title="开课信息"
+      title="评论"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleDialogClose"
     >
-      <el-form :model="course_form">
+      <el-form :model="comment_form">
 
         <el-form-item label="课程号" label-width="120px">
           <el-input
             v-model="comment_form.course_id_id"
             autocomplete="off"
+            disabled
           />
         </el-form-item>
-        <el-form-item label="课程名" label-width="120px">
-          <el-input
-            v-model="comment_form.course_id_course_name"
-            autocomplete="off"
-          />
-        </el-form-item>
+
         <el-form-item label="评论" label-width="120px">
-          <el-input v-model="comment_form.comments" autocomplete="off" />
+          <el-input type="textarea" v-model="comment_form.comments" autocomplete="off" />
         </el-form-item>
         
 
@@ -87,7 +83,7 @@
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button
           type="primary"
-          @click="addCourseRequest"
+          @click="addComment"
         >确 定</el-button>
       </span>
     </el-dialog>
@@ -149,7 +145,7 @@
             student_id_id: this.$store.getters.name,
             course_id_id: this.comment_form.course_id_id,
             staff_id_id: this.comment_form.staff_id_id,
-            comments: this.commentInput
+            comments: this.comment_form.comments
         }).then(response => {
             console.log(response)
             this.$message({

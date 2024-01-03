@@ -3,7 +3,7 @@
 from django.http import JsonResponse
 import json,hashlib
 from .sql_basic import get_from_table
-from .models import open_course
+from .models import course_selection, open_course, student
 from django.contrib.auth.models import User
 from django.shortcuts import HttpResponse
 
@@ -165,4 +165,63 @@ def addOpenCourse(request): # 新增
             }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-    
+
+
+def teacherOpenCourseView(request):
+    """
+    教师根据staff_id查询相关课程及课程下的学生
+    """
+    if request.method == "GET":
+        staff_id = request.GET.get('staff_id_id')
+        oc_lst = open_course.objects.filter(staff_id=staff_id).values(
+            "id", "semester", "course_id", "course_id__course_name", "staff_id", "class_time"
+        )
+        oc_lst = list(oc_lst)
+        for i in range(len(oc_lst)):
+            stu_list = course_selection.objects.filter(course_id=oc_lst[i]["course_id"]).values(
+                "id", "student_id", "student_id__name", "open_course_id"
+            )
+            oc_lst[i]['stu_list'] = list(stu_list)
+
+        data = {
+            'code': 20000,
+            'data': list(oc_lst),
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    elif request.method == "DELETE":
+        oc_id = request.GET.get('id')
+        course_selection.objects.filter(id=oc_id).delete()
+        data = {
+            'code': 20000,
+            'message': '删除成功',
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    elif request.method == "POST":
+        try:
+            req_data = json.loads(request.body.decode('utf-8'))
+            student_id = req_data['student_id_id']
+            stu = student.objects.filter(student_id=student_id).first()
+            if not stu:
+                data = {
+                'code': 50000,
+                'message': '学生不存在',
+                }
+                return HttpResponse(json.dumps(data), content_type='application/json')
+            course_selection.objects.create(
+                student_id_id=req_data['student_id_id'],
+                course_id_id=req_data['course_id_id'],
+                semester=req_data.get('semester', ''),
+                staff_id_id=req_data['staff_id_id'],
+                open_course_id_id=req_data['open_course_id_id']
+            )
+            data = {
+                'code': 20000,
+                'msg': '新增成功',
+            }
+        except Exception as e:
+            print(e)
+            data = {
+                'code': 50000,
+                'msg': '新增失败,'+str(e),
+            }
+        return HttpResponse(json.dumps(data), content_type='application/json')
