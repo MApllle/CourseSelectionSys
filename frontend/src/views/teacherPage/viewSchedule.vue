@@ -166,8 +166,8 @@ export default {
       const responseCS = await fetchCoursesForTeacherSchedule(this.query)
       this.tableData = responseCS.data
 
-      this.addNumberToData()
-      this.splitToSchedule()
+      await this.addNumberToData()
+      await this.splitToSchedule()
       this.listLoading = false
     },
     async fetchScheduleData() {
@@ -178,11 +178,10 @@ export default {
         this.scheduleData[i].Tuesday = ''
         this.scheduleData[i].Wednesday = ''
         this.scheduleData[i].Thursday = ''
-        this.scheduleData[i].Wednesday = ''
         this.scheduleData[i].Friday = ''
       }
-      this.addNumberToData()
-      this.splitToSchedule()
+      await this.addNumberToData()
+      await this.splitToSchedule()
       this.listLoading = false
     },
     // 编上字母编号
@@ -199,38 +198,39 @@ export default {
         const timelist = this.tableData[i].class_time.split(' ')
         for (let j = 0; j < timelist.length; j++) {
           // 添加到课程表
-          console.log('timelist', timelist[j], 'list1', timelist[j][0])
           let match = timelist[j].match(/(\d+)-(\d+)/);
+          console.log('timelist', timelist[j], 'list1', timelist[j][0])
           switch (timelist[j][0]) {
             case '一': {
-              for(let k=Number(match[1]);k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Monday = this.tableData[i].number
               break
             }
             case '二': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Tuesday = this.tableData[i].number
               break
             }
             case '三': {
-              for(let k=match[1];k<=match[2];k++)
+              console.log("周三",Number(match[1]),Number(match[2]))
+              for(let k=Number(match[1]);k<=Number(match[2]);k++){
                 this.scheduleData[Number(k) - 1].Wednesday = this.tableData[i].number
+              }
               break
             }
             case '四': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Thursday = this.tableData[i].number
               break
             }
             case '五': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Friday = this.tableData[i].number
               break
             }
             default:
               break
           }
-          console.log("结果",this.scheduleData)
         }
       }
     }

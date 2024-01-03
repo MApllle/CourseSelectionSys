@@ -219,27 +219,27 @@ export default {
           let match = timelist[j].match(/(\d+)-(\d+)/);
           switch (timelist[j][0]) {
             case '一': {
-              for(let k=Number(match[1]);k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Monday = this.tableData[i].number
               break
             }
             case '二': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Tuesday = this.tableData[i].number
               break
             }
             case '三': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Wednesday = this.tableData[i].number
               break
             }
             case '四': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Thursday = this.tableData[i].number
               break
             }
             case '五': {
-              for(let k=match[1];k<=match[2];k++)
+              for(let k=Number(match[1]);k<=Number(match[2]);k++)
                 this.scheduleData[Number(k) - 1].Friday = this.tableData[i].number
               break
             }
