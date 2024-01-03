@@ -69,6 +69,8 @@ def handleStudent(request):
         request_data = json.loads(request.body.decode('utf-8'))
         id = request_data['student_id']
         student.objects.filter(student_id=id).delete()
+        if User.objects.filter(username=id).count() != 0:
+            User.objects.filter(username__exact=id).delete()  # 删除该教师账户
         data = {
             "code": 20000,
             "message": "删除成功"
