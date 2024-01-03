@@ -70,7 +70,7 @@
         </el-table-column>
         <el-table-column label="学院" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.dept_name }}</span>
+            <span>{{ scope.row.dept_name }}（{{ scope.row.dept_id_id }}）</span>
           </template>
         </el-table-column>
         <el-table-column align="center" label="平时成绩">

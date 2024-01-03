@@ -11,12 +11,18 @@ from django.shortcuts import HttpResponse
 def is_time_conflict(new_time, existing_times):
     # 将时间段分割为单独的课程时间，例如 "一1-2" 或 "三1-2"
     new_times = new_time.split()
-    print(new_times,existing_times)
     for existing_time in existing_times:
+        print("existing_time",existing_time)
         existing_time_list = existing_time.split()
         # 如果有任何一个时间是相同的，那么就冲突了
-        if any(new in existing_time_list for new in new_times):
-            return True
+        for new in new_times:
+            if new in existing_time_list:
+                return True
+            else:
+                #如果都不重复，还要检查每个时间段是否重复
+                for atime in existing_time_list:
+                    if (new[0]==atime[0]) and ((new[1] in atime) or (new[3] in atime)):
+                        return True
     return False
 
 def fetchCoursesForTeacherSchedule(request):
@@ -91,7 +97,8 @@ def handleOpenCourse(request):
             staff_id_id=request_data['staff_id_id']
         )
         existing_times = [course.class_time for course in existing_courses]
-            
+
+        print("================================is_time_conflict",is_time_conflict(request_data['class_time'], existing_times))    
         if is_time_conflict(request_data['class_time'], existing_times):
             data = {
                 "code": 50000,
@@ -127,7 +134,7 @@ def addOpenCourse(request): # 新增
                 staff_id_id=request_data['staff_id_id']
             )
             existing_times = [course.class_time for course in existing_courses]
-            
+            print("=========================is_time_conflict",is_time_conflict(request_data['class_time'], existing_times))    
             if is_time_conflict(request_data['class_time'], existing_times):
                 data = {
                     "code": 50000,
