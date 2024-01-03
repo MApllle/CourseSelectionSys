@@ -47,11 +47,11 @@ const actions = {
   generateRoutes({ commit }, group) {
     return new Promise(resolve => {
       let accessedRoutes
-      if (group == '管理员') {
+/*       if (group == '管理员') {
         accessedRoutes = asyncRoutes || []
-      } else {
+      } else { */
         accessedRoutes = filterAsyncRoutes(asyncRoutes, group)
-      }
+      //}
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })

@@ -10,13 +10,18 @@
 
     <el-table
       v-loading="listLoading"
-      :data="coruse_request_list"
+      :data="coruse_request_list.slice((currentPage-1)*pageSize,currentPage*pageSize)"
       title="我的申请"
       element-loading-text="Loading"
       border
       fit
       highlight-current-row
     >
+      <el-table-column align="center" label="序号">
+          <template slot-scope="scope">
+            {{ scope.$index+1+pageSize*(currentPage-1) }}
+          </template>
+        </el-table-column>
       <el-table-column align="center" label="课程号">
         <template slot-scope="scope">
           <span>{{ scope.row.course_id }}</span>
@@ -47,7 +52,7 @@
           <span>{{ scope.row.status === 0 ? '待审核' : (scope.row.status === 1 ? '通过' : '未通过') }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="group==='管理员'" label="操作">
+      <el-table-column v-if="group==='管理员'" label="操作" align="center">
         <template v-if="scope.row.status === 0" slot-scope="scope">
           <el-button type="primary" size="small" @click="updateCourseRequest(scope.row.course_id, 1)">通过</el-button>
           <el-button type="danger " size="small" @click="updateCourseRequest(scope.row.course_id, 2)">拒绝</el-button>
@@ -58,6 +63,16 @@
       </el-table-column>
 
     </el-table>
+    <el-pagination
+        align="center"
+        :current-page="currentPage"
+        :page-sizes="[1,5,10,20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="coruse_request_list.length"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
 
     <el-dialog
       title="开课信息"
@@ -126,7 +141,10 @@ export default {
         dept_id: '',
         normal_score_percent: ''
       },
-      coruse_request_list: []
+      coruse_request_list: [],
+      currentPage: 1, // 当前页码
+      total: 20, // 总条数
+      pageSize: 5 // 每页的数据条数
     }
   },
   created() {
@@ -172,7 +190,18 @@ export default {
         this.coruse_request_list = res.data
         this.listLoading = false
       })
-    }
+    },
+      // 每页条数改变时触发 选择一页显示多少行
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`)
+        this.currentPage = 1
+        this.pageSize = val
+      },
+      // 当前页改变时触发 跳转其他页
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
+        this.currentPage = val
+      }
   }
 }
 </script>

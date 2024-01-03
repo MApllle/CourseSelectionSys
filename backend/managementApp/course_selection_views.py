@@ -41,6 +41,116 @@ professional_ranks
 [剩余容量
 上课时间]
 '''
+#为登分表选课表中获取学生的信息，联查开课表、学生表、院系表
+def fetchCoursesForScore(request):
+    if request.method=='POST':
+        #获取query
+        post_data = json.loads(request.body.decode('utf-8'))
+        query = {key: value for key, value in post_data.items() if value}
+        param=[]
+        if not query:
+            sql = '''select cs.id as selectcourse_id,cs.normal_score,cs.test_score,cs.total_score,cs.open_course_id_id,s.name as student_name,cs.student_id_id,d.dept_name,s.dept_id_id,CAST((CASE
+                    WHEN total_score >= 90 THEN 4.0
+                    WHEN total_score >= 85 THEN 3.7
+                    WHEN total_score >= 82 THEN 3.3
+                    WHEN total_score >= 78 THEN 3.0
+                    WHEN total_score >= 75 THEN 2.7
+                    WHEN total_score >= 72 THEN 2.3
+                    WHEN total_score >= 68 THEN 2.0
+                    WHEN total_score >= 66 THEN 1.7
+                    WHEN total_score >= 64 THEN 1.5
+                    WHEN total_score >= 60 THEN 1.0
+                    ELSE 0.0
+                END)AS FLOAT) as gpa from managementapp_course_selection cs,managementapp_student s,managementapp_department d where cs.student_id_id=s.student_id and s.dept_id_id=d.dept_id '''
+        else:
+            sql = '''select cs.id as selectcourse_id,cs.normal_score,cs.test_score,cs.total_score,cs.open_course_id_id,s.name as student_name,cs.student_id_id,d.dept_name,s.dept_id_id,CAST((CASE
+                    WHEN total_score >= 90 THEN 4.0
+                    WHEN total_score >= 85 THEN 3.7
+                    WHEN total_score >= 82 THEN 3.3
+                    WHEN total_score >= 78 THEN 3.0
+                    WHEN total_score >= 75 THEN 2.7
+                    WHEN total_score >= 72 THEN 2.3
+                    WHEN total_score >= 68 THEN 2.0
+                    WHEN total_score >= 66 THEN 1.7
+                    WHEN total_score >= 64 THEN 1.5
+                    WHEN total_score >= 60 THEN 1.0
+                    ELSE 0.0
+                END)AS FLOAT) as gpa from managementapp_course_selection cs,managementapp_student s,managementapp_department d where cs.student_id_id=s.student_id and s.dept_id_id=d.dept_id and  '''
+            conditions = []
+            for key, value in query.items():
+                if key in ['student_name','dept_id_id']:
+                    if key =='student_name':
+                        newkey='name'
+                        conditions.append(f's.{newkey} = %s')
+                    else:conditions.append(f's.{key} = %s')
+                elif key in ['course_id_id','staff_id_id','semester','student_id_id','open_course_id_id']:
+                    conditions.append(f'cs.{key} = %s')
+                elif key in ['dept_name']:
+                    conditions.append(f'd.{key} = %s')      
+                else :conditions.append(f'{key} = %s')
+                param.append(value)
+            sql += ' AND '.join(conditions)
+            print("sql",sql)
+        out=get_from_table(sql,param)
+        #需要捕捉一下错误
+        data={
+            "code":20000,
+            "data":out,
+            "message":"查询成功"
+        }
+        return HttpResponse(json.dumps(data),content_type='application/json')
+
+#为学生成绩表获取信息，联查课程表和选课表
+def fetchCourseSelectionForStudentScore(request):
+    if request.method=='POST':
+        #获取query
+        post_data = json.loads(request.body.decode('utf-8'))
+        query = {key: value for key, value in post_data.items() if value}
+        param=[]
+        if not query:
+            sql = '''select c.course_name ,cs.course_id_id,cs.total_score,c.credit,CAST((CASE
+                    WHEN total_score >= 90 THEN 4.0
+                    WHEN total_score >= 85 THEN 3.7
+                    WHEN total_score >= 82 THEN 3.3
+                    WHEN total_score >= 78 THEN 3.0
+                    WHEN total_score >= 75 THEN 2.7
+                    WHEN total_score >= 72 THEN 2.3
+                    WHEN total_score >= 68 THEN 2.0
+                    WHEN total_score >= 66 THEN 1.7
+                    WHEN total_score >= 64 THEN 1.5
+                    WHEN total_score >= 60 THEN 1.0
+                    ELSE 0.0
+                END)AS FLOAT) as gpa from managementapp_course_selection cs,managementapp_course c where cs.course_id_id=c.course_id  '''
+        else:
+            sql = '''select c.course_name ,cs.course_id_id,cs.total_score,c.credit,CAST((CASE
+                    WHEN total_score >= 90 THEN 4.0
+                    WHEN total_score >= 85 THEN 3.7
+                    WHEN total_score >= 82 THEN 3.3
+                    WHEN total_score >= 78 THEN 3.0
+                    WHEN total_score >= 75 THEN 2.7
+                    WHEN total_score >= 72 THEN 2.3
+                    WHEN total_score >= 68 THEN 2.0
+                    WHEN total_score >= 66 THEN 1.7
+                    WHEN total_score >= 64 THEN 1.5
+                    WHEN total_score >= 60 THEN 1.0
+                    ELSE 0.0
+                END)AS FLOAT) as gpa from managementapp_course_selection cs,managementapp_course c where cs.course_id_id=c.course_id and  '''
+            conditions = []
+            for key, value in query.items():
+                if key in ['student_id_id','semester']:
+                    conditions.append(f'cs.{key} = %s')
+                param.append(value)
+            sql += ' AND '.join(conditions)
+            print("sql",sql)
+        out=get_from_table(sql,param)
+        #需要捕捉一下错误
+        data={
+            "code":20000,
+            "data":out,
+            "message":"查询成功"
+        }
+        return HttpResponse(json.dumps(data),content_type='application/json')
+    
 #选课表从开课表中获取、构造选课页面
 def fetchCoursesForSelect(request):
     if request.method=='POST':
@@ -57,7 +167,9 @@ def fetchCoursesForSelect(request):
                 if key in ['course_name','credit']:
                     conditions.append(f'c.{key} = %s')
                 elif key in ['course_id_id','staff_id_id','semester','capacity','used_capacity']:
-                    conditions.append(f'oc.{key} = %s')
+                    if key=='used_capacity':
+                        conditions.append(f'oc.capacity-oc.{key} >= %s')
+                    else:conditions.append(f'oc.{key} = %s')
                 elif key in ['name','professional_ranks']:
                     conditions.append(f't.{key} = %s')
                 else :conditions.append(f'{key} = %s')
@@ -165,13 +277,20 @@ def handleCourseSelection(request):
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='PUT':#更新
         request_data = json.loads(request.body.decode('utf-8'))
-        #需要捕捉一下错误
-        #确保院系号存在？
-        course_selection.objects.filter(id=request_data['selectcourse_id']).update(normal_score=request_data['normal_score'] if request_data.get('normal_score', '') != '' else None,
-                                                                    test_score=request_data['test_score'] if request_data.get('test_score', '') != '' else None,)
+        print("===================",request_data)
+        for data in request_data:
+            if data['selectcourse_id']:
+                course_selection.objects.filter(id=data['selectcourse_id']).update(normal_score=data['normal_score'] if data.get('normal_score', '') != '' else None,
+                                                                test_score=data['test_score'] if data.get('test_score', '') != '' else None,)
+            else:
+                data={
+                "code":50000,
+                "message":"缺少字段！"
+                }
+                return HttpResponse(json.dumps(data),content_type='application/json')
         data={
-            "code":20000,
-            "message":"更新成功"
+        "code":20000,
+        "message":"更新成功"
         }
         return HttpResponse(json.dumps(data),content_type='application/json')
     elif request.method=='DELETE':#删除(逐个删)

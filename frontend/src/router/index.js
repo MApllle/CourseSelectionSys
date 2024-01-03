@@ -78,7 +78,7 @@ export const asyncRoutes = [
         path: 'viewHistoryCourseSelection',
         component: () => import('@/views/studentPage/viewHistoryCourseSelection'),
         name: 'viewHistoryCourseSelection',
-        meta: { title: '查看过往选课', group: '学生' }
+        meta: { title: '成绩查询', group: '学生' }
       },
       {
         path: 'viewSchedule',

@@ -60,6 +60,11 @@ urlpatterns = [
     #学生课程表获取联查接口、
     path("fetchCoursesForStudentSchedule/",course_selection_views.fetchCoursesForStudentSchedule), 
     #调用存储过程计算均分
-    path("calculateAllScore/",student_views.calculateAllScore), 
+    path("calculateAllScore/",student_views.calculateAllScore),
+    #教师登分表查登分表
+    path("fetchCoursesForScore/",course_selection_views.fetchCoursesForScore),
+    #学生查选课记录
+    path("fetchCourseSelectionForStudentScore/",course_selection_views.fetchCourseSelectionForStudentScore),
     
+     
 ]
