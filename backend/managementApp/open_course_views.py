@@ -11,6 +11,7 @@ from django.shortcuts import HttpResponse
 def is_time_conflict(new_time, existing_times):
     # 将时间段分割为单独的课程时间，例如 "一1-2" 或 "三1-2"
     new_times = new_time.split()
+    print(new_times,existing_times)
     for existing_time in existing_times:
         existing_time_list = existing_time.split()
         # 如果有任何一个时间是相同的，那么就冲突了
@@ -42,7 +43,7 @@ def fetchCoursesForTeacherSchedule(request):
         data = {
             "code": 20000,
             "data": out,
-            "msg": "查询成功"
+            "message": "查询成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -69,7 +70,7 @@ def handleOpenCourse(request):
         data = {
             "code": 20000,
             "data": out,
-            "msg": "查询成功"
+            "message": "查询成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method == 'DELETE': # 删除(逐个删)
@@ -78,15 +79,15 @@ def handleOpenCourse(request):
         open_course.objects.filter(id=todelete_id).delete()
         data = {
             "code": 20000,
-            "msg": "删除成功"
+            "message": "删除成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     elif request.method == 'PUT': # 更新
         request_data = json.loads(request.body.decode('utf-8'))
+        print("===================",request_data)
         # 查看是否有时间冲突的开课
         existing_courses = open_course.objects.filter(
             semester=request_data['semester'], 
-            course_id_id=request_data['course_id_id'],
             staff_id_id=request_data['staff_id_id']
         )
         existing_times = [course.class_time for course in existing_courses]
@@ -94,7 +95,7 @@ def handleOpenCourse(request):
         if is_time_conflict(request_data['class_time'], existing_times):
             data = {
                 "code": 50000,
-                "msg": "新增失败，该老师在该时间已经开课"
+                "message": "新增失败，该老师在该时间已经开课"
             }
             return HttpResponse(json.dumps(data), content_type='application/json')
         open_course.objects.filter(id=request_data['id']).update(capacity=request_data.get('capacity',0),
@@ -105,14 +106,14 @@ def handleOpenCourse(request):
                                                                 )
         data = {
             "code": 20000,
-            "msg": "更新成功"
+            "message": "更新成功"
         }
         return HttpResponse(json.dumps(data), content_type='application/json')
     
 def addOpenCourse(request): # 新增
     data = {
         "code": 20000,
-        "msg": "新增成功"
+        "message": "新增成功"
     }
     if request.method == 'POST':
         request_data = json.loads(request.body.decode('utf-8'))
@@ -123,7 +124,6 @@ def addOpenCourse(request): # 新增
              # 查看是否有时间冲突的开课
             existing_courses = open_course.objects.filter(
                 semester=request_data['semester'], 
-                course_id_id=request_data['course_id_id'],
                 staff_id_id=request_data['staff_id_id']
             )
             existing_times = [course.class_time for course in existing_courses]
@@ -131,7 +131,7 @@ def addOpenCourse(request): # 新增
             if is_time_conflict(request_data['class_time'], existing_times):
                 data = {
                     "code": 50000,
-                    "msg": "新增失败，该老师在该时间已经开课"
+                    "message": "新增失败，该老师在该时间已经开课"
                 }
                 return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -149,12 +149,12 @@ def addOpenCourse(request): # 新增
             new_oc.save()
             data = {
                 "code": 20000,
-                "msg": "新增成功"
+                "message": "新增成功"
             }
         else:
             data = {
                 "code": 50000,
-                "msg": "新增失败"
+                "message": "新增失败"
             }
     return HttpResponse(json.dumps(data), content_type='application/json')
 

@@ -173,9 +173,12 @@ def handleUser(request): #更改用户信息（主要是改密码）
     }
     if request.method=='PUT':   #改
         request_data = json.loads(request.body.decode('utf-8'))
+        print("=================",request_data)
         if request_data['id'] is not None:
             #修改密码与原来的相同，不会报错
-            User.objects.filter(username=request_data['id']).update(password=request_data['password'])
+            user=User.objects.get(id=request_data['id'])
+            user.set_password(request_data['password'])
+            user.save()
             data= {
                 "code":20000,
                 "message":"修改密码成功"

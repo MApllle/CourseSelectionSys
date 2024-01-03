@@ -14,7 +14,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="small" @click="fetchScheduleData()">查询</el-button>
+        <el-button type="primary" size="small" @click="fetchData()">查询</el-button>
       </el-form-item>
     </el-form>
       <el-divider />
@@ -130,6 +130,7 @@
         this.listLoading = true
         const responseSemester = await fetchSemester()
         this.allSemesterOption = responseSemester.data
+        this.query.semester=this.$store.getters.semester
         //返回：所有学期
         
         const response = await fetchCourseSelectionForStudentScore(this.query)
@@ -138,15 +139,15 @@
         this.sumCreditGpa()
         this.listLoading = false
       },
-      fetchData() {
+      async fetchData() {
         this.listLoading = true
-        // 先找课程表
         fetchCourseSelectionForStudentScore(this.query).then(response => {
           this.tableData = response.data
           console.log('更新tabledata', this.tableDataOpenCourse)
-          this.listLoading = false
+          this.sumCreditGpa()
+          
         })
-        this.sumCreditGpa()
+        this.listLoading = false
       },
       sumCreditGpa(){
         let creditPlusGpa=0
@@ -155,7 +156,9 @@
             creditPlusGpa+=this.tableData[i].gpa * this.tableData[i].credit
             this.total_credit+=this.tableData[i].credit
         }
-        this.average_gpa=(creditPlusGpa/this.total_credit).toFixed(2)
+        if (this.total_credit!==0)
+            this.average_gpa=(creditPlusGpa/this.total_credit).toFixed(2)
+        else this.average_gpa=0
       }
     }
   }

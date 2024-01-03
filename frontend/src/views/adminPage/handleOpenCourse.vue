@@ -106,7 +106,15 @@
     <el-dialog title="新增课程" :visible.sync="addFormVisible">
       <el-form :model="addForm" label-width="200px" algin="left">
         <el-form-item label="课程号" label-width="25%">
-          <el-input v-model="addForm.course_id_id" autocomplete="off" />
+          <el-select v-model="addForm.course_id_id" filterable>
+          <el-option
+              v-for="(item,index) in courseList"
+              :key="index"
+              :label="`${item.course_name} (${item.course_id})`"
+              :value="item.course_id">
+            <span style="float: left">{{ item.course_name }}({{ item.course_id }})</span>
+          </el-option>
+        </el-select>
         </el-form-item>
         <el-form-item label="开课时间" label-width="25%">
           <el-input v-model="addForm.class_time" autocomplete="off" />
@@ -138,16 +146,21 @@
     </el-dialog>
 
     <el-dialog title="编辑课程" :visible.sync="editFormVisible">
-      <el-form :model="editForm" label-width="200px" algin="left">
+      <el-form :model="editForm" label-width="200px" algin="left">\
+        <el-form-item label="课程号" label-width="25%">
+          <el-input v-model="editForm.course_id_id" autocomplete="off" disabled="true"/>
+        </el-form-item>
         <el-form-item label="开课时间" label-width="25%">
           <el-input v-model="editForm.class_time" autocomplete="off" />
         </el-form-item>
         <el-form-item label="学期" label-width="25%">
           <el-select v-model="editForm.semester" placeholder="选择学期">
-            <el-option label="2021-2022春季学期" value="2021-2022春季学期" />
-            <el-option label="2021-2022夏季学期" value="2021-2022夏季学期" />
-            <el-option label="2021-2022秋季学期" value="2021-2022秋季学期" />
-            <el-option label="2021-2022冬季学期" value="2021-2022冬季学期" />
+            <el-option
+            v-for="item in semesterList"
+            :key="item.semester"
+            :label="item.semester"
+            :value="item.semester"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="教师号" label-width="25%">
@@ -167,6 +180,7 @@
 
 <script>
 import { addOpenCourse, updateOpenCourse, fetchOpenCourse, deleteOpenCourse, fetchSemester } from '@/api/openCourseApi'
+import { fetchCourse } from '@/api/courseApi'
 import { mapGetters } from 'vuex'
 export default {
   computed: {
@@ -191,6 +205,7 @@ export default {
       listLoading: true,
       tableData: [],
       semesterList:[],
+      courseList:[],
       addFormVisible: false,
       editFormVisible: false,
       editForm: {
@@ -219,6 +234,7 @@ export default {
       deleteForm: {
         id: ''
       },
+      querycourse:{},
       currentPage: 1, // 当前页码
       total: 20, // 总条数
       pageSize: 5 // 每页的数据条数
@@ -227,6 +243,7 @@ export default {
   created() {
     this.fetchData()
     this.handleSemester()
+    this.handleCourse()
   },
   methods: {
     fetchData() {
@@ -309,6 +326,12 @@ export default {
       fetchSemester().then(response => {
         if (response) { console.log('获取学期成功') }
         this.semesterList = response.data
+      })
+    },
+    handleCourse(){
+      fetchCourse(this.querycourse).then(response=>{
+        if (response) { console.log('获取课程信息成功') }
+        this.courseList = response.data
       })
     },
     // 每页条数改变时触发 选择一页显示多少行

@@ -302,6 +302,7 @@ export default {
       this.editForm.name = row.name
       this.editForm.sex = row.sex
       this.editForm.date_of_birth = row.date_of_birth
+      this.editForm.professional_ranks = row.professional_ranks
       this.editForm.salary = row.salary
       this.editForm.dept_id_id = row.dept_id_id
     },
