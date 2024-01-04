@@ -365,6 +365,7 @@ def addCourseSelection(request):#新增
             
             # 查看是否有时间冲突的开课
             course_times = course_selection.objects.filter(student_id_id=request_data['student_id_id'],semester=request_data['semester']).values_list('open_course_id__class_time', flat=True)#某个学生选的所有课的上课时间
+            print("llllllllllllllllllllllllllllllllllllll")
             if is_time_conflict(request_data['class_time'], course_times):
                 data = {
                 "code": 50000,

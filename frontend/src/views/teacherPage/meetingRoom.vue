@@ -33,7 +33,7 @@
           </el-table-column>
           <el-table-column label="状态" align="center">
             <template slot-scope="scope">
-              <span style="color: greenyellow;">{{ scope.row.status?'使用中':'空闲' }}</span>
+              <span style="color: greenyellow;">{{ scope.row.status?'已预约':'空闲' }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center">

@@ -120,8 +120,8 @@ export default {
           this.studentReturn.total_credit = response.data[0].total_credit
           this.studentReturn.average_gpa = response.data[0].average_gpa
           this.outList.push({ value: `姓名：${this.studentReturn.student_name}` })
-          this.outList.push({ value: `已修学分：${this.studentReturn.total_credit}` })
-          this.outList.push({ value: `平均绩点：${this.studentReturn.average_gpa}` })
+          // this.outList.push({ value: `已修学分：${this.studentReturn.total_credit}` })
+          // this.outList.push({ value: `平均绩点：${this.studentReturn.average_gpa}` })
         })
       } else if (this.group === '教师') {
         fetchTeacher(this.queryTeacher).then(response => {

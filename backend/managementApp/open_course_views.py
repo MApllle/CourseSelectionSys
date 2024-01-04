@@ -6,22 +6,27 @@ from .sql_basic import get_from_table
 from .models import course_selection, open_course, student
 from django.contrib.auth.models import User
 from django.shortcuts import HttpResponse
+import re
 
 # 辅助函数，用于解析上课时间并比较两个时间段是否冲突
 def is_time_conflict(new_time, existing_times):
     # 将时间段分割为单独的课程时间，例如 "一1-2" 或 "三1-2"
     new_times = new_time.split()
     for existing_time in existing_times:
-        print("existing_time",existing_time)
+        print("existing_time================================",existing_time)
         existing_time_list = existing_time.split()
         # 如果有任何一个时间是相同的，那么就冲突了
         for new in new_times:
+            print('newtimes',new_times)
             if new in existing_time_list:
                 return True
             else:
+                matchselect = re.search(r'(\d+)-(\d+)', new)
+                print("match之后=====================",matchselect[0],matchselect[1],matchselect[2])
                 #如果都不重复，还要检查每个时间段是否重复
                 for atime in existing_time_list:
-                    if (new[0]==atime[0]) and ((new[1] in atime) or (new[3] in atime)):
+                    matchcompare = re.search(r'(\d+)-(\d+)', atime)
+                    if (new[0]==atime[0]) and ((int(matchselect[1]) == matchcompare[1]) or (int(matchselect[2]) == matchcompare[2])):
                         return True
     return False
 
